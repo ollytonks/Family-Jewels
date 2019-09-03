@@ -11,7 +11,8 @@ class Create extends Component {
     this.state = {
       title: '',
       description: '',
-      author: ''
+      author: '',
+      nextguardian: ''
     };
   }
   onChange = (e) => {
@@ -23,17 +24,19 @@ class Create extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { title, description, guardian, nextguardian } = this.state;
 
     this.ref.add({
       title,
       description,
-      author
+      guardian,
+      nextguardian
     }).then((docRef) => {
       this.setState({
         title: '',
         description: '',
-        author: ''
+        guardian: '',
+        nextguardian: ''
       });
       this.props.history.push("/")
     })
@@ -43,17 +46,17 @@ class Create extends Component {
   }
 
   render() {
-    const { title, description, author } = this.state;
+    const { title, description, guardian, nextguardian } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              ADD BOARD
+              ADD HEIRLOOM
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/" class="btn btn-primary">Book List</Link></h4>
+            <h4><Link to="/" class="btn btn-primary">Heirloom List</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="title">Title:</label>
@@ -64,8 +67,12 @@ class Create extends Component {
                 <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
               </div>
               <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={author} onChange={this.onChange} placeholder="Author" />
+                <label for="guardian">Guardian:</label>
+                <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian" />
+              </div>
+              <div class="form-group">
+                <label for="nextguardian">Next Guardian:</label>
+                <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

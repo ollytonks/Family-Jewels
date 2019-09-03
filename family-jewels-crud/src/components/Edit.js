@@ -10,7 +10,8 @@ class Edit extends Component {
       key: '',
       title: '',
       description: '',
-      author: ''
+      guardian: '',
+      nextguardian: ''
     };
   }
 
@@ -23,7 +24,8 @@ class Edit extends Component {
           key: doc.id,
           title: board.title,
           description: board.description,
-          author: board.author
+          guardian: board.guardian,
+          nextguardian: board.guardian
         });
       } else {
         console.log("No such document!");
@@ -40,19 +42,21 @@ class Edit extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { title, description, guardian, nextguardian } = this.state;
 
     const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
     updateRef.set({
       title,
       description,
-      author
+      guardian,
+      nextguardian
     }).then((docRef) => {
       this.setState({
         key: '',
         title: '',
         description: '',
-        author: ''
+        guardian: '',
+        nextguardian: ''
       });
       this.props.history.push("/show/"+this.props.match.params.id)
     })
@@ -71,7 +75,7 @@ class Edit extends Component {
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Board List</Link></h4>
+            <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Heirloom List</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="title">Title:</label>
@@ -82,8 +86,12 @@ class Edit extends Component {
                 <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
               </div>
               <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={this.state.author} onChange={this.onChange} placeholder="Author" />
+                <label for="guardian">Guardian:</label>
+                <input type="text" class="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
+              </div>
+              <div class="form-group">
+                <label for="nextguardian">Next Guardian:</label>
+                <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

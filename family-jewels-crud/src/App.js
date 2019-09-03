@@ -16,13 +16,14 @@ class App extends Component {
   onCollectionUpdate = (querySnapshot) => {
     const boards = [];
     querySnapshot.forEach((doc) => {
-      const { title, description, author } = doc.data();
+      const { title, description, guardian, nextguardian } = doc.data();
       boards.push({
         key: doc.id,
         doc, // DocumentSnapshot
         title,
         description,
-        author,
+        guardian,
+        nextguardian
       });
     });
     this.setState({
@@ -40,17 +41,18 @@ class App extends Component {
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              BOARD LIST
+              HEIRLOOM LIST
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/create">Add Board</Link></h4>
+            <h4><Link to="/create">Add Heirloom</Link></h4>
             <table class="table table-stripe">
               <thead>
                 <tr>
                   <th>Title</th>
                   <th>Description</th>
-                  <th>Author</th>
+                  <th>Guardian</th>
+                  <th>Next guardian</th>
                 </tr>
               </thead>
               <tbody>
@@ -58,7 +60,8 @@ class App extends Component {
                   <tr>
                     <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
                     <td>{board.description}</td>
-                    <td>{board.author}</td>
+                    <td>{board.guardian}</td>
+                    <td>{board.nextguardian}</td>
                   </tr>
                 )}
               </tbody>
