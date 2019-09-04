@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import firebase from '../Firebase';
 
 class UploadImage extends Component {
@@ -52,14 +53,23 @@ class UploadImage extends Component {
                 justifyContent: 'center'
             };
         return (
-        <div style={style}>
-        <progress value={this.state.progress} max="100"/>
-        <br/>
-            <input type="file" onChange={this.handleChange}/>
-            <button onClick={this.handleUpload}>Upload</button>
-            <br/>
-            <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400"/>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><Link to="/">Heirloom List</Link></h4>
+                    <h3 class="panel-title">
+                    {this.state.board.title}
+                    </h3>
+            </div>
+            <div>
+                <progress value={this.state.progress} max="100"/>
+                <br/>
+                <input type="file" onChange={this.handleChange}/>
+                <button onClick={this.handleUpload}>Upload</button>
+                <br/>
+                <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400"/>
+            </div>
         </div>
+       
         )
     }
 }
