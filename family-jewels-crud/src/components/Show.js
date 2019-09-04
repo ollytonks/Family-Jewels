@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
 import { Link } from 'react-router-dom';
-import { saveAs } from 'file-saver';
 
 class Show extends Component {
 
@@ -51,9 +50,8 @@ class Show extends Component {
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
             });
-    }
-
-    downloadTxtFile(id){
+      }
+      downloadTxtFile(id){
         firebase.firestore().collection('boards').doc(id).get().then((doc) => {
             if (doc.exists) {
                 var ng = "";
