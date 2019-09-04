@@ -51,6 +51,21 @@ class Show extends Component {
                 console.error("Error duplicating document: ", error);
             });
       }
+      downloadTxtFile(id){
+        firebase.firestore().collection('boards').doc(id).get().then((doc) => {
+            if (doc.exists) {
+                var ng = "";
+                if (this.state.board.nextguardian) {
+                    ng = this.state.board.nextguardian;
+                }
+                var blob = new Blob(["Title: ", this.state.board.title, "\nDescription: ", this.state.board.description, "\nGuardian: ", this.state.board.guardian, "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "heirloomy.txt");
+                console.log("Document successfully downloaded!");
+            }
+            }).catch((error) => {
+                console.error("Error duplicating document: ", error);
+            });
+    }
 
     render() {
         return (
@@ -67,11 +82,12 @@ class Show extends Component {
                     <dt>Description:</dt>
                     <dd>{this.state.board.description}</dd>
                     <dt>Guardian:</dt>
-                    <dd>{this.state.board.author}</dd>
+                    <dd>{this.state.board.guardian}</dd>
                     <dt>Next guardian:</dt>
                     <dd>{this.state.board.nextguardian}</dd>
                 </dl>
                 <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
+                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>
                 <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
                 <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">Archive</button>
                 </div>
