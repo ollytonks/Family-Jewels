@@ -41,7 +41,7 @@ class Login extends Component {
               </div>
               <div class="panel-body">
                 <label for="author">Password:</label>
-                <input type="text" class="form-control" name="password" placeholder="" />
+                <input type="password" class="form-control" name="password" placeholder="" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>
