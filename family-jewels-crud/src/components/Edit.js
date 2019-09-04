@@ -75,7 +75,6 @@ class Edit extends Component {
                 </h3>
             </div>
             <div class="panel-body">
-                <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Heirloom List</Link></h4>
                 <form onSubmit={this.onSubmit}>
                 <div class="form-group">
                     <label for="title">Title:</label>
@@ -94,6 +93,7 @@ class Edit extends Component {
                     <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>
+                <h4><Link to={`/show/${this.state.key}`} class="btn btn-danger">Cancel</Link></h4>
                 </form>
             </div>
             </div>
