@@ -37,6 +37,21 @@ class Show extends Component {
         });
     }
 
+    archive(id){
+        firebase.firestore().collection('boards').doc(id).get().then((doc) => {
+            if (doc.exists) {
+                console.log(this.state.board)
+                firebase.firestore().collection('archived_boards').add(this.state.board);
+            }
+            console.log("Document successfully duplicated!");
+            firebase.firestore().collection('boards').doc(id).delete();
+            console.log("Document successfully deleted!");
+            this.props.history.push("/")
+            }).catch((error) => {
+                console.error("Error duplicating document: ", error);
+            });
+      }
+
     render() {
         return (
             <div class="container">
@@ -58,6 +73,7 @@ class Show extends Component {
                 </dl>
                 <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
                 <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
+                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">Archive</button>
                 </div>
             </div>
             </div>
