@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import firebase from '../Firebase';
 
 class UploadImage extends Component {
-    state = {
-        image: null,
-        url: '',
-        progress: 0
+    constructor() {
+        super();
+        this.state = {
+            image: null,
+            url: '',
+            progress: 0,
+            title: ''
+        };
     }
 
     handleChange = e => {
@@ -57,7 +61,7 @@ class UploadImage extends Component {
             <div class="panel-heading">
                 <h4><Link to="/">Heirloom List</Link></h4>
                     <h3 class="panel-title">
-                    {this.state.board.title}
+                    {this.state.title}
                     </h3>
             </div>
             <div>
