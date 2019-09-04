@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
 
-class ImageUpload extends Component {
+class UploadImage extends Component {
     state = {
         image: null,
         url: '',
@@ -64,4 +64,4 @@ class ImageUpload extends Component {
     }
 }
 
-export default ImageUpload;
+export default UploadImage;
