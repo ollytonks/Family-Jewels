@@ -45,6 +45,8 @@ class Login extends Component {
               <button type="submit" class="btn btn-success">Submit</button>
             </form>
             </div>
+            </div>
+            </div>
         );
     }
 }
