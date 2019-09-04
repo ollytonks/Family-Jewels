@@ -25,24 +25,28 @@ class Create extends Component {
         e.preventDefault();
 
         const { title, description, guardian, nextguardian } = this.state;
-
-        this.ref.add({
-            title,
-            description,
-            guardian,
-            nextguardian
-        }).then((docRef) => {
-        this.setState({
-            title: '',
-            description: '',
-            guardian: '',
-            nextguardian: ''
-        });
-        this.props.history.push("/")
-        })
-        .catch((error) => {
-        console.error("Error adding document: ", error);
-        });
+        if (title && description && guardian) {
+            this.ref.add({
+                title,
+                description,
+                guardian,
+                nextguardian
+            }).then((docRef) => {
+            this.setState({
+                title: '',
+                description: '',
+                guardian: '',
+                nextguardian: ''
+            });
+            this.props.history.push("/")
+            })
+            .catch((error) => {
+            console.error("Error adding document: ", error);
+            });
+        } else {
+            window.alert("An heirloom must have a title, description, and guardian.");
+        }
+        
     }
 
     render() {
