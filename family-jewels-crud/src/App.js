@@ -43,10 +43,14 @@ class App extends Component {
             <h3 class="panel-title">
               HEIRLOOM LIST
             </h3>
+            
           </div>
           <div class="panel-body">
             <h4><Link to="/login">Login</Link></h4>
             <h4><Link to="/create">Add Heirloom</Link></h4>
+            <br></br>
+            <h4><Link to="/uploadimage">Upload an Image</Link></h4>
+
             <table class="table table-stripe">
               <thead>
                 <tr>
