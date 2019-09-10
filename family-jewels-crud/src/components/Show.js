@@ -52,6 +52,7 @@ class Show extends Component {
                 console.error("Error duplicating document: ", error);
             });
       }
+
       downloadTxtFile(id){
         firebase.firestore().collection('boards').doc(id).get().then((doc) => {
             if (doc.exists) {
@@ -60,7 +61,7 @@ class Show extends Component {
                     ng = this.state.board.nextguardian;
                 }
                 var blob = new Blob(["Title: ", this.state.board.title, "\nDescription: ", this.state.board.description, "\nGuardian: ", this.state.board.guardian, "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, "heirloomy.txt");
+                saveAs(blob, this.state.board.title + ".txt");
                 console.log("Document successfully downloaded!");
             }
             }).catch((error) => {
