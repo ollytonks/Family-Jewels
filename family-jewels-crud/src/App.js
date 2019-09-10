@@ -1,23 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
+import Switch from './components/elements/Switch';
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
         this.unsubscribe = null;
+        this.state = false;
         this.state = {
-            boards: []
+            heirlooms: [],
+            switch: false,
+            target: 'archived_boards'
         };
     }
 
     onCollectionUpdate = (querySnapshot) => {
-        const boards = [];
+        const list = [];
         querySnapshot.forEach((doc) => {
             const { title, description, guardian, nextguardian } = doc.data();
-            boards.push({
+            list.push({
                 key: doc.id,
                 doc, // DocumentSnapshot
                 title,
@@ -27,12 +31,18 @@ class App extends Component {
             });
         });
         this.setState({
-            boards
+            heirlooms: list
         });
     }
 
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    }
+
+    setCollection() {
+        this.ref = firebase.firestore().collection(this.state.target);
+        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        console.log(this.ref);
     }
 
     render() {
@@ -43,10 +53,23 @@ class App extends Component {
                 <h3 class="panel-title">
                 HEIRLOOM LIST
                 </h3>
-                
             </div>
             <div class="panel-body">
                 <h4><Link to="/login">Login</Link></h4>
+                <div>
+                <Switch
+                    isOn={this.state.switch}
+                    handleToggle={() => 
+                        {
+                            this.setState(prevState => ({switch: !prevState.switch}));
+                            this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
+                            this.setCollection();
+                            console.log(this.state.target);
+                        }
+                    }
+                />
+                {this.state.switch ? "Archive" : ""}
+                </div>
                 <h4><Link to="/create">Add Heirloom</Link></h4>
                 <br></br>
                 <h4><Link to="/uploadimage">Upload an Image</Link></h4>
@@ -61,7 +84,7 @@ class App extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.boards.map(board =>
+                    {this.state.heirlooms.map(board =>
                     <tr>
                         <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
                         <td>{board.description}</td>
