@@ -48,6 +48,20 @@
     color:#fff;
 }
 
+.navbar-brand{
+    width: auto;
+    background-color: #A4CABC;
+    color: #8D77AB;
+}
+
+.nav-item {
+    color:#8D77AB;
+}
+
+.navbar{
+    background-color: #A4CABC;
+}
+
 input, text, label{
     color:  #A4CABC;
 }
