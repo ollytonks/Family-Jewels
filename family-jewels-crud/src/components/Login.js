@@ -27,26 +27,32 @@ class Login extends Component {
 
     render() {
         return (
-            <div class="container">
-            <div class="panel panel-default">
+            <div class="login-container">
                 <div class="panel-heading">
-                <h3 class="panel-title">
+                <h2 class="panel-title">
                     LOGIN
-                </h3>
+                </h2>
+                </div>
                 <form onSubmit={this.onSubmit}>
-                    <div class="panel-body">
-                    <label for="description">Username:</label>
-                    <input type="text" class="form-control" name="username" placeholder="Username" />
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" name="username" placeholder="" />
+                        </div>
                     </div>
-                    <div class="panel-body">
-                    <label for="author">Password:</label>
-                    <input type="text" class="form-control" name="password" placeholder="" />
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" name="password" placeholder="" />
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-outline-warning">Submit</button>
+                        </div>
+                    </div>
                 </form>
-                </div>
-                </div>
-                </div>
+            </div>
         );
     }
 }
