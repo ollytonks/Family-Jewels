@@ -99,12 +99,12 @@ class App extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.heirlooms.map(board =>
+                    {this.state.heirlooms.map(heirlooms =>
                     <tr>
-                        <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
-                        <td>{board.description}</td>
-                        <td>{board.guardian}</td>
-                        <td>{board.nextguardian}</td>
+                        <td><Link to={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`}>{heirlooms.title}</Link></td>
+                        <td>{heirlooms.description}</td>
+                        <td>{heirlooms.guardian}</td>
+                        <td>{heirlooms.nextguardian}</td>
                     </tr>
                     )}
                 </tbody>
