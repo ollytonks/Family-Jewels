@@ -45,6 +45,7 @@ class App extends Component {
         console.log(this.ref);
     }
 
+
     render() {
         return (
         <div class="panel nav-bar">
@@ -71,11 +72,10 @@ class App extends Component {
                 </h3>
             </div>
             <div class="panel-body">
-                <h4><Link to="/login">Login</Link></h4>
                 <div>
                 <Switch
                     isOn={this.state.switch}
-                    handleToggle={() => 
+                    handleToggle={() =>
                         {
                             this.setState(prevState => ({switch: !prevState.switch}));
                             this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
@@ -85,10 +85,6 @@ class App extends Component {
                 />
                 {this.state.switch ? "Archive" : ""}
                 </div>
-                <h4><Link to="/create">Add Heirloom</Link></h4>
-                <br></br>
-                <h4><Link to="/uploadimage">Upload an Image</Link></h4>
-
                 <table class="table table-stripe">
                 <thead>
                     <tr>
@@ -101,7 +97,7 @@ class App extends Component {
                 <tbody>
                     {this.state.heirlooms.map(board =>
                     <tr>
-                        <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
+                        <td><a class="link" href={`/show/${board.key}`}>{board.title}</a></td>
                         <td>{board.description}</td>
                         <td>{board.guardian}</td>
                         <td>{board.nextguardian}</td>
