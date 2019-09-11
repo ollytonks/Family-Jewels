@@ -47,19 +47,43 @@
     background-color:#FF5964;
     color:#fff;
 }
-
 .navbar-brand{
     width: auto;
     background-color: #A4CABC;
     color: #8D77AB;
+}
+.navbar-brand:hover{
+    color:#B2473E;
 }
 
 .nav-item {
     color:#8D77AB;
 }
 
+.nav-item:hover{
+    color:#B2473E;
+}
+
 .navbar{
     background-color: #A4CABC;
+}
+.link{
+    color: #ACBD78;
+}
+
+.link:hover{
+    color: #FEBD59;
+}
+
+.panel-title{
+    color: #fff;
+}
+th{
+    color:#A4CABC;
+}
+
+td{
+    color: #fff;
 }
 
 input, text, label{
