@@ -97,7 +97,7 @@ class App extends Component {
                 <tbody>
                     {this.state.heirlooms.map(heirlooms =>
                     <tr>
-                        <td><Link to={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`}>{heirlooms.title}</Link></td>
+                        <td><a class="link" href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`}>{heirlooms.title}</a></td>
                         <td>{heirlooms.description}</td>
                         <td>{heirlooms.guardian}</td>
                         <td>{heirlooms.nextguardian}</td>
