@@ -53,7 +53,7 @@ class Show extends Component {
             });
       }
 
-      downloadTxtFile(id){
+    downloadTxtFile(id){
         firebase.firestore().collection('boards').doc(id).get().then((doc) => {
             if (doc.exists) {
                 var ng = "None assigned";
