@@ -31,11 +31,11 @@ class Show extends Component {
                 console.log("No such document!");
             }
         });
-        this.state.archive_text = this.strcmp(this.state.target,'boards') >= 0 ? 'Archive' : 'Restore';
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
     componentDidUpdate() {
-        this.state.archive_text = this.strcmp(this.state.target,'boards') >= 0 ? 'Archive' : 'Restore';
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
     delete(id) {
@@ -46,31 +46,14 @@ class Show extends Component {
             console.error("Error removing document: ", error);
         });
     }
-    
-    strcmp(str1, str2) {
-        // http://kevin.vanzonneveld.net
-        // +   original by: Waldo Malqui Silva
-        // +      input by: Steve Hilder
-        // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-        // +    revised by: gorthaur
-        // *     example 1: strcmp( 'waldo', 'owald' );
-        // *     returns 1: 1
-        // *     example 2: strcmp( 'owald', 'waldo' );
-        // *     returns 2: -1
-        return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
-    }
 
     // If current, archives. If archived, unarchives.
     archive(id){
         var current = this.state.target;
         var dest = '';
-        console.log(this.strcmp(current, 'boards'))
-        dest = this.strcmp(current, 'boards') >= 0 ? 'archived_boards' : 'boards';
-        console.log(current);
-        console.log(dest);
+        dest = current === 'boards' ? 'archived_boards' : 'boards';
         firebase.firestore().collection(current).doc(id).get().then((doc) => {
             if (doc.exists) {
-                console.log(this.state.board)
                 firebase.firestore().collection(dest).add(this.state.heirlooms);
             }
             console.log("Document successfully duplicated!");
