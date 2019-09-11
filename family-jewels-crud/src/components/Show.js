@@ -14,6 +14,7 @@ class Show extends Component {
             target: this.props.match.params.collection,
             archive_text: ''
         };
+        console.log(this.state.hlist);
         this.unsubscribe = null;
     }
 
