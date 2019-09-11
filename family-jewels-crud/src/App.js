@@ -47,6 +47,22 @@ class App extends Component {
 
     render() {
         return (
+        <div class="panel nav-bar">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="/">Family Jewels</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                <a class="nav-item nav-link" href="/create">Add Heirloom</a>
+                <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
+                </div>
+            </div>
+            <form class="form-inline">
+            <a class="nav-item nav-link" href="/login">Login</a>
+            </form>
+        </nav>
         <div class="container">
             <div class="panel panel-default">
             <div class="panel-heading">
@@ -64,7 +80,6 @@ class App extends Component {
                             this.setState(prevState => ({switch: !prevState.switch}));
                             this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
                             this.setCollection();
-                            console.log(this.state.target);
                         }
                     }
                 />
@@ -96,6 +111,7 @@ class App extends Component {
                 </table>
             </div>
             </div>
+        </div>
         </div>
         );
     }

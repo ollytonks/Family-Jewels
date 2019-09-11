@@ -46,12 +46,28 @@ class Create extends Component {
         } else {
             window.alert("An heirloom must have a title, description, and guardian.");
         }
-        
+
     }
 
     render() {
         const { title, description, guardian, nextguardian } = this.state;
         return (
+            <div class="panel nav-bar">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="/">Family Jewels</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/create">Add Heirloom</a>
+                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
+                    </div>
+                </div>
+                <form class="form-inline">
+                <a class="nav-item nav-link" href="/login">Login</a>
+                </form>
+            </nav>
         <div class="container">
             <div class="panel panel-default">
             <div class="panel-heading">
@@ -82,6 +98,7 @@ class Create extends Component {
                 </form>
             </div>
             </div>
+        </div>
         </div>
         );
     }
