@@ -56,11 +56,13 @@ class Show extends Component {
       downloadTxtFile(id){
         firebase.firestore().collection('boards').doc(id).get().then((doc) => {
             if (doc.exists) {
-                var ng = "";
+                var ng = "None assigned";
                 if (this.state.board.nextguardian) {
                     ng = this.state.board.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.board.title, "\nDescription: ", this.state.board.description, "\nGuardian: ", this.state.board.guardian, "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
+                var blob = new Blob(["Title: ", this.state.board.title, "\nDescription: ", 
+                    this.state.board.description, "\nGuardian: ", this.state.board.guardian, 
+                    "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.board.title + ".txt");
                 console.log("Document successfully downloaded!");
             }
