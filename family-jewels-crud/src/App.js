@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
+import { thisTypeAnnotation } from '@babel/types';
 
 class App extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ class App extends Component {
         this.state = {
             heirlooms: [],
             switch: false,
-            target: 'archived_boards'
+            target: 'archived_boards',
+            heading: 'HEIRLOOMS'
         };
     }
 
@@ -45,6 +47,9 @@ class App extends Component {
         console.log(this.ref);
     }
 
+    componentDidUpdate() {
+        this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
+    }
 
     render() {
         return (
@@ -68,7 +73,7 @@ class App extends Component {
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                HEIRLOOM LIST
+                {this.state.heading}
                 </h3>
             </div>
             <div class="panel-body">
@@ -83,7 +88,6 @@ class App extends Component {
                         }
                     }
                 />
-                {this.state.switch ? "Archive" : ""}
                 </div>
                 <table class="table table-stripe">
                 <thead>
