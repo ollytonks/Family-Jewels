@@ -9,12 +9,37 @@ class Create extends Component {
         super();
         this.ref = firebase.firestore().collection('boards');
         this.state = {
+            heirlooms: [],
             title: '',
             description: '',
             author: '',
             nextguardian: ''
         };
     }
+
+    onCollectionUpdate = (querySnapshot) => {
+        const list = [];
+        querySnapshot.forEach((doc) => {
+            const { title, description, guardian, nextguardian } = doc.data();
+            list.push({
+                key: doc.id,
+                doc, // DocumentSnapshot
+                title,
+                description,
+                guardian,
+                nextguardian
+            });
+        });
+        this.setState({
+            heirlooms: list
+        });
+    }
+
+
+    componentDidMount() {
+        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    }
+
     onChange = (e) => {
         const state = this.state
         state[e.target.name] = e.target.value;
@@ -23,28 +48,37 @@ class Create extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-
-        const { title, description, guardian, nextguardian } = this.state;
-        if (title && description && guardian) {
-            this.ref.add({
-                title,
-                description,
-                guardian,
-                nextguardian
-            }).then((docRef) => {
-            this.setState({
-                title: '',
-                description: '',
-                guardian: '',
-                nextguardian: ''
-            });
-            this.props.history.push("/")
-            })
-            .catch((error) => {
-            console.error("Error adding document: ", error);
-            });
+        var found = false;
+        for (let i=0; i < this.state.heirlooms.length; i++) {
+            if (this.state.heirlooms[i].title === this.state.title) {
+                found = true;
+            }
+        }
+        if (!found) {
+            const { title, description, guardian, nextguardian } = this.state;
+            if (title && description && guardian) {
+                this.ref.add({
+                    title,
+                    description,
+                    guardian,
+                    nextguardian
+                }).then((docRef) => {
+                this.setState({
+                    title: '',
+                    description: '',
+                    guardian: '',
+                    nextguardian: ''
+                });
+                this.props.history.push("/")
+                })
+                .catch((error) => {
+                console.error("Error adding document: ", error);
+                });
+            } else {
+                window.alert("An heirloom must have a title, description, and guardian.");
+            }
         } else {
-            window.alert("An heirloom must have a title, description, and guardian.");
+            window.alert("An heirloom already exists with that title.");
         }
 
     }
