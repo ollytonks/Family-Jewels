@@ -16,6 +16,7 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             heading: 'HEIRLOOMS'
+            //test
         };
     }
 
