@@ -55,7 +55,7 @@ class App extends Component {
     render() {
         this.isClassicBackground = this.state.switch;
         return (
-        <div className={this.isClassicBackground ? 'background-classic' : 'background-archive'}>
+        <div class="mainbody">
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand" href="/">Family Jewels</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
