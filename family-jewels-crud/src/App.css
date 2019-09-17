@@ -1,3 +1,12 @@
+/*
+    purple: #8D77AB
+    yellow: #FEBD59
+    light yellow: #ffd38f
+    blue:
+    green: #A4CABC
+    red: #ffd38f
+*/
+
 .App {
     text-align: center;
 }
@@ -36,7 +45,7 @@ body > #root > div {
     overflow: hidden;
 }
 
-div.mainbody1
+div.mainbodyClassic
 {
     padding:0;
     margin:0;
@@ -49,10 +58,10 @@ div.mainbody1
 
     position: absolute;
 
-    background:rgba(0,255,255,0.5);
+    background-color: #57496A;
 }
 
-div.mainbody2
+div.mainbodyArchive
 {
     padding:0;
     margin:0;
@@ -63,9 +72,9 @@ div.mainbody2
     min-width: 100vw;
     min-height: 100vh;
 
-    position:absolute;
+    position: absolute;
 
-    background:rgba(0,0,255,0.5);
+    background-color: #FEBD59;
 }
 
 .dropzone {
@@ -138,6 +147,16 @@ a.sub:hover {
     color: #ffd38f;
 }
 
+a.subArchive:link {
+    color: #57496A;
+}
+a.subArchive:visited {
+    color: rgb(78, 66, 95);
+}
+a.subArchive:hover {
+    color: rgb(78, 66, 95);
+}
+
 .panel-title{
     color: #fff;
 }
@@ -154,11 +173,11 @@ input, text, label{
 }
 
 .background-classic {
-    background-color: #fff;
+    background-color: #57496A;
     width: 100%;
     height: 100%;
 }
 
 .background-archive {
-    background-color: #A4CABC;
+    background-color: #FEBD59;
 }
