@@ -1,6 +1,11 @@
 import React, { Component, useState } from 'react';
 import './Switch.css';
 
+/* This is a simple class for a switch which can be used on any page
+  It uses isOn to check its state, handled in the parent component.
+  handleToggle is a lambda function in parent component.
+  */
+
 const Switch = ( {isOn, handleToggle, isClassicBackground} ) => {
 
   return (

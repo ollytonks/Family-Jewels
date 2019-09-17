@@ -17,7 +17,6 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             heading: 'HEIRLOOMS'
-            //test
         };
     }
 
@@ -105,10 +104,18 @@ class App extends Component {
                 <tbody>
                     {this.state.heirlooms.map(heirlooms =>
                     <tr>
-                        <td><Link to={{
-                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`,
-                        }}>{heirlooms.title}</Link></td>
-                        <td>{heirlooms.description}</td>
+                        <td>
+                            <a class="sub" href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
+                            }>{heirlooms.title}
+                            </a>
+                        </td>
+                        <td>
+                            {(heirlooms.description.length > 150) ?
+                                heirlooms.description.slice(0,120).concat("...")
+                                :
+                                heirlooms.description
+                            }
+                        </td>
                         <td>{heirlooms.guardian}</td>
                         <td>{heirlooms.nextguardian}</td>
                     </tr>

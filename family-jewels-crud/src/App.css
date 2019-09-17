@@ -65,28 +65,30 @@
 .navbar-brand{
     width: auto;
     background-color: #A4CABC;
-    color: #8D77AB;
+    color: #57496A;
 }
 .navbar-brand:hover{
-    color:#B2473E;
-}
-
-.nav-item {
-    color:#8D77AB;
-}
-
-.nav-item:hover{
     color:#B2473E;
 }
 
 .navbar{
     background-color: #A4CABC;
 }
-.link{
-    color: #FEBD59;
+
+a:link {
+    color: #57496A;
+}
+a:hover {
+    color: #B2473E;
 }
 
-.link:hover{
+a.sub:link {
+    color: #FEBD59;
+}
+a.sub:visited {
+    color: #ffd38f;
+}
+a.sub:hover {
     color: #ffd38f;
 }
 
