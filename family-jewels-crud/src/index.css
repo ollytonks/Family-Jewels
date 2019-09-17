@@ -3,7 +3,8 @@ body {
     font: "source sans pro";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #57496A;
+    background-color: #fff;
+    height: 0%;
 
 }
 
