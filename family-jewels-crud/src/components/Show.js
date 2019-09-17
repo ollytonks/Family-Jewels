@@ -104,7 +104,6 @@ class Show extends Component {
             <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h4><Link to="/">Heirloom List</Link></h4>
                 <h3 class="panel-title">
                     {this.state.heirlooms.title}
                 </h3>

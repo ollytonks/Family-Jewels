@@ -44,7 +44,7 @@ div.mainbodyClassic
     max-height: fit-content;
     min-width: 100%;
     min-height: 100vh;
-    background:rgba(0,255,255,0.5);
+    background-color: #8D77AB;
 }
 
 div.mainbodyArchive
@@ -59,7 +59,7 @@ div.mainbodyArchive
     max-height: fit-content;
     min-width: 100%;
     min-height: 100vh;
-    background:rgba(0,0,255,0.5);
+    background-color: #FEBD59;
 }
 
 .dropzone {
@@ -125,23 +125,23 @@ div.mainbodyArchive
 
 
 a.sub:link {
-    color: #8D77AB;
+    color: #FEBD59;
 }
 a.sub:visited {
-    color: #A4CABC;
+    color: #ffd38f;
 }
 a.sub:hover {
-    color: #8D77AB;
+    color: #ffd38f;
 }
 
 a.subArchive:link {
-    color: #FEBD59;
+    color: #8D77AB;
 }
 a.subArchive:visited {
-    color: #ffd38f;
+    color: #A4CABC;
 }
 a.subArchive:hover {
-    color: #ffd38f;
+    color: #8D77AB;
 }
 
 .panel-title{
@@ -160,11 +160,11 @@ input, text, label{
 }
 
 .background-classic {
-    background-color: #fff;
+    background-color: #8D77AB;
     width: 100%;
     height: 100%;
 }
 
 .background-archive {
-    background-color: #A4CABC;
+    background-color: #FEBD59;
 }

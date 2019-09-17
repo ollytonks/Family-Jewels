@@ -6,11 +6,11 @@ import './Switch.css';
   handleToggle is a lambda function in parent component.
   */
 
-const Switch = ( {isOn, handleToggle, isClassicBackground} ) => {
+const Switch = ( {isOn, handleToggle, isArchiveBackground} ) => {
 
   return (
     <div
-        className={isClassicBackground ? 'background-classic' : 'background-archive'}>
+        className={isArchiveBackground ? 'background-archive' : 'background-classic'}>
       <input
         checked={isOn}
         onChange={handleToggle}

@@ -9,7 +9,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
-        this.isClassicBackground=false;
+        this.isArchiveBackground=false;
         this.unsubscribe = null;
         this.state = false;
         this.state = {
@@ -53,9 +53,9 @@ class App extends Component {
     }
 
     render() {
-        this.isClassicBackground = this.state.switch;
+        this.isArchiveBackground = this.state.switch;
         return (
-        <div class={this.isClassicBackground ? "mainbodyClassic" : "mainbodyArchive"}>
+        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand" href="/">Family Jewels</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@ class App extends Component {
                 <div>
                 <Switch
                     isOn={this.state.switch}
-                    isClassicBackground = {this.isClassicBackground}
+                    isArchiveBackground = {this.isArchiveBackground}
                     handleToggle={() =>
                         {
                             this.setState(prevState => ({switch: !prevState.switch}));
@@ -105,7 +105,7 @@ class App extends Component {
                     {this.state.heirlooms.map(heirlooms =>
                     <tr>
                         <td>
-                            <a class={this.isClassicBackground ? "sub": "subArchive"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
+                            <a class={this.isArchiveBackground ? "subArchive": "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
                             }>{heirlooms.title}
                             </a>
                         </td>
