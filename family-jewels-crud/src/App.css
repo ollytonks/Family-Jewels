@@ -30,8 +30,10 @@ body > #root > div {
     top:0;
     left:0;
 
-    min-height: 100vh;
-    min-width: 100vh;
+    min-height: -webkit-fill-available;
+    min-width: 100vw;
+
+    overflow: hidden;
 }
 
 div.mainbody1
@@ -42,10 +44,11 @@ div.mainbody1
     top:0;
     left:0;
 
-    max-width: fit-content;
-    max-height: fit-content;
-    min-width: 100%;
+    min-width: 100vw;
     min-height: 100vh;
+
+    position: absolute;
+
     background:rgba(0,255,255,0.5);
 }
 
@@ -57,10 +60,11 @@ div.mainbody2
     top:0;
     left:0;
 
-    max-width: fit-content;
-    max-height: fit-content;
-    min-width: 100%;
+    min-width: 100vw;
     min-height: 100vh;
+
+    position:absolute;
+
     background:rgba(0,0,255,0.5);
 }
 
@@ -123,8 +127,6 @@ div.mainbody2
 .navbar{
     background-color: #A4CABC;
 }
-
-
 
 a.sub:link {
     color: #FEBD59;
