@@ -55,7 +55,7 @@ class App extends Component {
     render() {
         this.isClassicBackground = this.state.switch;
         return (
-        <div class={this.isClassicBackground ? "mainbody1" : "mainbody2"}>
+        <div class={this.isClassicBackground ? "mainbodyClassic" : "mainbodyArchive"}>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand" href="/">Family Jewels</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +105,7 @@ class App extends Component {
                     {this.state.heirlooms.map(heirlooms =>
                     <tr>
                         <td>
-                            <a class="sub" href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
+                            <a class={this.isClassicBackground ? "sub": "subArchive"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
                             }>{heirlooms.title}
                             </a>
                         </td>

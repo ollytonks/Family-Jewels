@@ -72,8 +72,8 @@ class Show extends Component {
                 if (this.state.heirlooms.nextguardian) {
                     ng = this.state.heirlooms.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ", 
-                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian, 
+                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ",
+                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.heirlooms.title + ".txt");
                 console.log("Document successfully downloaded!");

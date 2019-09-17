@@ -1,3 +1,12 @@
+/*
+    purple: #8D77AB
+    yellow: #FEBD59
+    light yellow: #ffd38f
+    blue:
+    green: #A4CABC
+    red: #ffd38f
+*/
+
 .App {
     text-align: center;
 }
@@ -23,7 +32,7 @@
     color: #61dafb;
 }
 
-div.mainbody1
+div.mainbodyClassic
 {
     padding:0;
     margin:0;
@@ -33,10 +42,10 @@ div.mainbody1
 
     width: fit-content;
     height: fit-content;
-    background:rgba(0,255,255,0.5);
+    background-color: #FEBD59;
 }
 
-div.mainbody2
+div.mainbodyArchive
 {
     padding:0;
     margin:0;
@@ -46,7 +55,7 @@ div.mainbody2
 
     width: fit-content;
     height: fit-content;
-    background:rgba(0,0,255,0.5);
+    background-color: #8D77AB;
 }
 
 .dropzone {
@@ -112,12 +121,22 @@ div.mainbody2
 
 
 a.sub:link {
-    color: #FEBD59;
+    color: #8D77AB;
 }
 a.sub:visited {
-    color: #ffd38f;
+    color: #A4CABC;
 }
 a.sub:hover {
+    color: #8D77AB;
+}
+
+a.subArchive:link {
+    color: #FEBD59;
+}
+a.subArchive:visited {
+    color: #ffd38f;
+}
+a.subArchive:hover {
     color: #ffd38f;
 }
 
