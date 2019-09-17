@@ -71,16 +71,19 @@
     color:#B2473E;
 }
 
+.nav-item {
+    color:#57496A;
+}
+
+.nav-item:hover{
+    color:#B2473E;
+}
+
 .navbar{
     background-color: #A4CABC;
 }
 
-a:link {
-    color: #57496A;
-}
-a:hover {
-    color: #B2473E;
-}
+
 
 a.sub:link {
     color: #FEBD59;
