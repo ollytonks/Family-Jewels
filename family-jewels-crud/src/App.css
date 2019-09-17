@@ -23,6 +23,17 @@
     color: #61dafb;
 }
 
+body > #root > div {
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    min-height: 100vh;
+    min-width: 100vh;
+}
+
 div.mainbody1
 {
     padding:0;
@@ -31,8 +42,10 @@ div.mainbody1
     top:0;
     left:0;
 
-    width: fit-content;
-    height: fit-content;
+    max-width: fit-content;
+    max-height: fit-content;
+    min-width: 100%;
+    min-height: 100vh;
     background:rgba(0,255,255,0.5);
 }
 
@@ -44,8 +57,10 @@ div.mainbody2
     top:0;
     left:0;
 
-    width: fit-content;
-    height: fit-content;
+    max-width: fit-content;
+    max-height: fit-content;
+    min-width: 100%;
+    min-height: 100vh;
     background:rgba(0,0,255,0.5);
 }
 
