@@ -1,9 +1,11 @@
 import React, { Component, useState } from 'react';
 import './Switch.css';
 
-const Switch = ( {isOn, handleToggle} ) => {
+const Switch = ( {isOn, handleToggle, isClassicBackground} ) => {
+
   return (
-    <div>
+    <div
+        className={isClassicBackground ? 'background-classic' : 'background-archive'}>
       <input
         checked={isOn}
         onChange={handleToggle}

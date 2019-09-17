@@ -8,6 +8,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
+        this.isClassicBackground=false;
         this.unsubscribe = null;
         this.state = false;
         this.state = {
@@ -47,8 +48,9 @@ class App extends Component {
 
 
     render() {
+        this.isClassicBackground = this.state.switch;
         return (
-        <div class="panel nav-bar">
+        <div className={this.isClassicBackground ? 'background-classic' : 'background-archive'}>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand" href="/">Family Jewels</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +77,7 @@ class App extends Component {
                 <div>
                 <Switch
                     isOn={this.state.switch}
+                    isClassicBackground = {this.isClassicBackground}
                     handleToggle={() =>
                         {
                             this.setState(prevState => ({switch: !prevState.switch}));

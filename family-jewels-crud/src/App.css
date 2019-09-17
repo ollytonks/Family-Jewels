@@ -89,3 +89,13 @@ td{
 input, text, label{
     color:  #A4CABC;
 }
+
+.background-classic {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.background-archive {
+    background-color: #A4CABC;
+}
