@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
+import { thisTypeAnnotation } from '@babel/types';
 
 class App extends Component {
     constructor(props) {
@@ -14,7 +15,9 @@ class App extends Component {
         this.state = {
             heirlooms: [],
             switch: false,
-            target: 'archived_boards'
+            target: 'archived_boards',
+            heading: 'HEIRLOOMS'
+            //test
         };
     }
 
@@ -46,6 +49,9 @@ class App extends Component {
         console.log(this.ref);
     }
 
+    componentDidUpdate() {
+        this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
+    }
 
     render() {
         this.isClassicBackground = this.state.switch;
@@ -70,7 +76,7 @@ class App extends Component {
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                HEIRLOOM LIST
+                {this.state.heading}
                 </h3>
             </div>
             <div class="panel-body">
@@ -86,7 +92,6 @@ class App extends Component {
                         }
                     }
                 />
-                {this.state.switch ? "Archive" : ""}
                 </div>
                 <table class="table table-stripe">
                 <thead>
@@ -98,12 +103,14 @@ class App extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.heirlooms.map(board =>
+                    {this.state.heirlooms.map(heirlooms =>
                     <tr>
-                        <td><a class="link" href={`/show/${board.key}`}>{board.title}</a></td>
-                        <td>{board.description}</td>
-                        <td>{board.guardian}</td>
-                        <td>{board.nextguardian}</td>
+                        <td><Link to={{
+                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`,
+                        }}>{heirlooms.title}</Link></td>
+                        <td>{heirlooms.description}</td>
+                        <td>{heirlooms.guardian}</td>
+                        <td>{heirlooms.nextguardian}</td>
                     </tr>
                     )}
                 </tbody>
