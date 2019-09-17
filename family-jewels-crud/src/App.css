@@ -23,18 +23,30 @@
     color: #61dafb;
 }
 
-div.mainbody
+div.mainbody1
 {
-    position:fixed;
     padding:0;
     margin:0;
 
     top:0;
     left:0;
 
-    width: 100%;
-    height: 100%;
+    width: fit-content;
+    height: fit-content;
     background:rgba(0,255,255,0.5);
+}
+
+div.mainbody2
+{
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: fit-content;
+    height: fit-content;
+    background:rgba(0,0,255,0.5);
 }
 
 .dropzone {
