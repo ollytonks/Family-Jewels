@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
+import SearchBar from './components/elements/Searchbar';
 
 class App extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ class App extends Component {
         this.state = {
             heirlooms: [],
             switch: false,
-            target: 'archived_boards'
+            target: 'archived_boards',
+            searchResult: []
         };
     }
 
@@ -72,6 +74,26 @@ class App extends Component {
             </div>
             <div class="panel-body">
                 <h4><Link to="/login">Login</Link></h4>
+                <div>
+                <SearchBar
+                    handleSearch={() =>
+                        {
+                            this.state.searchResult = [];
+                            var arrayLength = this.state.heirlooms.length;
+                            for (var i = 0; i < arrayLength; i++){
+                                if (this.state.heirlooms[i].title.includes(searchKey)       ||
+                                    this.state.heirlooms[i].description.includes(searchKey) ||
+                                    this.state.heirlooms[i].guardian.includes(searchKey)    ||
+                                    this.state.heirlooms[i].nextguardian.includes(searchKey))
+                                {
+                                    this.state.searchResult.push(this.state.heirlooms[i]);
+                                }
+                            }
+                            this.state.heirlooms = this.state.searchResult;
+                        }
+                    }
+                />
+                </div>
                 <div>
                 <Switch
                     isOn={this.state.switch}
