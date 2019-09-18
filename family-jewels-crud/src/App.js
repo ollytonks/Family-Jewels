@@ -93,6 +93,41 @@ class App extends Component {
                     }
                 />
                 </div>
+                <div class="grid">
+                    {this.state.heirlooms.map(heirlooms =>
+                        <div class="tile">
+                            <img style="width:100%"></img>
+                            <div class="infobox">
+                                <h4><b>{heirlooms.title}</b></h4>
+                                <p>
+                                    {(heirlooms.description.length > 80) ?
+                                        heirlooms.description.slice(0,80).concat("...")
+                                        : heirlooms.description
+                                    }
+                                </p>
+                                <p>
+                                    {heirlooms.guardian}
+                                </p>
+                                <p>
+                                    {heirlooms.nextguardian}
+                                </p>
+                            </div>
+                            <td>
+                                <a class={this.isArchiveBackground ? "subArchive": "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
+                                }>{heirlooms.title}
+                                </a>
+                            </td>
+                            <td>
+                                {(heirlooms.description.length > 150) ?
+                                    heirlooms.description.slice(0,120).concat("...")
+                                    :
+                                    heirlooms.description
+                                }
+                            </td>
+                            <td>{heirlooms.guardian}</td>
+                            <td>{heirlooms.nextguardian}</td>
+                        </div>
+                    )}
                 </div>
                 <table class="table table-stripe">
                 <thead>
