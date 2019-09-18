@@ -33,9 +33,15 @@ class App extends Component {
                 nextguardian
             });
         });
+        if (this.state.searchResult == null) {
+            this.setState({
+                searchResult : this.state.heirlooms
+            });
+        }
         this.setState({
             heirlooms: list
         });
+
     }
 
     componentDidMount() {
@@ -50,6 +56,8 @@ class App extends Component {
 
     handleChange(e){
         {
+            //window.alert(e.target.value);
+
             let currentList = [];
             let newList = [];
             // If the search bar isn't empty
@@ -60,12 +68,14 @@ class App extends Component {
                 newList = currentList.filter(item => {
                     // change search term to lowercase
                     var filter = e.target.value;
-                    let lc = item.title;//.lowerCase();
+                    let lc = "" + item.title;//.lowerCase();
                     if (lc !== null) {
                         if (lc.includes(filter)) {
+                            console.log(lc);
                             return 1;
                         }
                     }
+                    /**
                     lc = item.description;//.lowerCase();
                     if (lc !== null) {
                         if (lc.includes(filter)) {
@@ -84,13 +94,17 @@ class App extends Component {
                             return 1;
                         }
                     }
+                    */
                     return 0;
                 });
             } else {
                 // If the search bar is empty, set newList to original task list
                 newList = this.state.heirlooms;
             }
+            console.log(newList.length);
             this.state.searchResult = newList;
+            console.log(this.state.searchResult.length);
+            this.forceUpdate();
         }
     }
 
@@ -129,6 +143,7 @@ class App extends Component {
                         placeholder="Search..."
                     />
                 </div>
+
                 <div>
                 <Switch
                     isOn={this.state.switch}
@@ -156,7 +171,7 @@ class App extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.heirlooms.map(board =>
+                    {this.state.searchResult.map(board =>
                     <tr>
                         <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
                         <td>{board.description}</td>
