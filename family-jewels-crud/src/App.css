@@ -178,12 +178,18 @@ input, text, label{
 
 .background-classic {
     background-color: #57496A;
-    width: 100%;
-    height: 100%;
+    justify: center;
 }
 
 .background-archive {
     background-color: #FEBD59;
+    justify: center;
+}
+
+h2.panel-title {
+    height: 0%;
+    margin: 1%;
+    justify: center;
 }
 
 .grid {

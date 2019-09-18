@@ -71,7 +71,6 @@ class App extends Component {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                 <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
                 </div>
             </div>
             <form class="form-inline">
@@ -80,12 +79,14 @@ class App extends Component {
         </nav>
         <div class="container">
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                {this.state.heading}
-                </h3>
-            </div>
-            <div>
+            <div class="panel-body">
+                <div class="row">
+                <div class="col-md-10">
+                    <h2 class="panel-title">
+                    {this.state.heading}
+                    </h2>
+                </div>
+                <div class="col-md-2">
                 <Switch
                     isOn={this.state.switch}
                     isArchiveBackground = {this.isArchiveBackground}
@@ -97,16 +98,18 @@ class App extends Component {
                         }
                     }
                 />
+                </div>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="grid">
                     {this.state.heirlooms.map(heirloom =>
-                        <div class="tile">
+                        <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
                             <div class="imgbox">
                                 <img class="tileimg" src={heirloom.icon}></img>
                             </div>
                             <div class="infobox">
-                                <a class={this.isArchiveBackground ? "subArchive": "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <a class={this.isArchiveBackground ? "subArchive" : "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
                                     <b>{heirloom.title}</b>
                                     <br></br>
                                 </a>

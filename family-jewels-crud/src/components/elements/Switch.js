@@ -19,7 +19,7 @@ const Switch = ( {isOn, handleToggle, isArchiveBackground} ) => {
         type="checkbox"
       />
       <label
-        text = {isOn ? "Archive" : ""}
+        text = {isOn ? "Archived" : ""}
         style={{ background: isOn ? '#57496A' :'#FEBD59'}}
         className="react-switch-label"
         htmlFor={`react-switch-new`}
