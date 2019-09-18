@@ -5,10 +5,12 @@ import firebase from './Firebase';
 import Switch from './components/elements/Switch';
 import { thisTypeAnnotation } from '@babel/types';
 
+
 class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
+        this.isArchiveBackground=false;
         this.unsubscribe = null;
         this.state = false;
         this.state = {
@@ -19,18 +21,25 @@ class App extends Component {
         };
     }
 
+    /* On querySnapshot event, gets Firebase colelction */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian } = doc.data();
-            list.push({
-                key: doc.id,
-                doc, // DocumentSnapshot
-                title,
-                description,
-                guardian,
-                nextguardian
-            });
+            var iconSource = '';
+            const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
+            firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
+                list.push({
+                    key: doc.id,
+                    icon: url,
+                    doc, // DocumentSnapshot
+                    title,
+                    description,
+                    guardian,
+                    nextguardian,
+                    imagesLocations
+                });
+                this.forceUpdate();
+            })
         });
         this.setState({
             heirlooms: list
@@ -41,10 +50,10 @@ class App extends Component {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
+    /* Sets the current reference to Firebase collection to the target */
     setCollection() {
         this.ref = firebase.firestore().collection(this.state.target);
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        console.log(this.ref);
     }
 
     componentDidUpdate() {
@@ -52,34 +61,42 @@ class App extends Component {
     }
 
     render() {
+        this.isArchiveBackground = this.state.switch;
         return (
-        <div class="panel nav-bar">
-        <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="/">Family Jewels</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
-                </div>
+        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
+        <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
+                    <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                </ul>
             </div>
-            <form class="form-inline">
-            <a class="nav-item nav-link" href="/login">Login</a>
-            </form>
+        </nav>
+        <nav class="navbar navbar-default navbar-expand d-lg-none">
+                <ul class="nav navbar-nav">
+                    <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                    <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                </ul>
         </nav>
         <div class="container">
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                {this.state.heading}
-                </h3>
-            </div>
             <div class="panel-body">
-                <div>
+                <div class="row">
+                <div class="col-md-10">
+                    <h2 class="panel-title">
+                    {this.state.heading}
+                    </h2>
+                </div>
+                <div class="col-md-2">
                 <Switch
                     isOn={this.state.switch}
+                    isArchiveBackground = {this.isArchiveBackground}
                     handleToggle={() =>
                         {
                             this.setState(prevState => ({switch: !prevState.switch}));
@@ -89,28 +106,37 @@ class App extends Component {
                     }
                 />
                 </div>
-                <table class="table table-stripe">
-                <thead>
-                    <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Guardian</th>
-                    <th>Next guardian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.heirlooms.map(heirlooms =>
-                    <tr>
-                        <td><Link to={{
-                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`,
-                        }}>{heirlooms.title}</Link></td>
-                        <td>{heirlooms.description}</td>
-                        <td>{heirlooms.guardian}</td>
-                        <td>{heirlooms.nextguardian}</td>
-                    </tr>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="grid">
+                    {this.state.heirlooms.map(heirloom =>
+                        <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
+                            <div class="imgbox">
+                                <img class="tileimg" src={heirloom.icon}></img>
+                            </div>
+                            <div class="infobox">
+                                <a class={this.isArchiveBackground ? "subArchive" : "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                    <b>{heirloom.title}</b>
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {(heirloom.description.length > 80) ?
+                                        heirloom.description.slice(0,80).concat("...")
+                                        : heirloom.description
+                                    }
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {"Guardian: " + heirloom.guardian} <br></br>
+                                </a>
+                                <a class="plain">
+                                    {heirloom.nextguardian == "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                </a>
+                            </div>
+                        </div>
                     )}
-                </tbody>
-                </table>
+                </div>
             </div>
             </div>
         </div>

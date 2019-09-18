@@ -39,49 +39,58 @@ class Edit extends Component {
         this.setState({board:state});
     }
 
+    /* Updates heirloom info on submit from forms */
     onSubmit = (e) => {
         e.preventDefault();
 
         const { title, description, guardian, nextguardian } = this.state;
-
-        const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
-        updateRef.set({
-            title,
-            description,
-            guardian,
-            nextguardian
-        }).then((docRef) => {
-            this.setState({
-                key: '',
-                title: '',
-                description: '',
-                guardian: '',
-                nextguardian: ''
+        if (title && description && guardian) {
+            const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+            updateRef.set({
+                title,
+                description,
+                guardian,
+                nextguardian
+            }).then((docRef) => {
+                this.setState({
+                    key: '',
+                    title: '',
+                    description: '',
+                    guardian: '',
+                    nextguardian: ''
+                });
+                this.props.history.push("/show/"+this.props.match.params.id)
+            })
+            .catch((error) => {
+            console.error("Error adding document: ", error);
             });
-            this.props.history.push("/show/"+this.props.match.params.id)
-        })
-        .catch((error) => {
-        console.error("Error adding document: ", error);
-        });
+        } else {
+            window.alert("An heirloom must have a title, description, and guardian.");
+        }
     }
 
     render() {
         return (
             <div class="panel nav-bar">
-            <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/">Family Jewels</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
-                    </div>
+                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
                 </div>
-                <form class="form-inline">
-                <a class="nav-item nav-link" href="/login">Login</a>
-                </form>
+            </nav>
+            <nav class="navbar navbar-default navbar-expand d-lg-none">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
             </nav>
         <div class="container">
             <div class="panel panel-default">
@@ -108,8 +117,9 @@ class Edit extends Component {
                     <label for="nextguardian">Next Guardian:</label>
                     <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <button type="submit" class="btn btn-success">Submit</button>
-                <h4><Link to={`/show/${this.state.key}`} class="btn btn-danger">Cancel</Link></h4>
+                <button type="submit" class="btn btn-outline-warning">Submit</button>
+                <div class="divider"></div>
+                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
                 </form>
             </div>
             </div>

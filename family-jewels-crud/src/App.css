@@ -1,3 +1,12 @@
+/*
+    purple: #8D77AB
+    yellow: #FEBD59
+    light yellow: #ffd38f
+    blue:
+    green: #A4CABC
+    red: #ffd38f
+*/
+
 .App {
     text-align: center;
 }
@@ -21,6 +30,51 @@
 
 .App-link {
     color: #61dafb;
+}
+
+body > #root > div {
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    min-height: -webkit-fill-available;
+    min-width: 100vw;
+
+    overflow: hidden;
+}
+
+div.mainbodyClassic
+{
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    min-width: 100vw;
+    min-height: 100vh;
+
+    position: absolute;
+
+    background-color: rgb(72, 61, 87);
+}
+
+div.mainbodyArchive
+{
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    min-width: 100vw;
+    min-height: 100vh;
+
+    position: absolute;
+
+    background-color: #FEBD59;
 }
 
 .dropzone {
@@ -65,33 +119,40 @@
 .navbar-brand{
     width: auto;
     background-color: #A4CABC;
-    color: #8D77AB;
-}
-.navbar-brand:hover{
-    color:#B2473E;
+    color: #57496A;
 }
 
-.nav-item {
-    color:#8D77AB;
+.navbar ul li a {
+    color:#57496A;
 }
 
-.nav-item:hover{
+.navbar ul li a:hover{
     color:#B2473E;
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: inline-block;
+}
+
+.navbar-nav>li {
+    display: inline-block;
 }
 
 .navbar{
     background-color: #A4CABC;
 }
-.link{
-    color: #ACBD78;
-}
-
-.link:hover{
-    color: #FEBD59;
-}
 
 .panel-title{
     color: #fff;
+}
+.thumbnail {
+    width: 10vh;
+    height: 10vh;
+}
+.singleDisplayImg {
+    width: 20vh;
+    height: 20vh;
 }
 th{
     color:#A4CABC;
@@ -103,4 +164,118 @@ td{
 
 input, text, label{
     color:  #A4CABC;
+}
+
+.background-classic {
+    background-color: rgb(72, 61, 87);
+    justify: center;
+}
+
+.background-archive {
+    background-color: #FEBD59;
+    justify: center;
+}
+
+h2.panel-title {
+    height: 0%;
+    margin: 1%;
+    justify: center;
+}
+
+.grid {
+    display: grid;
+    grid-gap: 15px; 
+    overflow: hidden;
+  /*   grid-template-columns: repeat(auto-fill, 200px); */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /*   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr) 150px); */
+    grid-auto-flow: dense;
+    text-align: center;
+}
+
+.tile {
+    border-radius: 6px;
+    background: #57496A;
+    width: 100%;
+    height: 100%;
+}
+
+.tileArchive {
+    border-radius: 6px;
+    background: rgb(221, 163, 77);
+    width: 100%;
+    height: 100%;
+}
+
+.imgbox {
+    display: block;
+    width: 100%;
+    height: 60%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.tileimg {
+    padding: 5%;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.infobox {
+    height: 40%;
+    overflow: scroll;
+}
+
+.grid a.sub:link {
+    color: #FEBD59;
+}
+.grid a.sub:visited {
+    color: #ffd38f;
+}
+.grid a.sub:hover {
+    color: #ffd38f;
+}
+
+.grid a.subArchive:link {
+    color: #57496A;
+}
+.grid a.subArchive:visited {
+    color: rgb(78, 66, 95);
+}
+.grid a.subArchive:hover {
+    color: rgb(78, 66, 95);
+}
+
+.grid a.plain {
+    color: #fff;
+}
+
+.grid a.plain:hover {
+    color: #fff;
+}
+
+.container {
+    position: relative;
+	display: block;
+    text-align:center;
+    width: 100%;
+    color: #FEBD59;
+}
+
+.container dd {
+    color: #fff;
+}
+
+.container h3 {
+    color: #FEBD59;
+}
+
+.col-md-10 {
+    text-align:left;
+}
+
+.divider {
+    width: 5px;
+    height:auto;
+    display:inline-block;
 }

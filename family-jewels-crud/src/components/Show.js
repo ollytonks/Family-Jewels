@@ -11,6 +11,7 @@ class Show extends Component {
             heirlooms: {},
             key: '',
             title: '',
+            icon: '',
             target: this.props.match.params.collection,
             archive_text: ''
         };
@@ -22,11 +23,16 @@ class Show extends Component {
         const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
         ref.get().then((doc) => {
             if (doc.exists) {
-                this.setState({
-                    heirlooms: doc.data(),
-                    key: doc.id,
-                    isLoading: false
-                });
+                var data = doc.data();
+                console.log(data);
+                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
+                    this.setState({
+                        heirlooms: doc.data(),
+                        key: doc.id,
+                        icon: url,
+                        isLoading: false
+                    });
+                })
             } else {
                 console.log("No such document!");
             }
@@ -38,16 +44,7 @@ class Show extends Component {
         this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
-    delete(id) {
-        firebase.firestore().collection(this.state.target).doc(id).delete().then(() => {
-            console.log("Document successfully deleted!");
-            this.props.history.push("/")
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
-    }
-
-    // If current, archives. If archived, unarchives.
+    /* If current, archives. If archived, unarchives. */
     archive(id){
         var current = this.state.target;
         var dest = '';
@@ -65,6 +62,7 @@ class Show extends Component {
             });
     }
 
+    /* Creates a text file of heirloom info server-side then downloads it */
     downloadTxtFile(id){
         firebase.firestore().collection(this.state.target).doc(id).get().then((doc) => {
             if (doc.exists) {
@@ -72,11 +70,10 @@ class Show extends Component {
                 if (this.state.heirlooms.nextguardian) {
                     ng = this.state.heirlooms.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ", 
-                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian, 
+                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ",
+                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.heirlooms.title + ".txt");
-                console.log("Document successfully downloaded!");
             }
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
@@ -85,43 +82,49 @@ class Show extends Component {
 
     render() {
         return (
-            <div class="panel nav-bar">
-            <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/">Family Jewels</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
-                    </div>
+            <div>
+            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
                 </div>
-                <form class="form-inline">
-                <a class="nav-item nav-link" href="/login">Login</a>
-                </form>
+            </nav>
+            <nav class="navbar navbar-default navbar-expand d-lg-none">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
             </nav>
             <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h4><Link to="/">Heirloom List</Link></h4>
                 <h3 class="panel-title">
                     {this.state.heirlooms.title}
                 </h3>
                 </div>
                 <div class="panel-body">
                 <dl>
-                    <dt>Description:</dt>
+                    <dt>Description</dt>
                     <dd>{this.state.heirlooms.description}</dd>
-                    <dt>Guardian:</dt>
+                    <dt>Guardian</dt>
                     <dd>{this.state.heirlooms.guardian}</dd>
-                    <dt>Next guardian:</dt>
+                    <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
                     <dd>{this.state.heirlooms.nextguardian}</dd>
+                    <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
                 </dl>
-                <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
-                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>
-                <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
-                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">{this.state.archive_text}</button>
+                <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                <div class="divider"></div>
+                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                <div class="divider"></div>
+                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
                 </div>
             </div>
             </div>
