@@ -85,8 +85,7 @@ class App extends Component {
                 {this.state.heading}
                 </h3>
             </div>
-            <div class="panel-body">
-                <div>
+            <div>
                 <Switch
                     isOn={this.state.switch}
                     isArchiveBackground = {this.isArchiveBackground}
@@ -98,60 +97,36 @@ class App extends Component {
                         }
                     }
                 />
-                </div>
+            </div>
+            <div class="panel-body">
                 <div class="grid">
-                    {this.state.heirlooms.map(heirlooms =>
+                    {this.state.heirlooms.map(heirloom =>
                         <div class="tile">
-                            <img style="width:100%"></img>
+                            <div class="imgbox">
+                                <img class="tileimg" src={heirloom.icon}></img>
+                            </div>
                             <div class="infobox">
-                                <h4><b>{heirlooms.title}</b></h4>
-                                <p>
-                                    {(heirlooms.description.length > 80) ?
-                                        heirlooms.description.slice(0,80).concat("...")
-                                        : heirlooms.description
+                                <a class={this.isArchiveBackground ? "subArchive": "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                    <b>{heirloom.title}</b>
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {(heirloom.description.length > 80) ?
+                                        heirloom.description.slice(0,80).concat("...")
+                                        : heirloom.description
                                     }
-                                </p>
-                                <p>
-                                    {heirlooms.guardian}
-                                </p>
-                                <p>
-                                    {heirlooms.nextguardian}
-                                </p>
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {"Guardian: " + heirloom.guardian} <br></br>
+                                </a>
+                                <a class="plain">
+                                    {heirloom.nextguardian == "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                </a>
                             </div>
                         </div>
                     )}
                 </div>
-                <table class="table table-stripe">
-                <thead>
-                    <tr>
-                    <th>Title</th>
-                    <th>Image</th>
-                    <th>Description</th>
-                    <th>Guardian</th>
-                    <th>Next guardian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.heirlooms.map(heirloom =>
-                    <tr>
-                        <td>
-                            <a class={this.isArchiveBackground ? "subArchive": "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`
-                            }>{heirlooms.title}
-                            </a>
-                        </td>
-                        <td>
-                            {(heirlooms.description.length > 150) ?
-                                heirlooms.description.slice(0,120).concat("...")
-                                :
-                                heirlooms.description
-                            }
-                        </td>
-                        <td>{heirlooms.guardian}</td>
-                        <td>{heirlooms.nextguardian}</td>
-                    </tr>
-                    )}
-                </tbody>
-                </table>
             </div>
             </div>
         </div>
