@@ -73,13 +73,14 @@ class App extends Component {
         </nav>
         <div class="container">
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                {this.state.heading}
-                </h3>
-            </div>
             <div class="panel-body">
-                <div>
+                <div class="row">
+                <div class="col-md-10">
+                    <h2 class="panel-title">
+                    {this.state.heading}
+                    </h2>
+                </div>
+                <div class="col-md-2">
                 <Switch
                     isOn={this.state.switch}
                     isArchiveBackground = {this.isArchiveBackground}
@@ -91,6 +92,7 @@ class App extends Component {
                         }
                     }
                 />
+                </div>
                 </div>
                 <table class="table table-stripe">
                 <thead>
