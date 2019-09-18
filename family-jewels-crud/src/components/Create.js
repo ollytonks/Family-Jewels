@@ -275,7 +275,7 @@ class Create extends Component {
                         Upload Files
                     </button>
                 </div>
-                <button type="submit" class="btn btn-success" disabled={!this.state.images.length}>Submit</button>
+                <button type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
                 </form>
             </div>
             </div>

@@ -67,7 +67,7 @@ class App extends Component {
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
+                    <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
                     <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">

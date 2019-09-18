@@ -194,12 +194,14 @@ h2.panel-title {
 }
 
 .tile {
+    border-radius: 6px;
     background: #57496A;
     width: 100%;
     height: 100%;
 }
 
 .tileArchive {
+    border-radius: 6px;
     background: rgb(221, 163, 77);
     width: 100%;
     height: 100%;
@@ -257,4 +259,23 @@ h2.panel-title {
 	display: block;
     text-align:center;
     width: 100%;
+    color: #FEBD59;
+}
+
+.container dd {
+    color: #fff;
+}
+
+.container h3 {
+    color: #FEBD59;
+}
+
+.col-md-10 {
+    text-align:left;
+}
+
+.divider {
+    width: 5px;
+    height:auto;
+    display:inline-block;
 }

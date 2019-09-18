@@ -112,18 +112,19 @@ class Show extends Component {
                 </div>
                 <div class="panel-body">
                 <dl>
-                    <dt>Description:</dt>
+                    <dt>Description</dt>
                     <dd>{this.state.heirlooms.description}</dd>
-                    <dt>Guardian:</dt>
+                    <dt>Guardian</dt>
                     <dd>{this.state.heirlooms.guardian}</dd>
-                    <dt>Next guardian:</dt>
+                    <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
                     <dd>{this.state.heirlooms.nextguardian}</dd>
-                    <dt>Image: </dt>
                     <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
                 </dl>
-                <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
-                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>
-                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">{this.state.archive_text}</button>
+                <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                <div class="divider"></div>
+                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                <div class="divider"></div>
+                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
                 </div>
             </div>
             </div>

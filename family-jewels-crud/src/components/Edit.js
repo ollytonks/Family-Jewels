@@ -117,8 +117,9 @@ class Edit extends Component {
                     <label for="nextguardian">Next Guardian:</label>
                     <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <button type="submit" class="btn btn-success">Submit</button>
-                <h4><Link to={`/show/boards/${this.state.key}`} class="btn btn-danger">Cancel</Link></h4>
+                <button type="submit" class="btn btn-outline-warning">Submit</button>
+                <div class="divider"></div>
+                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
                 </form>
             </div>
             </div>
