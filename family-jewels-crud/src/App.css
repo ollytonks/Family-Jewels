@@ -251,3 +251,10 @@ h2.panel-title {
 .grid a.plain:hover {
     color: #fff;
 }
+
+.container {
+    position: relative;
+	display: block;
+    text-align:center;
+    width: 100%;
+}

@@ -21,6 +21,7 @@ class App extends Component {
         };
     }
 
+    /* On querySnapshot event, gets Firebase colelction */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
@@ -49,10 +50,10 @@ class App extends Component {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
+    /* Sets the current reference to Firebase collection to the target */
     setCollection() {
         this.ref = firebase.firestore().collection(this.state.target);
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        console.log(this.ref);
     }
 
     componentDidUpdate() {

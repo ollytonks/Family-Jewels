@@ -44,16 +44,7 @@ class Show extends Component {
         this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
-    /*delete(id) {
-        firebase.firestore().collection(this.state.target).doc(id).delete().then(() => {
-            console.log("Document successfully deleted!");
-            this.props.history.push("/")
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
-    }*/
-
-    // If current, archives. If archived, unarchives.
+    /* If current, archives. If archived, unarchives. */
     archive(id){
         var current = this.state.target;
         var dest = '';
@@ -71,6 +62,7 @@ class Show extends Component {
             });
     }
 
+    /* Creates a text file of heirloom info server-side then downloads it */
     downloadTxtFile(id){
         firebase.firestore().collection(this.state.target).doc(id).get().then((doc) => {
             if (doc.exists) {
@@ -82,7 +74,6 @@ class Show extends Component {
                     this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.heirlooms.title + ".txt");
-                console.log("Document successfully downloaded!");
             }
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
@@ -91,7 +82,7 @@ class Show extends Component {
 
     render() {
         return (
-            <div class="panel nav-bar">
+            <div>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">

@@ -142,6 +142,10 @@ class Create extends Component {
             console.log("success");
         });
     }
+
+    /* Creates a new heirloom in Firebase collection if:
+        - Unique title
+        - Title, description, and guardian fields non-empty */
     onSubmit = (e) => {
         e.preventDefault();
         var found = false;
@@ -204,7 +208,7 @@ class Create extends Component {
         ));
         const { title, description, guardian, nextguardian } = this.state;
         return (
-            <div class="panel nav-bar">
+            <div>
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">

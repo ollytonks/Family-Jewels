@@ -39,30 +39,34 @@ class Edit extends Component {
         this.setState({board:state});
     }
 
+    /* Updates heirloom info on submit from forms */
     onSubmit = (e) => {
         e.preventDefault();
 
         const { title, description, guardian, nextguardian } = this.state;
-
-        const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
-        updateRef.set({
-            title,
-            description,
-            guardian,
-            nextguardian
-        }).then((docRef) => {
-            this.setState({
-                key: '',
-                title: '',
-                description: '',
-                guardian: '',
-                nextguardian: ''
+        if (title && description && guardian) {
+            const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+            updateRef.set({
+                title,
+                description,
+                guardian,
+                nextguardian
+            }).then((docRef) => {
+                this.setState({
+                    key: '',
+                    title: '',
+                    description: '',
+                    guardian: '',
+                    nextguardian: ''
+                });
+                this.props.history.push("/show/"+this.props.match.params.id)
+            })
+            .catch((error) => {
+            console.error("Error adding document: ", error);
             });
-            this.props.history.push("/show/"+this.props.match.params.id)
-        })
-        .catch((error) => {
-        console.error("Error adding document: ", error);
-        });
+        } else {
+            window.alert("An heirloom must have a title, description, and guardian.");
+        }
     }
 
     render() {
@@ -114,7 +118,7 @@ class Edit extends Component {
                     <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>
-                <h4><Link to={`/show/${this.state.key}`} class="btn btn-danger">Cancel</Link></h4>
+                <h4><Link to={`/show/boards/${this.state.key}`} class="btn btn-danger">Cancel</Link></h4>
                 </form>
             </div>
             </div>
