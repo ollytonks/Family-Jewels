@@ -213,7 +213,6 @@ class Create extends Component {
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                     <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
                     </div>
                 </div>
                 <form class="form-inline">
