@@ -93,6 +93,10 @@
 .panel-title{
     color: #fff;
 }
+.thumbnail {
+    width: 10vh;
+    height: 10vh;
+}
 th{
     color:#A4CABC;
 }

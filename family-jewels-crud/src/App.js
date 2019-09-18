@@ -5,6 +5,7 @@ import firebase from './Firebase';
 import Switch from './components/elements/Switch';
 import { thisTypeAnnotation } from '@babel/types';
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -23,15 +24,22 @@ class App extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian } = doc.data();
-            list.push({
-                key: doc.id,
-                doc, // DocumentSnapshot
-                title,
-                description,
-                guardian,
-                nextguardian
-            });
+            var iconSource = '';
+            const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
+            firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
+                console.log(url);
+                list.push({
+                    key: doc.id,
+                    icon: url,
+                    doc, // DocumentSnapshot
+                    title,
+                    description,
+                    guardian,
+                    nextguardian,
+                    imagesLocations
+                });
+                this.forceUpdate();
+            })
         });
         this.setState({
             heirlooms: list
@@ -53,6 +61,9 @@ class App extends Component {
     }
 
     render() {
+        for (var i = 0; i < this.state.heirlooms.length; i++) {
+            
+        }
         return (
         <div class="panel nav-bar">
         <nav class="navbar navbar-expand-lg">
@@ -94,20 +105,22 @@ class App extends Component {
                 <thead>
                     <tr>
                     <th>Title</th>
+                    <th>Image</th>
                     <th>Description</th>
                     <th>Guardian</th>
                     <th>Next guardian</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.heirlooms.map(heirlooms =>
+                    {this.state.heirlooms.map(heirloom =>
                     <tr>
                         <td><Link to={{
-                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirlooms.key}`,
-                        }}>{heirlooms.title}</Link></td>
-                        <td>{heirlooms.description}</td>
-                        <td>{heirlooms.guardian}</td>
-                        <td>{heirlooms.nextguardian}</td>
+                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`,
+                        }}>{heirloom.title}</Link></td>
+                        <td><img class="thumbnail" src={heirloom.icon}/></td>
+                        <td>{heirloom.description}</td>
+                        <td>{heirloom.guardian}</td>
+                        <td>{heirloom.nextguardian}</td>
                     </tr>
                     )}
                 </tbody>
