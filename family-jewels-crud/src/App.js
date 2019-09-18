@@ -10,6 +10,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
+        this.isArchiveBackground=false;
         this.unsubscribe = null;
         this.state = false;
         this.state = {
@@ -17,7 +18,6 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             heading: 'HEIRLOOMS'
-            //test
         };
     }
 
@@ -27,7 +27,6 @@ class App extends Component {
             var iconSource = '';
             const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
-                console.log(url);
                 list.push({
                     key: doc.id,
                     icon: url,
@@ -61,11 +60,9 @@ class App extends Component {
     }
 
     render() {
-        for (var i = 0; i < this.state.heirlooms.length; i++) {
-            
-        }
+        this.isArchiveBackground = this.state.switch;
         return (
-        <div class="panel nav-bar">
+        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand" href="/">Family Jewels</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +71,6 @@ class App extends Component {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                 <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
                 </div>
             </div>
             <form class="form-inline">
@@ -83,15 +79,17 @@ class App extends Component {
         </nav>
         <div class="container">
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                {this.state.heading}
-                </h3>
-            </div>
             <div class="panel-body">
-                <div>
+                <div class="row">
+                <div class="col-md-10">
+                    <h2 class="panel-title">
+                    {this.state.heading}
+                    </h2>
+                </div>
+                <div class="col-md-2">
                 <Switch
                     isOn={this.state.switch}
+                    isArchiveBackground = {this.isArchiveBackground}
                     handleToggle={() =>
                         {
                             this.setState(prevState => ({switch: !prevState.switch}));
@@ -101,30 +99,37 @@ class App extends Component {
                     }
                 />
                 </div>
-                <table class="table table-stripe">
-                <thead>
-                    <tr>
-                    <th>Title</th>
-                    <th>Image</th>
-                    <th>Description</th>
-                    <th>Guardian</th>
-                    <th>Next guardian</th>
-                    </tr>
-                </thead>
-                <tbody>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="grid">
                     {this.state.heirlooms.map(heirloom =>
-                    <tr>
-                        <td><Link to={{
-                            pathname: `/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`,
-                        }}>{heirloom.title}</Link></td>
-                        <td><img class="thumbnail" src={heirloom.icon}/></td>
-                        <td>{heirloom.description}</td>
-                        <td>{heirloom.guardian}</td>
-                        <td>{heirloom.nextguardian}</td>
-                    </tr>
+                        <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
+                            <div class="imgbox">
+                                <img class="tileimg" src={heirloom.icon}></img>
+                            </div>
+                            <div class="infobox">
+                                <a class={this.isArchiveBackground ? "subArchive" : "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                    <b>{heirloom.title}</b>
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {(heirloom.description.length > 80) ?
+                                        heirloom.description.slice(0,80).concat("...")
+                                        : heirloom.description
+                                    }
+                                    <br></br>
+                                </a>
+                                <a class="plain">
+                                    {"Guardian: " + heirloom.guardian} <br></br>
+                                </a>
+                                <a class="plain">
+                                    {heirloom.nextguardian == "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                </a>
+                            </div>
+                        </div>
                     )}
-                </tbody>
-                </table>
+                </div>
             </div>
             </div>
         </div>

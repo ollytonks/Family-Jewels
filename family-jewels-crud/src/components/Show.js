@@ -44,14 +44,14 @@ class Show extends Component {
         this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
-    delete(id) {
+    /*delete(id) {
         firebase.firestore().collection(this.state.target).doc(id).delete().then(() => {
             console.log("Document successfully deleted!");
             this.props.history.push("/")
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
-    }
+    }*/
 
     // If current, archives. If archived, unarchives.
     archive(id){
@@ -78,8 +78,8 @@ class Show extends Component {
                 if (this.state.heirlooms.nextguardian) {
                     ng = this.state.heirlooms.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ", 
-                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian, 
+                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ",
+                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.heirlooms.title + ".txt");
                 console.log("Document successfully downloaded!");
@@ -100,7 +100,6 @@ class Show extends Component {
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                     <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
                     </div>
                 </div>
                 <form class="form-inline">
@@ -110,7 +109,6 @@ class Show extends Component {
             <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h4><Link to="/">Heirloom List</Link></h4>
                 <h3 class="panel-title">
                     {this.state.heirlooms.title}
                 </h3>
@@ -128,7 +126,6 @@ class Show extends Component {
                 </dl>
                 <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
                 <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>
-                <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
                 <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">{this.state.archive_text}</button>
                 </div>
             </div>
