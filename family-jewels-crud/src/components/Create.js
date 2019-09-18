@@ -205,19 +205,25 @@ class Create extends Component {
         const { title, description, guardian, nextguardian } = this.state;
         return (
             <div class="panel nav-bar">
-            <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/">Family Jewels</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    </div>
+                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
                 </div>
-                <form class="form-inline">
-                <a class="nav-item nav-link" href="/login">Login</a>
-                </form>
+            </nav>
+            <nav class="navbar navbar-default navbar-expand d-lg-none">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
             </nav>
         <div class="container">
             <div class="panel panel-default">
