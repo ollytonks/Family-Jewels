@@ -11,6 +11,7 @@ class Show extends Component {
             heirlooms: {},
             key: '',
             title: '',
+            icon: '',
             target: this.props.match.params.collection,
             archive_text: ''
         };
@@ -22,11 +23,16 @@ class Show extends Component {
         const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
         ref.get().then((doc) => {
             if (doc.exists) {
-                this.setState({
-                    heirlooms: doc.data(),
-                    key: doc.id,
-                    isLoading: false
-                });
+                var data = doc.data();
+                console.log(data);
+                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
+                    this.setState({
+                        heirlooms: doc.data(),
+                        key: doc.id,
+                        icon: url,
+                        isLoading: false
+                    });
+                })
             } else {
                 console.log("No such document!");
             }
@@ -117,6 +123,8 @@ class Show extends Component {
                     <dd>{this.state.heirlooms.guardian}</dd>
                     <dt>Next guardian:</dt>
                     <dd>{this.state.heirlooms.nextguardian}</dd>
+                    <dt>Image: </dt>
+                    <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
                 </dl>
                 <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
                 <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>

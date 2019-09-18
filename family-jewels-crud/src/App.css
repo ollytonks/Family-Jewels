@@ -97,6 +97,10 @@
     width: 10vh;
     height: 10vh;
 }
+.singleDisplayImg {
+    width: 20vh;
+    height: 20vh;
+}
 th{
     color:#A4CABC;
 }
