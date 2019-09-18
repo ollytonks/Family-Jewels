@@ -17,6 +17,7 @@ class App extends Component {
             target: 'archived_boards',
             searchResult: []
         };
+        this.handleChange = this.handleChange.bind(this);
     }
 
     onCollectionUpdate = (querySnapshot) => {
@@ -47,6 +48,52 @@ class App extends Component {
         console.log(this.ref);
     }
 
+    handleChange(e){
+        {
+            let currentList = [];
+            let newList = [];
+            // If the search bar isn't empty
+            if (e.target.value !== "") {
+                currentList = this.state.heirlooms;
+                // Use .filter() to determine which items should be displayed
+                // based on the search terms
+                newList = currentList.filter(item => {
+                    // change search term to lowercase
+                    var filter = e.target.value;
+                    let lc = item.title;//.lowerCase();
+                    if (lc !== null) {
+                        if (lc.includes(filter)) {
+                            return 1;
+                        }
+                    }
+                    lc = item.description;//.lowerCase();
+                    if (lc !== null) {
+                        if (lc.includes(filter)) {
+                            return 1;
+                        }
+                    }
+                    lc = item.guardian;//.lowerCase();
+                    if (lc !== null) {
+                        if (lc.includes(filter)) {
+                            return 1;
+                        }
+                    }
+                    lc = item.nextguardian;//.lowerCase();
+                    if (lc !== null) {
+                        if (lc.includes(filter)) {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                });
+            } else {
+                // If the search bar is empty, set newList to original task list
+                newList = this.state.heirlooms;
+            }
+            this.state.searchResult = newList;
+        }
+    }
+
     render() {
         return (
         <div class="panel nav-bar">
@@ -75,24 +122,12 @@ class App extends Component {
             <div class="panel-body">
                 <h4><Link to="/login">Login</Link></h4>
                 <div>
-                <SearchBar
-                    handleSearch={() =>
-                        {
-                            this.state.searchResult = [];
-                            var arrayLength = this.state.heirlooms.length;
-                            for (var i = 0; i < arrayLength; i++){
-                                if (this.state.heirlooms[i].title.includes(searchKey)       ||
-                                    this.state.heirlooms[i].description.includes(searchKey) ||
-                                    this.state.heirlooms[i].guardian.includes(searchKey)    ||
-                                    this.state.heirlooms[i].nextguardian.includes(searchKey))
-                                {
-                                    this.state.searchResult.push(this.state.heirlooms[i]);
-                                }
-                            }
-                            this.state.heirlooms = this.state.searchResult;
-                        }
-                    }
-                />
+                    <input
+                        type="text"
+                        className="input"
+                        onChange={this.handleChange}
+                        placeholder="Search..."
+                    />
                 </div>
                 <div>
                 <Switch

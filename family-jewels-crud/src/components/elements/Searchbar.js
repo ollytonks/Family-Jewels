@@ -5,12 +5,13 @@ const SearchBar = ( {handleSearch} ) => {
     return (
         <div>
             <input
-                type="text"
-                className="input"
-                id="input"
-                onChange={this.handleSearch}
+                type="search"
+                id="heirloomSearch"
+                name="q"
                 placeholder="Search..."
+                required
             />
+            <ul>...</ul>
         </div>
     );
 };
