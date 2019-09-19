@@ -68,33 +68,14 @@ class App extends Component {
                 newList = currentList.filter(item => {
                     // change search term to lowercase
                     var filter = e.target.value;
-                    let lc = "" + item.title;//.lowerCase();
+                    let lc = "" + item.title + item.description + item.guardian + item.nextguardian;
+                    lc = lc.toLowerCase();
                     if (lc !== null) {
                         if (lc.includes(filter)) {
                             console.log(lc);
                             return 1;
                         }
                     }
-                    /**
-                    lc = item.description;//.lowerCase();
-                    if (lc !== null) {
-                        if (lc.includes(filter)) {
-                            return 1;
-                        }
-                    }
-                    lc = item.guardian;//.lowerCase();
-                    if (lc !== null) {
-                        if (lc.includes(filter)) {
-                            return 1;
-                        }
-                    }
-                    lc = item.nextguardian;//.lowerCase();
-                    if (lc !== null) {
-                        if (lc.includes(filter)) {
-                            return 1;
-                        }
-                    }
-                    */
                     return 0;
                 });
             } else {
