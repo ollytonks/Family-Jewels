@@ -270,11 +270,6 @@ class Create extends Component {
                         )}
                     </Dropzone>
                 </div>
-                <div>
-                    <button onClick={this.handleUpload} disabled={!this.state.images.length}>
-                        Upload Files
-                    </button>
-                </div>
                 <button type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
                 </form>
             </div>
