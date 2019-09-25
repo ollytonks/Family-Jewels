@@ -34,12 +34,14 @@ class App extends Component {
                 nextguardian
             });
         });
-        this.setState({
-            heirlooms: list
-        });
-        if (this.state.searchResult == null) {
+        if (this.state.searchKey !== '') {
             this.setState({
-                searchResult : this.state.heirlooms
+                heirlooms: list
+            });
+        }
+        else {
+            this.setState({
+                heirlooms: list, searchResult : list
             });
         }
     }
@@ -60,37 +62,40 @@ class App extends Component {
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }
-            //this.defineSearch();
-
-            /**
-            let newList = [];
-            if (filter !== "") {
-                let currentList = this.state.heirlooms;
-                // Use .filter() to determine which items should be displayed
-                // based on the search terms
-                newList = currentList.filter(item => {
-                    let lc = "" + item.title + item.description + item.guardian + item.nextguardian;
-                    lc = lc.toLowerCase();
-                    if (lc !== null) {
-                        if (lc.includes(filter)) {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                });
-                console.log(newList.length);
-            } else {
-                // If the search bar is empty, set newList to original task list
-                newList = this.state.heirlooms;
-            }
-            console.log(newList.length);
-            */
+            }            
             this.setState({searchKey: filter});
         }
     }
 
     render() {
+        let tempList = [];
+        let filter = this.state.searchKey;
+        if (filter !== "") {
+            filter.toLowerCase();
+        }
+        if (filter !== "") {
+            let currentList = this.state.heirlooms;
+            // Use .filter() to determine which items should be displayed
+            // based on the search terms
+            tempList = currentList.filter(item => {
+                let lc = "" + item.title + item.description + item.guardian + item.nextguardian;
+                lc = lc.toLowerCase();
+                if (lc !== null) {
+                    if (lc.includes(filter)) {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+            console.log(tempList.length);
+        } else {
+            // If the search bar is empty, set newList to original task list
+            tempList = this.state.heirlooms;
+        }
+        var resultList = tempList
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((item, i) => <List key={i} data={item} />);
+
         return (
         <div class="panel nav-bar">
         <nav class="navbar navbar-expand-lg">
@@ -143,10 +148,26 @@ class App extends Component {
                 <br></br>
                 <h4><Link to="/uploadimage">Upload an Image</Link></h4>
 
-                <MainList
-                    heirlooms={this.state.heirlooms}
-                    searchKey={this.state.searchKey}
-                />
+                <table class="table table-stripe">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Guardian</th>
+                            <th>Next guardian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {resultList.map(board =>
+                            <tr>
+                                <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
+                                <td>{board.description}</td>
+                                <td>{board.guardian}</td>
+                                <td>{board.nextguardian}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
             </div>
         </div>
