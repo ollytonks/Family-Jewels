@@ -168,18 +168,18 @@ input, text, label{
 
 .background-classic {
     background-color: rgb(72, 61, 87);
-    justify: center;
+    /*justify: center;*/
 }
 
 .background-archive {
     background-color: #FEBD59;
-    justify: center;
+    /*justify: center;*/
 }
 
 h2.panel-title {
     height: 0%;
     margin: 1%;
-    justify: center;
+    /*justify: center;*/
 }
 
 .grid {
@@ -276,6 +276,12 @@ h2.panel-title {
 
 .divider {
     width: 5px;
+    height:auto;
+    display:inline-block;
+}
+
+.bigdivider {
+    width: 20px;
     height:auto;
     display:inline-block;
 }
