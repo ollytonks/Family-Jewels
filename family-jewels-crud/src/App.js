@@ -18,7 +18,7 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             searchKey: '',
-            searchResult: []
+            searchResult: [],
             heading: 'HEIRLOOMS'
         };
         this.handleChange = this.handleChange.bind(this);
@@ -92,7 +92,7 @@ class App extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + item.description + item.guardian + item.nextguardian;
+                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
                     if (lc.includes(filter)) {
@@ -110,6 +110,7 @@ class App extends Component {
             .sort((a, b) => a.title.localeCompare(b.title));
 
         this.isArchiveBackground = this.state.switch;
+        
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -135,7 +136,6 @@ class App extends Component {
         <div class="container">
             <div class="panel panel-default">
             <div class="panel-body">
-                <h4><Link to="/login">Login</Link></h4>
                 <div>
                     <input
                         type="text"
@@ -165,9 +165,6 @@ class App extends Component {
                     }
                 />
                 </div>
-                <h4><Link to="/create">Add Heirloom</Link></h4>
-                <br></br>
-                <h4><Link to="/uploadimage">Upload an Image</Link></h4>
 
                 <table class="table table-stripe">
                     <thead>
@@ -222,6 +219,7 @@ class App extends Component {
                 </div>
             </div>
             </div>
+        </div>
         </div>
         </div>
         );
