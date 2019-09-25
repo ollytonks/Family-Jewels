@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import MainList from './components/MainList';
 
 class App extends Component {
     constructor(props) {
@@ -93,8 +92,7 @@ class App extends Component {
             tempList = this.state.heirlooms;
         }
         var resultList = tempList
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((item, i) => <List key={i} data={item} />);
+            .sort((a, b) => a.title.localeCompare(b.title));
 
         return (
         <div class="panel nav-bar">
