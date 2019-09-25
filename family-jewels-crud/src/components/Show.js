@@ -80,6 +80,22 @@ class Show extends Component {
             });
     }
 
+    renderEditDelete() {
+        if (this.state.target === 'boards') {
+            return(
+            <div>
+            <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+            <div class="divider"></div>
+            <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+            <div class="divider"></div>
+            <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+            </div>
+            );
+        } else {
+            return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
+        }
+    }
+
     render() {
         return (
             <div>
@@ -120,11 +136,7 @@ class Show extends Component {
                     <dd>{this.state.heirlooms.nextguardian}</dd>
                     <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
                 </dl>
-                <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
-                <div class="divider"></div>
-                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
-                <div class="divider"></div>
-                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                <div>{this.renderEditDelete()}</div>
                 </div>
             </div>
             </div>

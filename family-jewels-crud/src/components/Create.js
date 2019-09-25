@@ -239,22 +239,22 @@ class Create extends Component {
             <div class="panel-body">
                 <form onSubmit={this.onSubmit}>
                 <div class="form-group">
-                    <label for="title">Title:</label>
+                    <label for="title">Title: *</label>
                     <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
                 </div>
                 <div class="form-group">
-                    <label for="description">Description:</label>
+                    <label for="description">Description: </label>
                     <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
                 </div>
                 <div class="form-group">
-                    <label for="guardian">Guardian:</label>
+                    <label for="guardian">Guardian: *</label>
                     <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian" />
                 </div>
                 <div class="form-group">
                     <label for="nextguardian">Next Guardian:</label>
                     <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <label for="imageDropzone">Images: </label>
+                <label for="imageDropzone">Images: *</label>
                 <div class = "dropzone">
                     <Dropzone onDrop={this.handleOnDrop} accept={acceptedFileTypes} name="imageDropzone">
                         {({getRootProps, getInputProps}) => (
@@ -271,11 +271,10 @@ class Create extends Component {
                     </Dropzone>
                 </div>
                 <div>
-                    <button onClick={this.handleUpload} disabled={!this.state.images.length}>
-                        Upload Files
-                    </button>
                 </div>
-                <button type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                <label for="submitButton"><i>* fields are mandatory</i></label>
+                <div></div>
+                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
                 </form>
             </div>
             </div>
