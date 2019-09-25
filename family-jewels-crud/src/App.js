@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import SearchBar from './components/elements/Searchbar';
+import MainList from './components/MainList';
 
 class App extends Component {
     constructor(props) {
@@ -15,6 +15,7 @@ class App extends Component {
             heirlooms: [],
             switch: false,
             target: 'archived_boards',
+            searchKey: '',
             searchResult: []
         };
         this.handleChange = this.handleChange.bind(this);
@@ -33,15 +34,14 @@ class App extends Component {
                 nextguardian
             });
         });
+        this.setState({
+            heirlooms: list
+        });
         if (this.state.searchResult == null) {
             this.setState({
                 searchResult : this.state.heirlooms
             });
         }
-        this.setState({
-            heirlooms: list
-        });
-
     }
 
     componentDidMount() {
@@ -56,36 +56,37 @@ class App extends Component {
 
     handleChange(e){
         {
-            //window.alert(e.target.value);
+            console.log(e.target.value);
+            let filter = e.target.value;
+            if (filter !== "") {
+                filter.toLowerCase();
+            }
+            //this.defineSearch();
 
-            let currentList = [];
+            /**
             let newList = [];
-            // If the search bar isn't empty
-            if (e.target.value !== "") {
-                currentList = this.state.heirlooms;
+            if (filter !== "") {
+                let currentList = this.state.heirlooms;
                 // Use .filter() to determine which items should be displayed
                 // based on the search terms
                 newList = currentList.filter(item => {
-                    // change search term to lowercase
-                    var filter = e.target.value;
                     let lc = "" + item.title + item.description + item.guardian + item.nextguardian;
                     lc = lc.toLowerCase();
                     if (lc !== null) {
                         if (lc.includes(filter)) {
-                            console.log(lc);
                             return 1;
                         }
                     }
                     return 0;
                 });
+                console.log(newList.length);
             } else {
                 // If the search bar is empty, set newList to original task list
                 newList = this.state.heirlooms;
             }
             console.log(newList.length);
-            this.state.searchResult = newList;
-            console.log(this.state.searchResult.length);
-            this.forceUpdate();
+            */
+            this.setState({searchKey: filter});
         }
     }
 
@@ -142,26 +143,10 @@ class App extends Component {
                 <br></br>
                 <h4><Link to="/uploadimage">Upload an Image</Link></h4>
 
-                <table class="table table-stripe">
-                <thead>
-                    <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Guardian</th>
-                    <th>Next guardian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.searchResult.map(board =>
-                    <tr>
-                        <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
-                        <td>{board.description}</td>
-                        <td>{board.guardian}</td>
-                        <td>{board.nextguardian}</td>
-                    </tr>
-                    )}
-                </tbody>
-                </table>
+                <MainList
+                    heirlooms={this.state.heirlooms}
+                    searchKey={this.state.searchKey}
+                />
             </div>
             </div>
         </div>
