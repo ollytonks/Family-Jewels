@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 
 const thumbsContainer = {

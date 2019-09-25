@@ -1,10 +1,8 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import { thisTypeAnnotation } from '@babel/types';
-
 
 class App extends Component {
     constructor(props) {
@@ -17,15 +15,17 @@ class App extends Component {
             heirlooms: [],
             switch: false,
             target: 'archived_boards',
+            searchKey: '',
+            searchResult: [],
             heading: 'HEIRLOOMS'
         };
+        this.handleChange = this.handleChange.bind(this);
     }
 
     /* On querySnapshot event, gets Firebase colelction */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            var iconSource = '';
             const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
                 list.push({
@@ -41,9 +41,16 @@ class App extends Component {
                 this.forceUpdate();
             })
         });
-        this.setState({
-            heirlooms: list
-        });
+        if (this.state.searchKey !== '') {
+            this.setState({
+                heirlooms: list
+            });
+        }
+        else {
+            this.setState({
+                heirlooms: list, searchResult : list
+            });
+        }
     }
 
     componentDidMount() {
@@ -60,8 +67,47 @@ class App extends Component {
         this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
     }
 
+    handleChange(e){
+        {
+            console.log(e.target.value);
+            let filter = e.target.value;
+            if (filter !== "") {
+                filter.toLowerCase();
+            }            
+            this.setState({searchKey: filter});
+        }
+    }
+
     render() {
+        let tempList = [];
+        let filter = this.state.searchKey;
+        if (filter !== "") {
+            filter.toLowerCase();
+        }
+        if (filter !== "") {
+            let currentList = this.state.heirlooms;
+            // Use .filter() to determine which items should be displayed
+            // based on the search terms
+            tempList = currentList.filter(item => {
+                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian;
+                lc = lc.toLowerCase();
+                if (lc !== null) {
+                    if (lc.includes(filter)) {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+            console.log(tempList.length);
+        } else {
+            // If the search bar is empty, set newList to original task list
+            tempList = this.state.heirlooms;
+        }
+        var resultList = tempList
+            .sort((a, b) => a.title.localeCompare(b.title));
+
         this.isArchiveBackground = this.state.switch;
+        
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -87,6 +133,16 @@ class App extends Component {
         <div class="container">
             <div class="panel panel-default">
             <div class="panel-body">
+                <div>
+                    <input
+                        type="text"
+                        className="input"
+                        onChange={this.handleChange}
+                        placeholder="Search..."
+                    />
+                </div>
+
+                <div>
                 <div class="row">
                 <div class="col-md-10">
                     <h2 class="panel-title">
@@ -106,6 +162,27 @@ class App extends Component {
                     }
                 />
                 </div>
+
+                <table class="table table-stripe">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Guardian</th>
+                            <th>Next guardian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {resultList.map(board =>
+                            <tr>
+                                <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
+                                <td>{board.description}</td>
+                                <td>{board.guardian}</td>
+                                <td>{board.nextguardian}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
                 </div>
             </div>
             <div class="panel-body">
@@ -131,7 +208,7 @@ class App extends Component {
                                     {"Guardian: " + heirloom.guardian} <br></br>
                                 </a>
                                 <a class="plain">
-                                    {heirloom.nextguardian == "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                    {heirloom.nextguardian === "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
                                 </a>
                             </div>
                         </div>
@@ -139,6 +216,7 @@ class App extends Component {
                 </div>
             </div>
             </div>
+        </div>
         </div>
         </div>
         );

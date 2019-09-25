@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import './Switch.css';
 
 /* This is a simple class for a switch which can be used on any page
