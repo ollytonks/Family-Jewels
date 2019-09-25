@@ -8,108 +8,135 @@ class Show extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            board: {},
+            heirlooms: {},
             key: '',
-            title: ''
+            title: '',
+            icon: '',
+            target: this.props.match.params.collection,
+            archive_text: ''
         };
+        console.log(this.state.hlist);
+        this.unsubscribe = null;
     }
 
     componentDidMount() {
-        const ref = firebase.firestore().collection('boards').doc(this.props.match.params.id);
+        const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
         ref.get().then((doc) => {
             if (doc.exists) {
-                this.setState({
-                    board: doc.data(),
-                    key: doc.id,
-                    isLoading: false
-                });
+                var data = doc.data();
+                console.log(data);
+                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
+                    this.setState({
+                        heirlooms: doc.data(),
+                        key: doc.id,
+                        icon: url,
+                        isLoading: false
+                    });
+                })
             } else {
                 console.log("No such document!");
             }
         });
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
-    delete(id){
-        firebase.firestore().collection('boards').doc(id).delete().then(() => {
-            console.log("Document successfully deleted!");
-            this.props.history.push("/")
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
+    componentDidUpdate() {
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
     }
 
+    /* If current, archives. If archived, unarchives. */
     archive(id){
-        firebase.firestore().collection('boards').doc(id).get().then((doc) => {
+        var current = this.state.target;
+        var dest = '';
+        dest = current === 'boards' ? 'archived_boards' : 'boards';
+        firebase.firestore().collection(current).doc(id).get().then((doc) => {
             if (doc.exists) {
-                console.log(this.state.board)
-                firebase.firestore().collection('archived_boards').add(this.state.board);
+                firebase.firestore().collection(dest).add(this.state.heirlooms);
             }
             console.log("Document successfully duplicated!");
-            firebase.firestore().collection('boards').doc(id).delete();
+            firebase.firestore().collection(current).doc(id).delete();
             console.log("Document successfully deleted!");
             this.props.history.push("/")
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
             });
-      }
+    }
 
+    /* Creates a text file of heirloom info server-side then downloads it */
     downloadTxtFile(id){
-        firebase.firestore().collection('boards').doc(id).get().then((doc) => {
+        firebase.firestore().collection(this.state.target).doc(id).get().then((doc) => {
             if (doc.exists) {
                 var ng = "None assigned";
-                if (this.state.board.nextguardian) {
-                    ng = this.state.board.nextguardian;
+                if (this.state.heirlooms.nextguardian) {
+                    ng = this.state.heirlooms.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.board.title, "\nDescription: ", 
-                    this.state.board.description, "\nGuardian: ", this.state.board.guardian, 
+                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ",
+                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, this.state.board.title + ".txt");
-                console.log("Document successfully downloaded!");
+                saveAs(blob, this.state.heirlooms.title + ".txt");
             }
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
             });
+    }
+
+    renderEditDelete() {
+        if (this.state.target === 'boards') {
+            return(
+            <div>
+            <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+            <div class="divider"></div>
+            <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+            <div class="divider"></div>
+            <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+            </div>
+            );
+        } else {
+            return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
+        }
     }
 
     render() {
         return (
-            <div class="panel nav-bar">
-            <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/">Family Jewels</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/create">Add Heirloom</a>
-                    <a class="nav-item nav-link" href="/uploadimage">Upload Image</a>
-                    </div>
+            <div>
+            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
                 </div>
-                <form class="form-inline">
-                <a class="nav-item nav-link" href="/login">Login</a>
-                </form>
+            </nav>
+            <nav class="navbar navbar-default navbar-expand d-lg-none">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    </ul>
             </nav>
             <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h4><Link to="/">Heirloom List</Link></h4>
                 <h3 class="panel-title">
-                    {this.state.board.title}
+                    {this.state.heirlooms.title}
                 </h3>
                 </div>
                 <div class="panel-body">
                 <dl>
-                    <dt>Description:</dt>
-                    <dd>{this.state.board.description}</dd>
-                    <dt>Guardian:</dt>
-                    <dd>{this.state.board.guardian}</dd>
-                    <dt>Next guardian:</dt>
-                    <dd>{this.state.board.nextguardian}</dd>
+                    <dt>Description</dt>
+                    <dd>{this.state.heirlooms.description}</dd>
+                    <dt>Guardian</dt>
+                    <dd>{this.state.heirlooms.guardian}</dd>
+                    <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
+                    <dd>{this.state.heirlooms.nextguardian}</dd>
+                    <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
                 </dl>
-                <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
-                <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-primary">Download</button>
-                <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
-                <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-danger">Archive</button>
+                <div>{this.renderEditDelete()}</div>
                 </div>
             </div>
             </div>

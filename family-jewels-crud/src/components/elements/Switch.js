@@ -1,9 +1,16 @@
 import React, { Component, useState } from 'react';
 import './Switch.css';
 
-const Switch = ( {isOn, handleToggle} ) => {
+/* This is a simple class for a switch which can be used on any page
+  It uses isOn to check its state, handled in the parent component.
+  handleToggle is a lambda function in parent component.
+  */
+
+const Switch = ( {isOn, handleToggle, isArchiveBackground} ) => {
+
   return (
-    <div>
+    <div
+        className={isArchiveBackground ? 'background-archive' : 'background-classic'}>
       <input
         checked={isOn}
         onChange={handleToggle}
@@ -12,8 +19,8 @@ const Switch = ( {isOn, handleToggle} ) => {
         type="checkbox"
       />
       <label
-        text = {isOn ? "Archive" : ""}
-        style={{ background: isOn ? '#8D77AB' :'#FEBD59'}}
+        text = {isOn ? "Archived" : ""}
+        style={{ background: isOn ? '#57496A' :'#FEBD59'}}
         className="react-switch-label"
         htmlFor={`react-switch-new`}
       >

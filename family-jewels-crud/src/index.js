@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
@@ -17,7 +18,7 @@ ReactDOM.render(
             <Route exact path='/' component={App} />
             <Route path='/edit/:id' component={Edit} />
             <Route path='/create' component={Create} />
-            <Route path='/show/:id' component={Show} />
+            <Route path='/show/:collection/:id' component={Show} />
             <Route path ='/login' component={Login} />
             <Route path='/uploadimage' component={UploadImage} />
         </div>
