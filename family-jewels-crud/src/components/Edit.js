@@ -11,7 +11,8 @@ class Edit extends Component {
             title: '',
             description: '',
             guardian: '',
-            nextguardian: ''
+            nextguardian: '',
+            imagesLocations: []
         };
     }
 
@@ -25,7 +26,8 @@ class Edit extends Component {
                 title: board.title,
                 description: board.description,
                 guardian: board.guardian,
-                nextguardian: board.guardian
+                nextguardian: board.guardian,
+                imagesLocations: board.imagesLocations
                 });
             } else {
                 console.log("No such document!");
@@ -43,23 +45,25 @@ class Edit extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { title, description, guardian, nextguardian } = this.state;
+        const { title, description, guardian, nextguardian, imagesLocations } = this.state;
         if (title && description && guardian) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             updateRef.set({
                 title,
                 description,
                 guardian,
-                nextguardian
+                nextguardian,
+                imagesLocations: this.state.imagesLocations
             }).then((docRef) => {
                 this.setState({
                     key: '',
                     title: '',
                     description: '',
                     guardian: '',
-                    nextguardian: ''
+                    nextguardian: '',
+                    imagesLocations: []
                 });
-                this.props.history.push("/show/"+this.props.match.params.id)
+                this.props.history.push("/")
             })
             .catch((error) => {
             console.error("Error adding document: ", error);
@@ -96,7 +100,7 @@ class Edit extends Component {
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                EDIT BOARD
+                EDIT HEIRLOOM
                 </h3>
             </div>
             <div class="panel-body">
