@@ -26,7 +26,6 @@ class App extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            var iconSource = '';
             const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
                 list.push({
@@ -197,7 +196,7 @@ class App extends Component {
                                     {"Guardian: " + heirloom.guardian} <br></br>
                                 </a>
                                 <a class="plain">
-                                    {heirloom.nextguardian == "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                    {heirloom.nextguardian === "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
                                 </a>
                             </div>
                         </div>
