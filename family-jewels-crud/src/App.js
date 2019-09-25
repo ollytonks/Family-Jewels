@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import { thisTypeAnnotation } from '@babel/types';
-
 
 class App extends Component {
     constructor(props) {
@@ -62,6 +60,7 @@ class App extends Component {
 
     render() {
         this.isArchiveBackground = this.state.switch;
+
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -144,5 +143,7 @@ class App extends Component {
         );
     }
 }
+
+
 
 export default App;
