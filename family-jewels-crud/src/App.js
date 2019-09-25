@@ -1,10 +1,8 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import { thisTypeAnnotation } from '@babel/types';
-
 
 class App extends Component {
     constructor(props) {
