@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
 class Show extends Component {
