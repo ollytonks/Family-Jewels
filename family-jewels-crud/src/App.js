@@ -117,9 +117,20 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
+                    <li>
+                        <input
+                            type="text"
+                            className="input"
+                            onChange={this.handleChange}
+                            placeholder="Search..."
+                            class="form-row" 
+                        />
+                    </li>
+                    <li class="bigdivider"></li>
                     <li class="nav-item nav-link"><a href="/login">Login</a></li>
                 </ul>
             </div>
+            
         </nav>
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
@@ -129,18 +140,16 @@ class App extends Component {
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item nav-link"><a href="/login">Login</a></li>
                 </ul>
+                <input
+                    type="text"
+                    className="input"
+                    onChange={this.handleChange}
+                    placeholder="Search..."
+                />
         </nav>
         <div class="container">
             <div class="panel panel-default">
             <div class="panel-body">
-                <div>
-                    <input
-                        type="text"
-                        className="input"
-                        onChange={this.handleChange}
-                        placeholder="Search..."
-                    />
-                </div>
 
                 <div>
                 <div class="row">
@@ -162,32 +171,11 @@ class App extends Component {
                     }
                 />
                 </div>
-
-                <table class="table table-stripe">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Guardian</th>
-                            <th>Next guardian</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {resultList.map(board =>
-                            <tr>
-                                <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
-                                <td>{board.description}</td>
-                                <td>{board.guardian}</td>
-                                <td>{board.nextguardian}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
                 </div>
             </div>
             <div class="panel-body">
                 <div class="grid">
-                    {this.state.heirlooms.map(heirloom =>
+                    {resultList.map(heirloom =>
                         <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
                             <div class="imgbox">
                                 <img class="tileimg" src={heirloom.icon}></img>
