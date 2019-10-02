@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import firebase from '../Firebase';
 import { saveAs } from 'file-saver';
 import { Gallery, GalleryImage } from "react-gesture-gallery";
+<<<<<<< HEAD
 import Navbar from './elements/Navbar';
+=======
+
+>>>>>>> dev
 
 class Show extends Component {
     constructor(props) {
@@ -111,6 +115,13 @@ class Show extends Component {
             return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
         }
     }
+    setIndex(i){
+        if (i == this.state.images.length) {
+            return 0;
+        } else {
+            return i++;
+        }
+    }
 
     setIndex(i){
         if (i == this.state.images.length) {
@@ -147,7 +158,7 @@ class Show extends Component {
                                 })
                             }}>
                                 {this.state.images.map(image => (
-                            <GalleryImage objectFit="contain" key={image} src={image} />
+                            <GalleryImage class="galleryImage" objectFit="contain" key={image} src={image} />
                             ))}
                         </Gallery></dd>
                 </dl>
