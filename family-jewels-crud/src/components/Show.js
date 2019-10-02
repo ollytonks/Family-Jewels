@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
 import { saveAs } from 'file-saver';
+import { Gallery, GalleryImage } from "react-gesture-gallery";
+
 
 class Show extends Component {
 
@@ -11,9 +12,10 @@ class Show extends Component {
             heirlooms: {},
             key: '',
             title: '',
-            icon: '',
+            images: [],
             target: this.props.match.params.collection,
-            archive_text: ''
+            archive_text: '',
+            index: 0
         };
         console.log(this.state.hlist);
         this.unsubscribe = null;
@@ -21,18 +23,21 @@ class Show extends Component {
 
     componentDidMount() {
         const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
+        var imageRefs = [];
         ref.get().then((doc) => {
             if (doc.exists) {
                 var data = doc.data();
-                console.log(data);
-                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
-                    this.setState({
-                        heirlooms: doc.data(),
-                        key: doc.id,
-                        icon: url,
-                        isLoading: false
+                for (var i = 0; i < data.imagesLocations.length; i++){
+                    firebase.storage().ref('images').child(data.imagesLocations[i]).getDownloadURL().then(url => {
+                        imageRefs.push(url);
+                        this.setState({
+                            heirlooms: doc.data(),
+                            key: doc.id,
+                            images: imageRefs,
+                            isLoading: false
+                        });
                     });
-                })
+                }
             } else {
                 console.log("No such document!");
             }
@@ -95,6 +100,13 @@ class Show extends Component {
             return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
         }
     }
+    setIndex(i){
+        if (i == this.state.images.length) {
+            return 0;
+        } else {
+            return i++;
+        }
+    }
 
     render() {
         return (
@@ -134,7 +146,16 @@ class Show extends Component {
                     <dd>{this.state.heirlooms.guardian}</dd>
                     <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
                     <dd>{this.state.heirlooms.nextguardian}</dd>
-                    <dd><img class="singleDisplayImg" src={this.state.icon}></img></dd>
+                    <dd><Gallery class="gallery" index={this.state.index}
+                            onRequestChange={i => {
+                                this.setState({
+                                    index: this.setIndex(i)
+                                })
+                            }}>
+                                {this.state.images.map(image => (
+                            <GalleryImage objectFit="contain" key={image} src={image} />
+                            ))}
+                        </Gallery></dd>
                 </dl>
                 <div>{this.renderEditDelete()}</div>
                 </div>
