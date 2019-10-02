@@ -12,7 +12,12 @@ class Show extends Component {
             title: '',
             icon: '',
             target: this.props.match.params.collection,
-            archive_text: ''
+            archive_text: '',
+
+            description: '',
+            guardian: '',
+            nextguardian: '',
+            imagesLocations: []
         };
         console.log(this.state.hlist);
         this.unsubscribe = null;
@@ -29,7 +34,13 @@ class Show extends Component {
                         heirlooms: doc.data(),
                         key: doc.id,
                         icon: url,
-                        isLoading: false
+                        isLoading: false,
+
+                        title: data.title,
+                        description: data.description,
+                        guardian: data.guardian,
+                        nextguardian: data.guardian,
+                        imagesLocations: data.imagesLocations
                     });
                 })
             } else {
@@ -79,6 +90,33 @@ class Show extends Component {
             });
     }
 
+    /* Changes nextguardian to guardian, asks for new nextguardian */
+    inherit(id){
+        var futureguardian = prompt("Optional: Please state the new Next Guardian.");
+        const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+        updateRef.set({
+            title:this.state.title,
+            description:this.state.description,
+            guardian:this.state.nextguardian,
+            nextguardian:futureguardian,
+            imagesLocations:this.state.imagesLocations
+        }).then((docRef) => {
+            this.setState({
+                key: '',
+                title: '',
+                description: '',
+                guardian: '',
+                nextguardian: '',
+                imagesLocations: []
+            });
+            this.props.history.push("/")
+        })
+        .catch((error) => {
+            console.error("Error performing Inheritance: ", error);
+            window.alert("Error performing Inheritance, please edit manually.")
+        });
+    }
+
     renderEditDelete() {
         if (this.state.target === 'boards') {
             return(
@@ -88,6 +126,8 @@ class Show extends Component {
             <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
             <div class="divider"></div>
             <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+            <div class="divider"></div>
+            <button onClick = {this.inherit.bind(this, this.state.key)} class = "btn btn-outline-warning">Inherit</button>
             </div>
             );
         } else {
