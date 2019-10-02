@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
+import { Link, Redirect} from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
 class Show extends Component {
@@ -81,6 +81,12 @@ class Show extends Component {
     }
 
     render() {
+        //user is not logged in
+        if(firebase.auth().currentUser == null){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
         return (
             <div>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">

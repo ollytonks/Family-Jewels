@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 
 const thumbsContainer = {
@@ -127,16 +127,16 @@ class Create extends Component {
     }
     individualUpload = (file, id) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        uploadTask.on('state_changed', 
+        uploadTask.on('state_changed',
         (snapshot) => {
             // progrss function ....
             const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             this.setState({progress});
-        }, 
+        },
         (error) => {
             // error function ....
             console.log(error);
-        }, 
+        },
         () => {
             // complete function ....
             console.log("success");
@@ -152,7 +152,7 @@ class Create extends Component {
         const images = this.state.images;
         var imagesID = [];
         var imagesLocations = [];
-        
+
         for (let i=0; i < this.state.heirlooms.length; i++) {
             if (this.state.heirlooms[i].title === this.state.title) {
                 found = true;
@@ -207,6 +207,12 @@ class Create extends Component {
            </div>
         ));
         const { title, description, guardian, nextguardian } = this.state;
+        //user is not logged in
+        if(firebase.auth().currentUser == null){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
         return (
             <div>
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
