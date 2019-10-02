@@ -16,7 +16,6 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             searchKey: '',
-            searchResult: [],
             heading: 'HEIRLOOMS'
         };
         this.handleChange = this.handleChange.bind(this);
@@ -41,16 +40,9 @@ class App extends Component {
                 this.forceUpdate();
             })
         });
-        if (this.state.searchKey !== '') {
-            this.setState({
-                heirlooms: list
-            });
-        }
-        else {
-            this.setState({
-                heirlooms: list, searchResult : list
-            });
-        }
+        this.setState({
+            heirlooms: list
+        });
     }
 
     componentDidMount() {
@@ -80,11 +72,8 @@ class App extends Component {
 
     render() {
         let tempList = [];
-        let filter = this.state.searchKey;
-        if (filter !== "") {
-            filter.toLowerCase();
-        }
-        if (filter !== "") {
+        if (this.state.searchKey !== "") {
+            var filter = this.state.searchKey.toLowerCase();
             let currentList = this.state.heirlooms;
             // Use .filter() to determine which items should be displayed
             // based on the search terms
@@ -119,19 +108,20 @@ class App extends Component {
                 <ul class="nav navbar-nav ml-auto">
                     <li>
                         <input
-                            type="text"
+                            type="search"
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row" 
+                            class="form-row"
+                            autoFocus
                         />
                     </li>
                     <li class="bigdivider"></li>
                     <li class="nav-item nav-link"><a href="/login">Login</a></li>
                 </ul>
             </div>
-            
         </nav>
+        
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
                     <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
@@ -141,10 +131,11 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/login">Login</a></li>
                 </ul>
                 <input
-                    type="text"
+                    type="search"
                     className="input"
                     onChange={this.handleChange}
                     placeholder="Search..."
+                    autoFocus
                 />
         </nav>
         <div class="container">
