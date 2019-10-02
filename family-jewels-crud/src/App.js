@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
-import Navbar from './components/elements/Navbar';
 
 
 class App extends Component {
