@@ -153,7 +153,7 @@ class Show extends Component {
                                 })
                             }}>
                                 {this.state.images.map(image => (
-                            <GalleryImage objectFit="contain" key={image} src={image} />
+                            <GalleryImage class="galleryImage" objectFit="contain" key={image} src={image} />
                             ))}
                         </Gallery></dd>
                 </dl>
