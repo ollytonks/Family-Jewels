@@ -21,12 +21,12 @@ class Edit extends Component {
             if (doc.exists) {
                 const board = doc.data();
                 this.setState({
-                key: doc.id,
-                title: board.title,
-                description: board.description,
-                guardian: board.guardian,
-                nextguardian: board.guardian,
-                imagesLocations: board.imagesLocations
+                    key: doc.id,
+                    title: board.title,
+                    description: board.description,
+                    guardian: board.guardian,
+                    nextguardian: board.guardian,
+                    imagesLocations: board.imagesLocations
                 });
             } else {
                 console.log("No such document!");

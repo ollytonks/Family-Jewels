@@ -9,7 +9,7 @@ class Show extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            heirlooms: {},
+            heirloom: {},
             key: '',
             title: '',
             images: [],
@@ -20,7 +20,6 @@ class Show extends Component {
             guardian: '',
             nextguardian: '',
             imagesLocations: [],
-            
             index: 0
         };
         console.log(this.state.hlist);
@@ -33,17 +32,29 @@ class Show extends Component {
         ref.get().then((doc) => {
             if (doc.exists) {
                 var data = doc.data();
-                for (var i = 0; i < data.imagesLocations.length; i++){
-                    firebase.storage().ref('images').child(data.imagesLocations[i]).getDownloadURL().then(url => {
-                        imageRefs.push(url);
-                        this.setState({
-                            heirlooms: doc.data(),
-                            key: doc.id,
-                            images: imageRefs,
-                            isLoading: false
+                console.log(data);
+                this.setState({
+                    heirloom: doc.data(),
+                    key: doc.id,
+                    isLoading: false,
+
+                    title: data.title,
+                    description: data.description,
+                    guardian: data.guardian,
+                    nextguardian: data.guardian,
+                    imagesLocations: data.imagesLocations,
+                });
+                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
+                    for (var i = 0; i < data.imagesLocations.length; i++){
+                        firebase.storage().ref('images').child(data.imagesLocations[i]).getDownloadURL().then(url => {
+                            imageRefs.push(url);
+                            this.setState({
+                                images: imageRefs,
+                                isLoading: false,
+                            });
                         });
-                    });
-                }
+                    }
+                });
             } else {
                 console.log("No such document!");
             }
@@ -62,7 +73,7 @@ class Show extends Component {
         dest = current === 'boards' ? 'archived_boards' : 'boards';
         firebase.firestore().collection(current).doc(id).get().then((doc) => {
             if (doc.exists) {
-                firebase.firestore().collection(dest).add(this.state.heirlooms);
+                firebase.firestore().collection(dest).add(this.state.heirloom);
             }
             console.log("Document successfully duplicated!");
             firebase.firestore().collection(current).doc(id).delete();
@@ -78,13 +89,13 @@ class Show extends Component {
         firebase.firestore().collection(this.state.target).doc(id).get().then((doc) => {
             if (doc.exists) {
                 var ng = "None assigned";
-                if (this.state.heirlooms.nextguardian) {
-                    ng = this.state.heirlooms.nextguardian;
+                if (this.state.nextguardian) {
+                    ng = this.state.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.heirlooms.title, "\nDescription: ",
-                    this.state.heirlooms.description, "\nGuardian: ", this.state.heirlooms.guardian,
+                var blob = new Blob(["Title: ", this.state.title, "\nDescription: ",
+                    this.state.description, "\nGuardian: ", this.state.guardian,
                     "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, this.state.heirlooms.title + ".txt");
+                saveAs(blob, this.state.title + ".txt");
             }
             }).catch((error) => {
                 console.error("Error duplicating document: ", error);
@@ -170,17 +181,17 @@ class Show extends Component {
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h3 class="panel-title">
-                    {this.state.heirlooms.title}
+                    {this.state.heirloom.title}
                 </h3>
                 </div>
                 <div class="panel-body">
                 <dl>
                     <dt>Description</dt>
-                    <dd>{this.state.heirlooms.description}</dd>
+                    <dd>{this.state.heirloom.description}</dd>
                     <dt>Guardian</dt>
-                    <dd>{this.state.heirlooms.guardian}</dd>
-                    <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
-                    <dd>{this.state.heirlooms.nextguardian}</dd>
+                    <dd>{this.state.heirloom.guardian}</dd>
+                    <dt>{this.state.heirloom.nextguardian === "" ? "" : "Next guardian"}</dt>
+                    <dd>{this.state.heirloom.nextguardian}</dd>
                     <dd><Gallery class="gallery" index={this.state.index}
                             onRequestChange={i => {
                                 this.setState({
