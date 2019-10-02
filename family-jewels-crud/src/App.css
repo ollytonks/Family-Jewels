@@ -116,32 +116,7 @@ div.mainbodyArchive
     background-color:#FF5964;
     color:#fff;
 }
-.navbar-brand{
-    width: auto;
-    background-color: #A4CABC;
-    color: #57496A;
-}
 
-.navbar ul li a {
-    color:#57496A;
-}
-
-.navbar ul li a:hover{
-    color:#B2473E;
-    text-decoration: none;
-}
-
-.navbar-nav {
-    display: inline-block;
-}
-
-.navbar-nav>li {
-    display: inline-block;
-}
-
-.navbar{
-    background-color: #A4CABC;
-}
 
 .panel-title{
     color: #fff;
@@ -285,3 +260,9 @@ h2.panel-title {
     height:auto;
     display:inline-block;
 }
+
+.gallery {
+    color: black;
+    height: "100vh";
+    width: "100vw";
+ }

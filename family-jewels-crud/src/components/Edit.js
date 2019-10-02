@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
+import Navbar from './elements/Navbar';
+
 
 class Edit extends Component {
 
@@ -73,61 +75,43 @@ class Edit extends Component {
     }
 
     render() {
+        document.title = "Edit heirloom";
         return (
             <div class="panel nav-bar">
-                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
-                    </ul>
+            <Navbar/>
+                <div class="container">
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                        EDIT HEIRLOOM
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form onSubmit={this.onSubmit}>
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian">Guardian:</label>
+                            <input type="text" class="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
+                        </div>
+                        <div class="form-group">
+                            <label for="nextguardian">Next Guardian:</label>
+                            <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
+                        </div>
+                        <button type="submit" class="btn btn-outline-warning">Submit</button>
+                        <div class="divider"></div>
+                        <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
+                        </form>
+                    </div>
+                    </div>
                 </div>
-            </nav>
-            <nav class="navbar navbar-default navbar-expand d-lg-none">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
-                    </ul>
-            </nav>
-        <div class="container">
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                EDIT HEIRLOOM
-                </h3>
             </div>
-            <div class="panel-body">
-                <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
-                </div>
-                <div class="form-group">
-                    <label for="guardian">Guardian:</label>
-                    <input type="text" class="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
-                </div>
-                <div class="form-group">
-                    <label for="nextguardian">Next Guardian:</label>
-                    <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
-                </div>
-                <button type="submit" class="btn btn-outline-warning">Submit</button>
-                <div class="divider"></div>
-                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
-                </form>
-            </div>
-            </div>
-        </div>
-        </div>
         );
     }
 }

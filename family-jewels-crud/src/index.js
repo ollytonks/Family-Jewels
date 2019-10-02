@@ -10,6 +10,8 @@ import Edit from './components/Edit';
 import Create from './components/Create';
 import Show from './components/Show';
 import Login from './components/Login';
+import 'font-awesome/css/font-awesome.min.css';
+
 
 ReactDOM.render(
     <Router>
