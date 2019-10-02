@@ -4,36 +4,7 @@ import Dropzone from 'react-dropzone'
 import Navbar from './elements/Navbar';
 
 
-const thumbsContainer = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16
-};
-
-const thumb = {
-    display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: 'border-box'
-};
-
-const thumbInner = {
-    display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden'
-};
-
-const img = {
-    display: 'block',
-    width: 'auto',
-    height: '100%'
-};
+  
 
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
@@ -98,13 +69,13 @@ class Create extends Component {
         }
     }
     handleOnDrop = (files, rejectedFiles) => {
-        console.log(files);
         if (rejectedFiles && rejectedFiles.length > 0 ){
             this.verifyFile(rejectedFiles)
         }
         if (files && files.length > 0){
             const isVerified = this.verifyFile(files)
             if (isVerified){
+                files = this.state.images.concat(files);
                 this.setState ({
                     images: files,
                     previews: files.map(file => Object.assign(file, {
@@ -195,16 +166,21 @@ class Create extends Component {
 
     }
 
+    removePreview(index) {
+        var images = this.state.images.splice(index, 1)
+        console.log(images);
+       
+    }
     render() {
         document.title = "Add heirloom";
-        const thumbs = this.state.previews.map(file => (
-            <div style={thumb} key={file.name}>
-               <div style={thumbInner}>
-                   <img
-                   src={file.preview}
-                   style={img}
-                   />
-               </div>
+        const thumbs = this.state.previews.map((file,index) => (
+            <div class="thumb" key={file.name}>
+                <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="thumb-inner">
+                    <img src={file.preview} class="thumb-img"/>
+                </div>
            </div>
         ));
         const { title, description, guardian, nextguardian } = this.state;
@@ -232,25 +208,23 @@ class Create extends Component {
                 <div class="form-group">
                     <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <div class = "dropzone">
-                    <Dropzone onDrop={this.handleOnDrop} accept={acceptedFileTypes} name="imageDropzone">
-                        {({getRootProps, getInputProps}) => (
-                            <section>
-                                <div {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    <p>Drag and drop files here, or click HERE to select files*</p>
-                                </div>
-                                <aside style={thumbsContainer}>
-                                    {thumbs}
-                                </aside>
-                            </section>
-                        )}
-                    </Dropzone>
-                </div>
-                <div>
-                </div>
+                <label for="imageDropzone">Images: *</label>
+                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
+                    {({getRootProps, getInputProps}) => (
+                        <section class="dropzone">
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <p>Drag and drop files here, or click HERE to select files</p>
+                            </div>
+                            <aside class="thumbs-container">
+                                {thumbs}
+                            </aside>
+                        </section>
+                    )}
+                </Dropzone>
+                <div/>
                 <label for="submitButton"><i>* fields are mandatory</i></label>
-                <div></div>
+                <div/>
                 <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
                 </form>
             </div>
