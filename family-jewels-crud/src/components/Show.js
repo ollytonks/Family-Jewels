@@ -89,8 +89,13 @@ class Show extends Component {
     render() {
         var username = "Login";
         if(firebase.auth().currentUser != null){
-             username = this.state.user.displayName;
-             console.log(this.state.user.displayName);
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
         }
         //user is not logged in
         /*if(this.state.user == null){

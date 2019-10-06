@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {firebase} from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 
@@ -57,7 +57,8 @@ class Create extends Component {
             progress: 0,
             images: [],
             imagesLocations: [],
-            previews: []
+            previews: [],
+            user: firebase.auth().currentUser
         };
     }
 
@@ -81,6 +82,10 @@ class Create extends Component {
 
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+        });
     }
 
     onChange = (e) => {
@@ -213,6 +218,17 @@ class Create extends Component {
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }*/
+        var username = "Login";
+        if(this.state.user != null){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
+        console.log(this.state.user);
         return (
             <div>
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -222,7 +238,7 @@ class Create extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
                 </div>
             </nav>
@@ -232,7 +248,7 @@ class Create extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
             </nav>
         <div class="container">

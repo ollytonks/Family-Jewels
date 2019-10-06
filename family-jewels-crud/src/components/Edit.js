@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {firebase} from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 
 class Edit extends Component {
@@ -11,7 +11,8 @@ class Edit extends Component {
             title: '',
             description: '',
             guardian: '',
-            nextguardian: ''
+            nextguardian: '',
+            user: firebase.auth().currentUser
         };
     }
 
@@ -30,6 +31,9 @@ class Edit extends Component {
             } else {
                 console.log("No such document!");
             }
+        });
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
         });
     }
 
@@ -76,6 +80,17 @@ class Edit extends Component {
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }*/
+        var username = "Login";
+        if(this.state.user != null){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
+        console.log(firebase.auth().currentUser);
         return (
             <div class="panel nav-bar">
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -85,7 +100,7 @@ class Edit extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
                 </div>
             </nav>
@@ -95,7 +110,7 @@ class Edit extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
             </nav>
         <div class="container">

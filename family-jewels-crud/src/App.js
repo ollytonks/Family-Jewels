@@ -84,6 +84,7 @@ class App extends Component {
              }
         }
         console.log(username)
+
         //user not authenticated, redirect to login page
         /*if(this.state.user == null){
             console.log("not authenticated");
