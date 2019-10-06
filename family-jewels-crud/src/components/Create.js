@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import firebase from '../Firebase';
+import {firebase} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 
@@ -208,11 +208,11 @@ class Create extends Component {
         ));
         const { title, description, guardian, nextguardian } = this.state;
         //user is not logged in
-        if(firebase.auth().currentUser == null){
+        /*if(firebase.auth().currentUser == null){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }
+        }*/
         return (
             <div>
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">

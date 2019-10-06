@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 
 class Edit extends Component {
@@ -71,11 +71,11 @@ class Edit extends Component {
 
     render() {
         //user is not logged in
-        if(firebase.auth().currentUser == null){
+        /*if(firebase.auth().currentUser == null){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }
+        }*/
         return (
             <div class="panel nav-bar">
                 <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">

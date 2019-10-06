@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect} from 'react-router-dom';
 import { thisTypeAnnotation } from '@babel/types';
 import withFirebaseAuth from 'react-with-firebase-auth'
 //import * as firebase from 'firebase/app';
-import 'firebase/auth';
+//import 'firebase/auth';
 import firebaseApp from '../Firebase';
 
-const firebaseAppAuth = firebaseApp.auth();
+//const firebaseAppAuth = firebaseApp.auth();
 
 /*const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
@@ -17,67 +17,93 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 class Login extends Component {
 
+
     constructor() {
         super();
+        //this.log = this.onSubmit.bind(this);
         this.state = {
-            username: '',
-            password: '',
-            authenticated: false
-        };
+            user : firebase.auth().currentUser,
+            email : null,
+            password : null
+        }
     }
 
-    onSubmit = (e) => {
+    componentDidMount() {
+        //check if still signed in
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+        });
+
+    }
+
+    //sign in with Google
+    loginWithGoogle = (e) => {
         e.preventDefault();
-        const { username, password } = this.state;
+        firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+          .then(() => {
+            firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then(() => {
+                //console.log.(" ")
+                this.props.history.push("/");
+                //this.user = firebase.auth().currentUser;
+            })
+        });
 
-        /*this.setState({
-            title: '',
-            description: '',
-            author: ''
-        });*/
-        //this.props.history.push("/")
-    }
-    login = () => {
-        //authenticate user
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      // ...
-        }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
-        //if authenticated, redirect to apps
-        //redirect to app = true (redirection handled in render)
-        this.setState(() => ({
-            authenticated: true
-      }));
-    //s.render();
     }
 
+    //sign in with email and password
+    loginEmailPassword = (e) => {
+        e.preventDefault();
+        firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+          .then(() => {
+            firebase
+            .auth()
+            .signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then(() => {
+                this.props.history.push("/")
+            })
+        });
+    }
+
+//sign the user out
+    logout() {
+        firebase.auth().signOut();
+    }
 
     render() {
-        const {
-          user,
-          signOut,
-          signInWithGoogle,
-        } = this.props;
-        //user has logged in successfully
-        if(this.authenticated || firebase.auth().currentUser != null){
-            console.log("authenticated");
-            console.log(firebase.auth().currentUser);
-            return <Redirect to= '/'/>
+        //check if user is signed in
+        if(this.state.user) {
+            var username;
+            //verify if they signed in with Google
+            if(firebase.auth().currentUser != null){
+                if(this.state.user.displayName){
+                     username = this.state.user.displayName;
+                 }
+                 //signed in with email and password
+                 else {
+                     username = this.state.user.email;
+                 }
+             }
+            return(
+                <div class="login-container">
+                    <div class="panel-heading">
+                    <h2 class="panel-title">
+                        Hello {username}
+                    </h2>
+                    </div>
+                    <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
+                </div>
+            );
         }
-        //else
-        console.log("not authenticated");
+        console.log(this.state.user);
+        console.log(this.state.email)
+        //user not signed in
         return (
             <div class="login-container">
                 <div class="panel-heading">
@@ -85,44 +111,39 @@ class Login extends Component {
                     LOGIN
                 </h2>
                 </div>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.loginEmailPassword}>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                        {
-                            user
-                              ? <h2>Hello, {user.displayName}</h2>
-                              : <h2>Please sign in</h2>
-                          }
                             <label for="username">Username:</label>
-                            <input type="text" class="form-control" name="username" placeholder="" />
+                            <input type="email" class="form-control"
+                            name="username" placeholder="Username" value={this.state.email}
+                             onChange={e => this.setState({email: e.target.value})} />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label for="password">Password:</label>
-                            <input type="password" class="form-control" name="password" placeholder="" />
+                            <input type="password" class="form-control"
+                            name="password" placeholder="Password"
+                            value={this.state.password}
+                            onChange={e => this.setState({password: e.target.value})} />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                        {
-                            user
-                            ? <button type="submit" class="btn btn-outline-warning" onClick={signOut}>Sign out</button>
-                            : <button type="submit" class="btn btn-outline-warning" onClick={this.login}>Sign in with Google</button>
-                            //<button type="submit" class="btn btn-outline-warning">Submit</button>
-                        }
+                        <button type="submit" class="btn btn-outline-warning" onClick={this.submit}>Sign in</button>
                         </div>
 
                     </div>
                 </form>
+                <div class="row">
+                    <div class="col-md-12">
+                    <button type="submit" class="btn btn-outline-warning" onClick={this.loginWithGoogle}>Sign in with Google</button>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
-
-
-export default withFirebaseAuth({
-  provider,
-  firebaseAppAuth,
-}) (Login);
+export default Login;

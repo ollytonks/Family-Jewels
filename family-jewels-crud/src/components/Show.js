@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect} from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
@@ -13,7 +13,8 @@ class Show extends Component {
             title: '',
             icon: '',
             target: this.props.match.params.collection,
-            archive_text: ''
+            archive_text: '',
+            user: firebase.auth().currentUser
         };
         console.log(this.state.hlist);
         this.unsubscribe = null;
@@ -38,6 +39,11 @@ class Show extends Component {
             }
         });
         this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
+
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+        });
     }
 
     componentDidUpdate() {
@@ -81,12 +87,19 @@ class Show extends Component {
     }
 
     render() {
+        var username = "Login";
+        if(firebase.auth().currentUser != null){
+             username = this.state.user.displayName;
+             console.log(this.state.user.displayName);
+        }
         //user is not logged in
-        if(firebase.auth().currentUser == null){
+        /*if(this.state.user == null){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }
+        }*/
+        console.log(this.state.user);
+        console.log(firebase.auth().currentUser);
         return (
             <div>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -96,7 +109,7 @@ class Show extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
                 </div>
             </nav>
@@ -106,7 +119,7 @@ class Show extends Component {
                         <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                     </ul>
             </nav>
             <div class="container">

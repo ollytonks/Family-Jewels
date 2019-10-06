@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import './App.css';
-import firebase from './Firebase';
+import {firebase, firebaseAuth} from './Firebase';
 import Switch from './components/elements/Switch';
 //import Login from './components/Login';
 
@@ -11,33 +11,19 @@ class App extends Component {
         this.ref = firebase.firestore().collection('boards');
         this.isArchiveBackground=false;
         this.unsubscribe = null;
-        this.authenticated = true;
+        //this.authenticated = true;
         this.state = false;
         this.state = {
             heirlooms: [],
             switch: false,
             target: 'archived_boards',
             heading: 'HEIRLOOMS',
+            user: firebase.auth().currentUser
         };
-        this.logout = this.logout.bind(this)
+        /*if(firebase.auth().currentUser == null){
+            this.props.history.push("/Login");
+        }*/
     }
-
-    /*setRedirect = () => {
-    this.setState({
-      redirect: true
-    })
-}*/
-
-  /*renderRedirect = () => {
-    if (this.state.redirect) {
-        this.setState = {
-            username: '',
-            password: '',
-        };
-        this.props.history.push("/")
-      return <Redirect to='/login'/>
-    }
-}*/
 
     /* On querySnapshot event, gets Firebase colelction */
     onCollectionUpdate = (querySnapshot) => {
@@ -66,7 +52,12 @@ class App extends Component {
 
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+        });
+        console.log(this.state);
     }
+
 
     /* Sets the current reference to Firebase collection to the target */
     setCollection() {
@@ -78,20 +69,30 @@ class App extends Component {
         this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
     }
 
-    logout() {
-        firebase.auth().signOut();
-        this.authenticated = false;
-        this.props.history.push("/")
-    }
-
     render() {
         this.isArchiveBackground = this.state.switch;
-        //user not authenticated, redirect to login page
-        if(firebase.auth().currentUser == null || this.authenticated == false){
-            console.log(" not authenticated");
-            console.log(firebase.auth().currentUser);
-            return <Redirect to= '/login'/>
+        //authentication
+        console.log(this.props);
+        var username = "Login";
+        if(firebase.auth().currentUser != null){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
         }
+        console.log(username)
+        //user not authenticated, redirect to login page
+        /*if(this.state.user == null){
+            console.log("not authenticated");
+            console.log(firebase.auth().currentUser);
+            this.props.history.push("/Login");
+            return <Redirect to= '/login'/>
+        }*/
+        console.log("authenticated");
+        console.log(firebase.auth().currentUser);
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -101,10 +102,7 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-                { firebase.auth().currentUser
-                    ? <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
-                    : <li class="nav-item nav-link"><a href="/login">Login</a></li>
-                }
+                <li class="nav-item nav-link"><a href="/login">{username}</a></li>
 
                 </ul>
             </div>
@@ -115,7 +113,7 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login">{username}</a></li>
                 </ul>
         </nav>
         <div class="container">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../Firebase';
+import {firebase} from '../Firebase';
 import Dropzone from 'react-dropzone'
 
 const thumbsContainer = {
@@ -78,16 +78,16 @@ class UploadImage extends Component {
     }
     individualUpload = (file, id) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        uploadTask.on('state_changed', 
+        uploadTask.on('state_changed',
         (snapshot) => {
             // progrss function ....
             const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             this.setState({progress});
-        }, 
+        },
         (error) => {
             // error function ....
             console.log(error);
-        }, 
+        },
         () => {
             // complete function ....
             console.log("success");
