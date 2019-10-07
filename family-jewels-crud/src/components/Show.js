@@ -103,6 +103,8 @@ class Show extends Component {
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }*/
+        //end authentication check
+
         console.log(this.state.user);
         console.log(firebase.auth().currentUser);
         return (
