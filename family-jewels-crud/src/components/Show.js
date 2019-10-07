@@ -41,7 +41,7 @@ class Show extends Component {
                     title: data.title,
                     description: data.description,
                     guardian: data.guardian,
-                    nextguardian: data.guardian,
+                    nextguardian: data.nextguardian,
                     imagesLocations: data.imagesLocations,
                 });
                 firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
@@ -105,6 +105,9 @@ class Show extends Component {
     /* Changes nextguardian to guardian, asks for new nextguardian */
     inherit(id){
         var futureguardian = prompt("Optional: Please state the new Next Guardian.");
+        console.log("Old Guardian: " + this.state.guardian);
+        console.log("New Guardian: " + this.state.nextguardian);
+        console.log("Future Guardian: " + futureguardian);
         const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
         updateRef.set({
             title:this.state.title,
