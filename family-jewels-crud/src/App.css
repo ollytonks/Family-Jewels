@@ -102,7 +102,7 @@ div.mainbodyArchive
 }
 
 .login-container{
-    width:30%;
+    width:40%;
     max-width:100%;
     margin:10% auto;
 }
@@ -112,10 +112,28 @@ div.mainbodyArchive
     color: #FEBD59;
 }
 
-.login-container .btn-login{
-    background-color:#FF5964;
-    color:#fff;
+.login-container .col-md-12{
+    padding: 2%;
 }
+
+.login-container .btn-link {
+    color: #A4CABC;
+}
+
+.login-container .btn-link:hover {
+    color: #ffd38f;
+}
+
+.profile-container{
+    width: 60%;
+    max-width:100%;
+    margin:5% auto;
+}
+
+.profile-container .col-md-12{
+    padding: 2%;
+}
+
 .navbar-brand{
     width: auto;
     background-color: #A4CABC;
@@ -184,7 +202,7 @@ h2.panel-title {
 
 .grid {
     display: grid;
-    grid-gap: 15px; 
+    grid-gap: 15px;
     overflow: hidden;
   /*   grid-template-columns: repeat(auto-fill, 200px); */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

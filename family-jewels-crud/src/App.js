@@ -56,6 +56,8 @@ class App extends Component {
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
             this.setState({ isAuth: true });
+            console.log("Auth state changed");
+            console.log(this.state.user);
         });
         console.log(this.state);
     }
@@ -85,12 +87,6 @@ class App extends Component {
                  username = this.state.user.email;
              }
         }
-        else {
-            console.log("not authenticated");
-            console.log(firebase.auth().currentUser);
-            this.props.history.push("/Login");
-            return <Redirect to= '/login'/>
-        }
         //console.log(username);
         //console.log(firebase.auth().currentUser);
 
@@ -102,7 +98,6 @@ class App extends Component {
             return <Redirect to= '/login'/>
         }
         console.log("authenticated");
-
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">

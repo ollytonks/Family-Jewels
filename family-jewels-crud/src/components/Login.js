@@ -1,32 +1,46 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Link, Redirect} from 'react-router-dom';
-import { thisTypeAnnotation } from '@babel/types';
+import { Redirect } from 'react-router-dom';
 import withFirebaseAuth from 'react-with-firebase-auth'
 import firebaseApp from '../Firebase';
+import '../App.css';
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
 class Login extends Component {
 
+    _isMounted = false;
+
     constructor() {
         super();
         this.state = {
             user : firebase.auth().currentUser,
-            email : null,
-            password : null,
-            resetPassword: false
+            email : "",
+            password : "",
+            resetPassword: false,
+            isAuth: false
         }
         this.editProfile = this.editProfile.bind(this);
+        this.returnToLogin = this.returnToLogin.bind(this);
     }
 
     componentDidMount() {
+        //ensure mounted correctly
+        this._isMounted = true;
         //check if still signed in
-        firebaseAuth.onAuthStateChanged(user => {
-            this.setState({ user: firebase.auth().currentUser });
-        });
+        if(this._isMounted) {
+            firebaseAuth.onAuthStateChanged(user => {
+                console.log("Auth state changed")
+                this.setState({ user: firebase.auth().currentUser });
+                this.setState({ isAuth: true });
+                console.log(this.state.user)
+            });
+        }
+    }
 
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     //sign in with Google
@@ -116,6 +130,12 @@ class Login extends Component {
         this.props.history.push("/EditProfile");
     }
 
+    //rederict to Login page from password reset
+    returnToLogin() {
+        //refresh page to return to original sign in options
+        window.location.reload();
+    }
+
     render() {
         //check if user is signed in
         if(this.state.user) {
@@ -129,19 +149,45 @@ class Login extends Component {
                      username = this.state.user.email;
                  }
             return(
-                <div class="login-container">
-                    <div class="panel-heading">
+                <div>
+                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
+                            <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
+
+                        </ul>
+                    </div>
+                </nav>
+                <nav class="navbar navbar-default navbar-expand d-lg-none">
+                        <ul class="nav navbar-nav">
+                            <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                            <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item nav-link"><a href="/login">{username}</a></li>
+                        </ul>
+                </nav>
+                <div class="profile-container">
+                    <div class="col-md-12" align="center">
                     <h2 class="panel-title">
                         Hello {username}
                     </h2>
                     </div>
+                    <div class="col-md-12" align="center">
                     <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
+                    </div>
+                    <div class="col-md-12" align="center">
                     <button type="submit" class="btn btn-outline-warning" onClick={this.editProfile}>Edit profile</button>
+                    </div>
+                </div>
                 </div>
             );
         }
         console.log(this.state.user);
-        console.log(this.state.email)
         //user not signed in, prompt login
         return (
             <div class="login-container">
@@ -153,17 +199,22 @@ class Login extends Component {
                 <form onSubmit={this.loginEmailPassword}>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <label for="username">Email:</label>
                             <input type="email" class="form-control"
                             name="username" placeholder="Username" value={this.state.email}
                              onChange={e => this.setState({email: e.target.value})} />
                         </div>
                     </div>
                     {this.state.resetPassword
-                    ? <button  type="submit" class="btn btn-outline-warning" onClick={this.resetPassword}>Send password reset</button>
+                    ? <div>
+                        <div class="col-md-12" align="center">
+                            <button type="submit" class="btn btn-outline-warning" onClick={this.resetPassword}>Send password reset</button>
+                        </div>
+                        <div class="col-md-12" align="center">
+                            <button type="button" class="btn btn-outline-warning" onClick={this.returnToLogin}>Return</button>
+                        </div>
+                    </div>
                     :<div class="row">
                         <div class="col-md-12 form-group">
-                            <label for="password">Password:</label>
                             <input type="password" class="form-control"
                             name="password" placeholder="Password"
                             value={this.state.password}
@@ -175,22 +226,25 @@ class Login extends Component {
                         <div class="col-md-12">
                         {this.state.resetPassword
                         ? <p></p>
-                        : <button type="submit" class="btn btn-outline-warning" onClick={this.submit}>Sign in</button>
+                        : <button type="submit" class="btn btn-outline-warning btn-block" onClick={this.submit}>Sign in</button>
                         }
                         </div>
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-md-12">
-                    <button class="btn btn-outline-warning" onClick={this.loginWithGoogle}>Sign in with Google</button>
+                    <div class="col-md-12" align="center">
+                    {this.state.resetPassword
+                        ? <p></p>
+                        : <button class="btn btn-outline-warning btn-block" onClick={this.loginWithGoogle}>Sign in with Google</button>
+                    }
                     </div>
                 </div>
                 <div class="row">
                 </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" align="center">
                     { this.state.resetPassword
                     ? <p></p>
-                    : <button class="btn btn-outline-warning" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
+                    : <button class="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
                     }
                     </div>
             </div>

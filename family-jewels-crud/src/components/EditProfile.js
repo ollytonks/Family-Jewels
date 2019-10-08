@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect} from 'react-router-dom';
@@ -64,19 +64,41 @@ class EditProfile extends Component {
             }
         }
         return(
-            <div class="login-container">
-                <div class="panel-heading">
+            <div>
+            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item nav-link"><a href="/login">{username}</a></li>
+
+                    </ul>
+                </div>
+            </nav>
+            <nav class="navbar navbar-default navbar-expand d-lg-none">
+                    <ul class="nav navbar-nav">
+                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
+                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
+                    </ul>
+            </nav>
+                <div class="profile-container">
+                <div class="col-md-12" align="center">
                     <h2 class="panel-title">
                         Hello {username}
                     </h2>
                 </div>
-                <div>
-                    <label for="displayName">Display name:</label>
                     <input type="text" class="form-control"
-                    name="displayName" placeholder="Your name" value={this.state.displayName}
+                    name="displayName" placeholder="Your display name" value={this.state.displayName}
                         onChange={e => this.setState({displayName: e.target.value})}/>
+                    <div class="col-md-12" align="center">
                      <button type="button" class="btn btn-outline-warning" onClick= {this.updateProfile}>
                         Save</button>
+                    </div>
                 </div>
             </div>
         );
