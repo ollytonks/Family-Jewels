@@ -11,6 +11,7 @@ import Create from './components/Create';
 import Show from './components/Show';
 import Login from './components/Login';
 import UploadImage from './components/UploadImage';
+import EditProfile from './components/EditProfile';
 
 ReactDOM.render(
     <Router>
@@ -21,6 +22,7 @@ ReactDOM.render(
             <Route path='/show/:collection/:id' component={Show} />
             <Route path ='/login' component={Login} />
             <Route path='/uploadimage' component={UploadImage} />
+            <Route path='/EditProfile' component={EditProfile} />
         </div>
     </Router>,
     document.getElementById('root')
