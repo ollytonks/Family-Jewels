@@ -85,7 +85,14 @@ class App extends Component {
                  username = this.state.user.email;
              }
         }
-        console.log(username)
+        else {
+            console.log("not authenticated");
+            console.log(firebase.auth().currentUser);
+            this.props.history.push("/Login");
+            return <Redirect to= '/login'/>
+        }
+        //console.log(username);
+        //console.log(firebase.auth().currentUser);
 
         //user not authenticated, redirect to login page
         if(this.state.user == null && this.state.isAuth){
@@ -95,7 +102,7 @@ class App extends Component {
             return <Redirect to= '/login'/>
         }
         console.log("authenticated");
-        console.log(firebase.auth().currentUser);
+
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
