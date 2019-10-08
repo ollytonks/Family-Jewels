@@ -169,61 +169,56 @@ class App extends Component {
                     />
             </nav>
             <div class="container">
-                <div class="panel panel-default">
+                <div class="panel">
                 <div class="panel-body">
 
                     <div>
                     <div class="row">
-                    <div class="col-md-10">
-                        <h2 class="panel-title">
-                        {this.state.heading}
-                        </h2>
-                    </div>
-                    <div class="col-md-2">
-                    <Switch
-                        isOn={this.state.switch}
-                        isArchiveBackground = {this.isArchiveBackground}
-                        handleToggle={() =>
-                            {
-                                this.setState(prevState => ({switch: !prevState.switch}));
-                                this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
-                                this.setCollection();
-                            }
-                        }
-                    />
-                    </div>
+                        <div class="col"></div>
+                        <div class="col">
+                            <h2 class="centre-title">
+                            {'HEIRLOOMS'}
+                            </h2>
+                        </div>
+                        <div class="col">
+                        </div>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="grid">
                         {resultList.map(heirloom =>
                             <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
-                                <div class="imgbox">
-                                    <img class="tileimg" src={heirloom.icon}></img>
-                                </div>
-                                <div class="infobox">
-                                    <a class={this.isArchiveBackground ? "subArchive" : "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <div class="tiletitle">
+                                    <a class={this.isArchiveBackground ? "subArchive" : "sub"}>
                                         <b>{heirloom.title}</b>
                                         <br></br>
                                     </a>
-                                    <a class="plain">
-                                        {(heirloom.description.length > 80) ?
-                                            heirloom.description.slice(0,80).concat("...")
-                                            : heirloom.description
-                                        }
-                                        <br></br>
-                                    </a>
-                                    <a class="plain">
-                                        {"Guardian: " + heirloom.guardian} <br></br>
-                                    </a>
-                                    <a class="plain">
-                                        {heirloom.nextguardian === "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
-                                    </a>
                                 </div>
+                                <div class="imgbox">
+                                    <img class="tileimg" src={heirloom.icon}></img>
+                                </div>
+                                </a>
                             </div>
                         )}
                     </div>
                 </div>
+                </div>
+                <div class='floating'>
+                    <div class="floating-tile">
+                        <b>{this.isArchiveBackground ? "Return" : "Go to archive"}</b>
+                        <Switch
+                            isOn={this.state.switch}
+                            isArchiveBackground = {this.isArchiveBackground}
+                            handleToggle={() =>
+                                {
+                                    this.setState(prevState => ({switch: !prevState.switch}));
+                                    this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
+                                    this.setCollection();
+                                }
+                            }
+                        />
+                    </div>
                 </div>
             </div>
             </div>

@@ -57,7 +57,7 @@ div.mainbodyClassic
 
     position: absolute;
 
-    background-color: rgb(72, 61, 87);
+    background-color: #8D77AB;
 }
 
 div.mainbodyArchive
@@ -117,9 +117,28 @@ div.mainbodyArchive
 }
 
 
-.panel-title{
+.panel-title-right {
     color: #fff;
+    text-align: left;
+    width: 100%;
+    height: 100%;
 }
+
+.panel-title-left {
+    color: #fff;
+    text-align: right;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-default {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 12px 18px 0 rgba(0, 0, 0, 0.4);
+}
+
 .singleDisplayImg {
     width: 20vh;
     height: 20vh;
@@ -134,10 +153,12 @@ td{
 
 input, text, label{
     color:  #A4CABC;
+    box-sizing: border-box;
+    width: 20vh;
 }
 
 .background-classic {
-    background-color: rgb(72, 61, 87);
+    background-color: #8D77AB;
     /*justify: center;*/
 }
 
@@ -154,69 +175,109 @@ h2.panel-title {
 
 .grid {
     display: grid;
-    grid-gap: 15px; 
+    gap: 15px; 
     overflow: hidden;
   /*   grid-template-columns: repeat(auto-fill, 200px); */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   /*   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr) 150px); */
     grid-auto-flow: dense;
     text-align: center;
+    padding: 14px;
 }
 
 .tile {
-    border-radius: 6px;
-    background: #57496A;
+    border-radius: 4px;
+    background: rgb(72, 61, 87);
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.4);
+    display: block;
+    text-decoration-line: none;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+    width: 200px;
+    height: 200px;
+}
+
+.tiletitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 350;
+    font-size: 16px;
+    padding-top: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
     width: 100%;
-    height: 100%;
+    height: 65px;
+    text-transform: uppercase;
+    line-height: normal;
 }
 
 .tileArchive {
-    border-radius: 6px;
-    background: rgb(221, 163, 77);
-    width: 100%;
-    height: 100%;
+    border-radius: 4px;
+    background: rgb(189, 139, 64);
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.4);
+    display: block;
+    text-decoration-line: none;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+    width: 200px;
+    height: 200px;
 }
 
 .imgbox {
     display: block;
     width: 100%;
-    height: 60%;
-    margin: 0 auto;
+    height: 135px;
     text-align: center;
+    padding: 10px;
 }
 
 .tileimg {
-    padding: 5%;
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
 }
 
 .infobox {
-    height: 40%;
+    height: 17%;
     overflow: scroll;
 }
 
-.grid a.sub:link {
+.grid a {
+    text-decoration: none;
+    /*text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/
+}
+
+.grid a.sub {
     color: #FEBD59;
 }
+
 .grid a.sub:visited {
     color: #ffd38f;
 }
+
 .grid a.sub:hover {
-    color: #ffd38f;
+    color: #FEBD59;
 }
 
-.grid a.subArchive:link {
-    color: #57496A;
+.grid a.subArchive {
+    color: rgb(47, 40, 58);
 }
+
 .grid a.subArchive:visited {
-    color: rgb(78, 66, 95);
+    color: rgb(47, 40, 58);
 }
+
 .grid a.subArchive:hover {
-    color: rgb(78, 66, 95);
+    color: rgb(47, 40, 58);
 }
 
 .grid a.plain {
+    font-family: 'Roboto', serif;
+    font-weight: 500;
+    font-size: 15px;
+    padding-top: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
     color: #fff;
 }
 
@@ -229,6 +290,7 @@ h2.panel-title {
 	display: block;
     text-align:center;
     width: 100%;
+    height: 100%;
     color: #FEBD59;
 }
 
@@ -237,9 +299,14 @@ h2.panel-title {
 }
 
 .container h3 {
-    color: #FEBD59;
+    color: #A4CABC;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
+div .col-1 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
 .col-md-10 {
     text-align:left;
 }
@@ -297,4 +364,41 @@ h2.panel-title {
     color: black;
     height: "100vh";
     width: "100vw";
+ }
+
+ .floating {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    width: 110px;
+    height: 60px;
+ }
+
+ .floating-tile {
+    background: rgb(255, 255, 255, 0.2);
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.4);
+    display: block;
+    text-decoration-line: none;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+ }
+
+ .floating-tile b {
+     font-size: 15px;
+     color: rgb(0, 0, 0);
+ }
+
+ .col h2.centre-title {
+     padding-top: 10px;
+     font-family: 'Roboto', sans-serif;
+     font-weight: 900;
+     color: #A4CABC;
+     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+ }
+
+ .button-row {
+     padding: 10px;
  }

@@ -129,7 +129,9 @@ class Create extends Component {
                 found = true;
             }
         }
-        if (!found) {
+        if (this.state.title.length > 55) {
+            window.alert("Title has a 55 character limit. You have " + this.state.title.length.toString() + ".");
+        } else if (!found) {
             const { title, description, guardian, nextguardian } = this.state;
             if (title && description && guardian) {
                 for (var i = 0; i < images.length; i++){
@@ -208,13 +210,12 @@ class Create extends Component {
                 <div class="form-group">
                     <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <label for="imageDropzone">Images: *</label>
                 <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
                     {({getRootProps, getInputProps}) => (
                         <section class="dropzone">
                             <div {...getRootProps()}>
                                 <input {...getInputProps()} />
-                                <p>Drag and drop files here, or click HERE to select files</p>
+                                <p>Drag and drop files here, or click HERE to select files*</p>
                             </div>
                             <aside class="thumbs-container">
                                 {thumbs}

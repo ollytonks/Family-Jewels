@@ -99,7 +99,7 @@ class Show extends Component {
     renderEditDelete() {
         if (this.state.target === 'boards') {
             return(
-            <div>
+            <div class="button-row">
             <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
             <div class="divider"></div>
             <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>

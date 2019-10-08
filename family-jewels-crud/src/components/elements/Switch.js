@@ -10,7 +10,7 @@ const Switch = ( {isOn, handleToggle, isArchiveBackground} ) => {
 
     return (
       <div
-          className={isArchiveBackground ? 'background-archive' : 'background-classic'}>
+          className='toggle-box'>
         <input
           checked={isOn}
           onChange={handleToggle}
