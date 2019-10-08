@@ -18,7 +18,8 @@ class App extends Component {
             switch: false,
             target: 'archived_boards',
             heading: 'HEIRLOOMS',
-            user: firebase.auth().currentUser
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         /*if(firebase.auth().currentUser == null){
             this.props.history.push("/Login");
@@ -54,6 +55,7 @@ class App extends Component {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
         });
         console.log(this.state);
     }
@@ -74,7 +76,7 @@ class App extends Component {
         //authentication
         console.log(this.props);
         var username = "Login";
-        if(firebase.auth().currentUser != null){
+        if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
                  console.log(this.state.user.displayName);
@@ -86,12 +88,12 @@ class App extends Component {
         console.log(username)
 
         //user not authenticated, redirect to login page
-        /*if(this.state.user == null){
+        if(this.state.user == null && this.state.isAuth){
             console.log("not authenticated");
             console.log(firebase.auth().currentUser);
             this.props.history.push("/Login");
             return <Redirect to= '/login'/>
-        }*/
+        }
         console.log("authenticated");
         console.log(firebase.auth().currentUser);
         return (

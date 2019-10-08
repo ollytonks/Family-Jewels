@@ -12,7 +12,8 @@ class Edit extends Component {
             description: '',
             guardian: '',
             nextguardian: '',
-            user: firebase.auth().currentUser
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
     }
 
@@ -34,6 +35,7 @@ class Edit extends Component {
         });
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
         });
     }
 
@@ -75,13 +77,13 @@ class Edit extends Component {
 
     render() {
         //user is not logged in
-        /*if(firebase.auth().currentUser == null){
+        if(this.state.user == null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }*/
+        }
         var username = "Login";
-        if(this.state.user != null){
+        if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
                  console.log(this.state.user.displayName);

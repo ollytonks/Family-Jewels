@@ -58,7 +58,8 @@ class Create extends Component {
             images: [],
             imagesLocations: [],
             previews: [],
-            user: firebase.auth().currentUser
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
     }
 
@@ -85,6 +86,7 @@ class Create extends Component {
         //authentication
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
         });
     }
 
@@ -213,13 +215,13 @@ class Create extends Component {
         ));
         const { title, description, guardian, nextguardian } = this.state;
         //user is not logged in
-        /*if(firebase.auth().currentUser == null){
+        if(this.state.user == null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }*/
+        }
         var username = "Login";
-        if(this.state.user != null){
+        if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
                  console.log(this.state.user.displayName);

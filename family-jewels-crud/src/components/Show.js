@@ -14,7 +14,8 @@ class Show extends Component {
             icon: '',
             target: this.props.match.params.collection,
             archive_text: '',
-            user: firebase.auth().currentUser
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         console.log(this.state.hlist);
         this.unsubscribe = null;
@@ -42,8 +43,15 @@ class Show extends Component {
 
         //authentication
         firebaseAuth.onAuthStateChanged(user => {
+            console.log("auth state changed");
             this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+            console.log(this.state.isAuth);
         });
+        console.log("has mounted");
+        console.log(this.state.isAuth);
+
+
     }
 
     componentDidUpdate() {
@@ -88,7 +96,7 @@ class Show extends Component {
 
     render() {
         var username = "Login";
-        if(firebase.auth().currentUser != null){
+        if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
                  console.log(this.state.user.displayName);
@@ -98,11 +106,11 @@ class Show extends Component {
              }
         }
         //user is not logged in
-        /*if(this.state.user == null){
+        if(this.state.user == null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
-        }*/
+        }
         console.log(this.state.user);
         console.log(firebase.auth().currentUser);
         return (
