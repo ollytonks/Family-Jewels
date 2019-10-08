@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import firebase from '../Firebase';
 import Dropzone from 'react-dropzone'
 import Navbar from './elements/Navbar';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from './elements/google-maps-react';
+
 
 
   
@@ -230,6 +232,7 @@ class Create extends Component {
                 </form>
             </div>
             </div>
+            <Map></Map>
         </div>
         </div>
         );
