@@ -94,22 +94,40 @@ class Create extends Component {
             return true
         }
     }
-    individualUpload = (file, id) => {
+    individualUpload = (file, id, currFile, numImages) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        uploadTask.on('state_changed', 
-        (snapshot) => {
-            // progrss function ....
-            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            this.setState({progress});
-        }, 
-        (error) => {
-            // error function ....
-            console.log(error);
-        }, 
-        () => {
-            // complete function ....
-            console.log("success");
-        });
+        if (currFile === numImages - 1) {uploadTask.on('state_changed', 
+            (snapshot) => {
+                // progress function ....
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                this.setState({progress});
+            }, 
+            (error) => {
+                // error function ....
+                console.log(error);
+            }, 
+            () => {
+                // complete function ....
+                const progress = 0;
+                console.log("success");
+                this.setState({progress});
+                this.props.history.push("/")
+            });
+        } else { uploadTask.on('state_changed', 
+            (snapshot) => {
+                // progress function ....
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                this.setState({progress});
+            }, 
+            (error) => {
+                // error function ....
+                console.log(error);
+            }, 
+            () => {
+                // complete function ....
+                console.log("success - more to come");
+            });
+        }
     }
 
     /* Creates a new heirloom in Firebase collection if:
@@ -118,6 +136,7 @@ class Create extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         var found = false;
+        var uploads = false;
         const images = this.state.images;
         var imagesID = [];
         var imagesLocations = [];
@@ -134,7 +153,8 @@ class Create extends Component {
                     var id = uuidv4()
                     imagesID.push([images[i], id]);
                     imagesLocations.push(id);
-                    this.individualUpload(images[i], id)
+                    this.individualUpload(images[i], id, i, images.length)
+                    uploads = true;
                 }
                 this.ref.add({
                     title,
@@ -150,13 +170,15 @@ class Create extends Component {
                     nextguardian: '',
                     imagesLocations: ''
                 });
-                this.props.history.push("/")
+                if (!uploads) {
+                    this.props.history.push("/");
+                }
                 })
                 .catch((error) => {
                 console.error("Error adding document: ", error);
                 });
             } else {
-                window.alert("An heirloom must have a title, description, and guardian.");
+                window.alert("An heirloom must have a title, description, guardian, and at least one image.");
             }
         } else {
             window.alert("An heirloom already exists with that title.");
@@ -164,15 +186,24 @@ class Create extends Component {
 
     }
 
-    removePreview(index) {
-        var images = this.state.images.splice(index, 1)
-        console.log(images);
+    removePreview = (index) => {
+        var images = [], previews = [];
+        images = images.concat(this.state.images);
+        previews = previews.concat(this.state.previews);
+        
+        images.splice(index,1);
+        previews.splice(index, 1);
+       
+        this.setState({
+            images: images,
+            previews: previews
+        });
        
     }
     render() {
         const thumbs = this.state.previews.map((file,index) => (
             <div class="thumb" key={file.name}>
-                <button type="button" class="close" aria-label="Close">
+                <button type="button" class="close" aria-label="Close" onClick={() => this.removePreview(index)}>
                         <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="thumb-inner">
@@ -242,6 +273,11 @@ class Create extends Component {
                         </section>
                     )}
                 </Dropzone>
+                <div class="divider"/>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
+                </div>
+                <div class="divider"/>
                 <div/>
                 <label for="submitButton"><i>* fields are mandatory</i></label>
                 <div/>
