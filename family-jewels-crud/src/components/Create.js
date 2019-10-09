@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import firebase from '../Firebase';
 import Dropzone from 'react-dropzone'
 import Navbar from './elements/Navbar';
-
+import MapContainer from './elements/MapContainer';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
   
 
@@ -22,24 +23,29 @@ class Create extends Component {
         this.state = {
             heirlooms: [],
             title: '',
+            data: '',
             description: '',
             author: '',
             nextguardian: '',
             progress: 0,
             images: [],
             imagesLocations: [],
-            previews: []
+            previews: [],
+            marker: null,
+            googleReverseGeolocation:null,
+            date: ''
         };
     }
 
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian } = doc.data();
+            const { title, date, description, guardian, nextguardian } = doc.data();
             list.push({
                 key: doc.id,
                 doc, // DocumentSnapshot
                 title,
+                date,
                 description,
                 guardian,
                 nextguardian
@@ -114,6 +120,7 @@ class Create extends Component {
         });
     }
 
+
     /* Creates a new heirloom in Firebase collection if:
         - Unique title
         - Title, description, and guardian fields non-empty */
@@ -132,7 +139,7 @@ class Create extends Component {
         if (this.state.title.length > 55) {
             window.alert("Title has a 55 character limit. You have " + this.state.title.length.toString() + ".");
         } else if (!found) {
-            const { title, description, guardian, nextguardian } = this.state;
+            const { title, date, marker, description, guardian, nextguardian } = this.state;
             if (title && description && guardian) {
                 for (var i = 0; i < images.length; i++){
                     var id = uuidv4()
@@ -142,6 +149,8 @@ class Create extends Component {
                 }
                 this.ref.add({
                     title,
+                    date,
+                    marker,
                     description,
                     guardian,
                     nextguardian,
@@ -149,6 +158,8 @@ class Create extends Component {
                 }).then((docRef) => {
                 this.setState({
                     title: '',
+                    date: '',
+                    marker: null,
                     description: '',
                     guardian: '',
                     nextguardian: '',
@@ -168,12 +179,52 @@ class Create extends Component {
 
     }
 
+    createMap() {
+        return (
+            <div class="map-box">
+              <Map google={this.props.google}
+                style={style}
+                initialCenter={{
+                    lat: -37.794921,
+                    lng: 144.961446
+                }}
+                zoom={5}
+                onClick={this.saveMarker}
+              >
+              {this.createMarker}
+              </Map>
+            </div>
+          );
+    }
+
+    saveMarker (t, map, c) {
+        this.setState({
+            marker: [c.latLng.lat(),c.latLng.lng()]
+        })
+    }
+
+    createMarker() {
+        console.log("being called");
+        if (this.state.marker) {
+            console.log("rendering");
+            return (
+                <Marker
+                    title={this.state.title}
+                    name={this.state.title}
+                    position={{ lat: this.state.marker[0], lng:this.state.marker[1]}}
+                />
+            );
+        } else {
+            return (null);
+        }
+    }
+
     removePreview(index) {
         var images = this.state.images.splice(index, 1)
         console.log(images);
        
     }
-    render() {
+    render() {             
         document.title = "Add heirloom";
         const thumbs = this.state.previews.map((file,index) => (
             <div class="thumb" key={file.name}>
@@ -185,11 +236,11 @@ class Create extends Component {
                 </div>
            </div>
         ));
-        const { title, description, guardian, nextguardian } = this.state;
+        const { title, date, description, guardian, nextguardian } = this.state;
         return (
-            <div>
+            <div class="create-container-main">
             <Navbar/>
-        <div class="container">
+        <div class="create-container">
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -198,8 +249,9 @@ class Create extends Component {
             </div>
             <div class="panel-body">
                 <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title*" />
+                <div class="form-group form-control-text">
+                    <input type="text" class="form-control form-control-text-major" name="title" value={title} onChange={this.onChange} placeholder="Title*"/>
+                    <input type="text" class="form-control form-control-text-minor" name="date" value={date} onChange={this.onChange} placeholder="Origin date"/>
                 </div>
                 <div class="form-group">
                     <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
@@ -225,8 +277,25 @@ class Create extends Component {
                 </Dropzone>
                 <div/>
                 <label for="submitButton"><i>* fields are mandatory</i></label>
+                <br></br>
+                <a>Click a location relevant to the item</a>
+                <br></br>
+                <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
                 <div/>
-                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                <div class="map-container">
+                    {<MapContainer
+                        saveMarker={(t, map, c) => {
+                            this.setState({
+                                marker: [c.latLng.lat(),c.latLng.lng()]
+                            })
+                        }}>
+                    </MapContainer>}
+                </div>
+                <div class="floating-button">
+                    <div class ="floating-button-tile">
+                        <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                    </div>
+                </div>
                 </form>
             </div>
             </div>
@@ -234,6 +303,24 @@ class Create extends Component {
         </div>
         );
     }
+}
+
+/*                             const lat = event.latLng.lat();
+                            const lng = event.latLng.lng();
+                            let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs`
+                            axios.get(url).then(response => {
+                                this.setState({
+                                googleReverseGeolocation: response.data.results[0].formatted_address,
+                                marker: {position:{lat:event.latLng.lat(),lng:event.latLng.lng()}},
+                                });
+                            this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
+                            console.log(this.state); 
+                            });*/
+
+const style = {
+    width: '80%',
+    height: '50%',
+    'max-height': '300px'
 }
 
 export default Create;
