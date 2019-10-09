@@ -1,0 +1,13 @@
+.map-box {
+    width: 100%;
+    height: 50%;
+}
+
+.container a.map-info{
+    color: rgb(72, 61, 87);
+}
+
+.container a.map-info:hover{
+    color: rgb(72, 61, 87);
+}
+

@@ -13,6 +13,9 @@ import Login from './components/Login';
 import UploadImage from './components/UploadImage';
 import EditProfile from './components/EditProfile';
 import CreateUser from './components/CreateUser';
+import FamilyMap from './components/FamilyMap';
+import Timeline from './components/Timeline';
+import 'font-awesome/css/font-awesome.min.css';
 
 ReactDOM.render(
     <Router>
@@ -25,6 +28,8 @@ ReactDOM.render(
             <Route path='/uploadimage' component={UploadImage} />
             <Route path='/editprofile' component={EditProfile} />
             <Route path='/createuser' component={CreateUser} />
+            <Route path ='/map' component={FamilyMap} />
+            <Route path ='/timeline' component={Timeline} />
         </div>
     </Router>,
     document.getElementById('root')

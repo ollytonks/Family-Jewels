@@ -1,18 +1,18 @@
-import React, { Component, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import './App.css';
-import {firebase, firebaseAuth} from './Firebase';
-import Switch from './components/elements/Switch';
-import homeIcon from './components/elements/familyjewelsgem.svg'
+import React, { Component } from 'react';
+import './Timeline.css';
+import './../App.css';
+import firebase from './../Firebase';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import homeIcon from './elements/familyjewelsgem.svg'
 
 
-class App extends Component {
+
+class Timeline extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
         this.isArchiveBackground=false;
         this.unsubscribe = null;
-        //this.authenticated = true;
         this.state = false;
         this.state = {
             heirlooms: [],
@@ -22,9 +22,10 @@ class App extends Component {
             searchResult: [],
             heading: 'HEIRLOOMS',
             searching: false,
-            heading: 'HEIRLOOMS',
-            user: firebase.auth().currentUser,
-            isAuth: false
+            markers: null,
+            showingInfoWindow: false,  //Hides or the shows the infoWindow
+            activeMarker: {},          //Shows the active marker upon click
+            selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -33,19 +34,23 @@ class App extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
+
+            const { title, description, guardian, nextguardian, imagesLocations, date} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
-                list.push({
-                    key: doc.id,
-                    icon: url,
-                    doc, // DocumentSnapshot
-                    title,
-                    description,
-                    guardian,
-                    nextguardian,
-                    imagesLocations
-                });
-                this.forceUpdate();
+                if (date) {
+                    list.push({
+                        key: doc.id,
+                        icon: url,
+                        doc, // DocumentSnapshot
+                        title,
+                        description,
+                        guardian,
+                        nextguardian,
+                        imagesLocations,
+                        date
+                    });
+                    this.forceUpdate();
+                }
             })
         });
         if (this.state.searchKey !== '') {
@@ -55,21 +60,14 @@ class App extends Component {
         }
         else {
             this.setState({
-                heirlooms: list, searchResult : list
+                heirlooms: list,
+                searchResult : list
             });
         }
     }
 
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        firebaseAuth.onAuthStateChanged(user => {
-            this.setState({ user: firebase.auth().currentUser });
-            this.setState({ isAuth: true });
-            console.log("Auth state changed");
-            console.log(this.state.user);
-        });
-        console.log(this.state);
-
         var locstate = this.props.location.payload;
         if (locstate !== undefined) {
             if (locstate.searching == true) {
@@ -79,7 +77,6 @@ class App extends Component {
             }
         }
     }
-
 
     /* Sets the current reference to Firebase collection to the target */
     setCollection() {
@@ -100,20 +97,37 @@ class App extends Component {
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }
+            }            
             this.setState({searchKey: filter});
         }
     }
 
+    onMarkerClick = (props, marker, e) =>
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true
+    });
+
+    onClose = () => {
+        if (this.state.showingInfoWindow) {
+        this.setState({
+            showingInfoWindow: false,
+            activeMarker: null
+        });
+    }}
+
     render() {
-        document.title = "Home";
+        document.title = "Family map";
+
+        let map;
+        let markers = [];
+        let infowds = [];
 
         let tempList = [];
         let filter = this.state.searchKey;
         if (filter !== "") {
             filter.toLowerCase();
-        }
-        if (filter !== "") {
             let currentList = this.state.heirlooms;
             // Use .filter() to determine which items should be displayed
             // based on the search terms
@@ -127,38 +141,16 @@ class App extends Component {
                 }
                 return 0;
             });
-            console.log(tempList.length);
+            console.log(tempList);
         } else {
             // If the search bar is empty, set newList to original task list
             tempList = this.state.heirlooms;
         }
         var resultList = tempList
-            .sort((a, b) => a.title.localeCompare(b.title));
-
+            .sort((a, b) => a.date.localeCompare(b.date));
+        
         this.isArchiveBackground = this.state.switch;
-        //authentication
-        console.log(this.props);
-        var username = "";
-        if(this.state.user){
-            if(this.state.user.displayName){
-                 username = this.state.user.displayName;
-                 console.log(this.state.user.displayName);
-             }
-             else {
-                 username = this.state.user.email;
-             }
-        }
-        //console.log(username);
-        //console.log(firebase.auth().currentUser);
-
-        //user not authenticated, redirect to login page
-        if(this.state.user == null && this.state.isAuth){
-            console.log("not authenticated");
-            console.log(firebase.auth().currentUser);
-            this.props.history.push("/Login");
-            return <Redirect to= '/login'/>
-        }
-        console.log("authenticated");
+        
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -170,14 +162,13 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-
                     <li class={this.state.searching ? '' : 'collapse'}>
                         <input
                             type="text"
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row"
+                            class="form-row" 
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
@@ -187,10 +178,10 @@ class App extends Component {
                         }}><i className="fa fa-search"/></div>
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/>{username}</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Login</a></li>
                 </ul>
             </div>
-
+            
         </nav>
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
@@ -218,48 +209,38 @@ class App extends Component {
                         <div class="col"></div>
                         <div class="col">
                             <h2 class="centre-title">
-                            {'HEIRLOOMS'}
+                            {'TIMELINE'}
                             </h2>
                         </div>
                         <div class="col">
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="grid">
+                <div class="container mt-5 mb-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="timeline">
                         {resultList.map(heirloom =>
-                            <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
-                                <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
-                                <div class="tiletitle">
-                                    <a class={this.isArchiveBackground ? "subArchive" : "sub"}>
-                                        <b>{heirloom.title}</b>
-                                        <br></br>
-                                    </a>
-                                </div>
-                                <div class="imgbox">
-                                    <img class="tileimg" src={heirloom.icon}></img>
-                                </div>
-                                </a>
-                            </div>
+                                <li> <a href={`/show/boards/`+ heirloom.key}>
+                                    <div class="header"><a target="_blank">{heirloom.title}</a></div>
+                                    <div class="timeline-row">
+                                        <div class="left-image">
+                                            <div class="imgbox">
+                                                <img class="tileimg" src={heirloom.icon}></img>
+                                            </div>
+                                        </div>
+                                        <div class="right-text">
+                                            <a class="float-right">{heirloom.date}</a>
+                                            <p>{heirloom.description}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    </a></li>
                         )}
+                        </ul>
                     </div>
                 </div>
-                </div>
-                <div class='floating'>
-                    <div class="floating-tile">
-                        <b>{this.isArchiveBackground ? "Return" : "Go to archive"}</b>
-                        <Switch
-                            isOn={this.state.switch}
-                            isArchiveBackground = {this.isArchiveBackground}
-                            handleToggle={() =>
-                                {
-                                    this.setState(prevState => ({switch: !prevState.switch}));
-                                    this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
-                                    this.setCollection();
-                                }
-                            }
-                        />
-                    </div>
+            </div>
                 </div>
             </div>
             </div>
@@ -268,6 +249,4 @@ class App extends Component {
     }
 }
 
-
-
-export default App;
+export default Timeline;

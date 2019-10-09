@@ -3,37 +3,11 @@ import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
+import Navbar from './elements/Navbar';
+import MapContainer from './elements/MapContainer';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
-const thumbsContainer = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16
-};
 
-const thumb = {
-    display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: 'border-box'
-};
-
-const thumbInner = {
-    display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden'
-};
-
-const img = {
-    display: 'block',
-    width: 'auto',
-    height: '100%'
-};
 
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
@@ -51,6 +25,7 @@ class Create extends Component {
         this.state = {
             heirlooms: [],
             title: '',
+            data: '',
             description: '',
             author: '',
             nextguardian: '',
@@ -60,17 +35,21 @@ class Create extends Component {
             previews: [],
             user: firebase.auth().currentUser,
             isAuth: false
+            marker: null,
+            googleReverseGeolocation:null,
+            date: ''
         };
     }
 
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian } = doc.data();
+            const { title, date, description, guardian, nextguardian } = doc.data();
             list.push({
                 key: doc.id,
                 doc, // DocumentSnapshot
                 title,
+                date,
                 description,
                 guardian,
                 nextguardian
@@ -105,13 +84,13 @@ class Create extends Component {
         }
     }
     handleOnDrop = (files, rejectedFiles) => {
-        console.log(files);
         if (rejectedFiles && rejectedFiles.length > 0 ){
             this.verifyFile(rejectedFiles)
         }
         if (files && files.length > 0){
             const isVerified = this.verifyFile(files)
             if (isVerified){
+                files = this.state.images.concat(files);
                 this.setState ({
                     images: files,
                     previews: files.map(file => Object.assign(file, {
@@ -132,23 +111,42 @@ class Create extends Component {
             return true
         }
     }
-    individualUpload = (file, id) => {
+    individualUpload = (file, id, currFile, numImages) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        uploadTask.on('state_changed',
-        (snapshot) => {
-            // progrss function ....
-            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            this.setState({progress});
-        },
-        (error) => {
-            // error function ....
-            console.log(error);
-        },
-        () => {
-            // complete function ....
-            console.log("success");
-        });
+        if (currFile === numImages - 1) {uploadTask.on('state_changed',
+            (snapshot) => {
+                // progress function ....
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                this.setState({progress});
+            },
+            (error) => {
+                // error function ....
+                console.log(error);
+            },
+            () => {
+                // complete function ....
+                const progress = 0;
+                console.log("success");
+                this.setState({progress});
+                this.props.history.push("/")
+            });
+        } else { uploadTask.on('state_changed',
+            (snapshot) => {
+                // progress function ....
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                this.setState({progress});
+            },
+            (error) => {
+                // error function ....
+                console.log(error);
+            },
+            () => {
+                // complete function ....
+                console.log("success - more to come");
+            });
+        }
     }
+
 
     /* Creates a new heirloom in Firebase collection if:
         - Unique title
@@ -156,6 +154,7 @@ class Create extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         var found = false;
+        var uploads = false;
         const images = this.state.images;
         var imagesID = [];
         var imagesLocations = [];
@@ -165,17 +164,22 @@ class Create extends Component {
                 found = true;
             }
         }
-        if (!found) {
-            const { title, description, guardian, nextguardian } = this.state;
-            if (title && description && guardian) {
+        if (this.state.title.length > 55) {
+            window.alert("Title has a 55 character limit. You have " + this.state.title.length.toString() + ".");
+        } else if (!found) {
+            const { title, date, marker, description, guardian, nextguardian } = this.state;
+            if (title && description && guardian && this.state.previews.length != 0) {
                 for (var i = 0; i < images.length; i++){
                     var id = uuidv4()
                     imagesID.push([images[i], id]);
                     imagesLocations.push(id);
-                    this.individualUpload(images[i], id)
+                    this.individualUpload(images[i], id, i, images.length)
+                    uploads = true;
                 }
                 this.ref.add({
                     title,
+                    date,
+                    marker,
                     description,
                     guardian,
                     nextguardian,
@@ -183,18 +187,22 @@ class Create extends Component {
                 }).then((docRef) => {
                 this.setState({
                     title: '',
+                    date: '',
+                    marker: null,
                     description: '',
                     guardian: '',
                     nextguardian: '',
                     imagesLocations: ''
                 });
-                this.props.history.push("/")
+                if (!uploads) {
+                    this.props.history.push("/");
+                }
                 })
                 .catch((error) => {
                 console.error("Error adding document: ", error);
                 });
             } else {
-                window.alert("An heirloom must have a title, description, and guardian.");
+                window.alert("An heirloom must have a title, description, guardian, and at least one image.");
             }
         } else {
             window.alert("An heirloom already exists with that title.");
@@ -202,18 +210,73 @@ class Create extends Component {
 
     }
 
+    createMap() {
+        return (
+            <div class="map-box">
+              <Map google={this.props.google}
+                style={style}
+                initialCenter={{
+                    lat: -37.794921,
+                    lng: 144.961446
+                }}
+                zoom={5}
+                onClick={this.saveMarker}
+              >
+              {this.createMarker}
+              </Map>
+            </div>
+          );
+    }
+
+    saveMarker (t, map, c) {
+        this.setState({
+            marker: [c.latLng.lat(),c.latLng.lng()]
+        })
+    }
+
+    createMarker() {
+        console.log("being called");
+        if (this.state.marker) {
+            console.log("rendering");
+            return (
+                <Marker
+                    title={this.state.title}
+                    name={this.state.title}
+                    position={{ lat: this.state.marker[0], lng:this.state.marker[1]}}
+                />
+            );
+        } else {
+            return (null);
+        }
+    }
+
+    removePreview = (index) => {
+        var images = [], previews = [];
+        images = images.concat(this.state.images);
+        previews = previews.concat(this.state.previews);
+
+        images.splice(index,1);
+        previews.splice(index, 1);
+
+        this.setState({
+            images: images,
+            previews: previews
+        });
+    }
+
     render() {
-        const thumbs = this.state.previews.map(file => (
-            <div style={thumb} key={file.name}>
-               <div style={thumbInner}>
-                   <img
-                   src={file.preview}
-                   style={img}
-                   />
-               </div>
+        document.title = "Add heirloom";
+        const thumbs = this.state.previews.map((file,index) => (
+            <div class="thumb" key={file.name}>
+                <button type="button" class="close" aria-label="Close" onClick={() => this.removePreview(index)}>
+                        <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="thumb-inner">
+                    <img src={file.preview} class="thumb-img"/>
+                </div>
            </div>
         ));
-        const { title, description, guardian, nextguardian } = this.state;
+        const { title, date, description, guardian, nextguardian } = this.state;
         if(this.state.isAuth == false){
             return (<div></div>);
         }
@@ -233,30 +296,10 @@ class Create extends Component {
                  username = this.state.user.email;
              }
         }
-        console.log(this.state.user);
         return (
-            <div>
-                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <nav class="navbar navbar-default navbar-expand d-lg-none">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
-                    </ul>
-            </nav>
-        <div class="container">
+            <div class="create-container-main">
+            <Navbar/>
+            <div class="create-container">
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -265,39 +308,58 @@ class Create extends Component {
             </div>
             <div class="panel-body">
                 <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
+                <div class="form-group form-control-text">
+                    <input type="text" class="form-control form-control-text-major" name="title" value={title} onChange={this.onChange} placeholder="Title*"/>
+                    <input type="text" class="form-control form-control-text-minor" name="date" value={date} onChange={this.onChange} placeholder="Origin date"/>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description:</label>
                     <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
                 </div>
                 <div class="form-group">
-                    <label for="guardian">Guardian:</label>
-                    <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian" />
+                    <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian*" />
                 </div>
                 <div class="form-group">
-                    <label for="nextguardian">Next Guardian:</label>
                     <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <label for="imageDropzone">Images: </label>
-                <div class = "dropzone">
-                    <Dropzone onDrop={this.handleOnDrop} accept={acceptedFileTypes} name="imageDropzone">
-                        {({getRootProps, getInputProps}) => (
-                            <section>
-                                <div {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    <p>Drag and drop files here, or click HERE to select files</p>
-                                </div>
-                                <aside style={thumbsContainer}>
-                                    {thumbs}
-                                </aside>
-                            </section>
-                        )}
-                    </Dropzone>
+                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
+                    {({getRootProps, getInputProps}) => (
+                        <section class="dropzone">
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <p>Drag and drop files here, or click HERE to select files*</p>
+                            </div>
+                            <aside class="thumbs-container">
+                                {thumbs}
+                            </aside>
+                        </section>
+                    )}
+                </Dropzone>
+                <div class="divider"/>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
                 </div>
-                <button type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                <div class="divider"/>
+                <div/>
+                <label for="submitButton"><i>* fields are mandatory</i></label>
+                <br></br>
+                <a>Click a location relevant to the item</a>
+                <br></br>
+                <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                <div/>
+                <div class="map-container">
+                    {<MapContainer
+                        saveMarker={(t, map, c) => {
+                            this.setState({
+                                marker: [c.latLng.lat(),c.latLng.lng()]
+                            })
+                        }}>
+                    </MapContainer>}
+                </div>
+                <div class="floating-button">
+                    <div class ="floating-button-tile">
+                        <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                    </div>
+                </div>
                 </form>
             </div>
             </div>
@@ -305,6 +367,24 @@ class Create extends Component {
         </div>
         );
     }
+}
+
+/*                             const lat = event.latLng.lat();
+                            const lng = event.latLng.lng();
+                            let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs`
+                            axios.get(url).then(response => {
+                                this.setState({
+                                googleReverseGeolocation: response.data.results[0].formatted_address,
+                                marker: {position:{lat:event.latLng.lat(),lng:event.latLng.lng()}},
+                                });
+                            this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
+                            console.log(this.state);
+                            });*/
+
+const style = {
+    width: '80%',
+    height: '50%',
+    'max-height': '300px'
 }
 
 export default Create;
