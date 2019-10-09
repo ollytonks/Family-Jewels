@@ -34,7 +34,7 @@ class Create extends Component {
             imagesLocations: [],
             previews: [],
             user: firebase.auth().currentUser,
-            isAuth: false
+            isAuth: false,
             marker: null,
             googleReverseGeolocation:null,
             date: ''

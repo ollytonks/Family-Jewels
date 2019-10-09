@@ -10,7 +10,6 @@ import Edit from './components/Edit';
 import Create from './components/Create';
 import Show from './components/Show';
 import Login from './components/Login';
-import UploadImage from './components/UploadImage';
 import EditProfile from './components/EditProfile';
 import CreateUser from './components/CreateUser';
 import FamilyMap from './components/FamilyMap';
@@ -25,7 +24,6 @@ ReactDOM.render(
             <Route path='/create' component={Create} />
             <Route path='/show/:collection/:id' component={Show} />
             <Route path ='/login' component={Login} />
-            <Route path='/uploadimage' component={UploadImage} />
             <Route path='/editprofile' component={EditProfile} />
             <Route path='/createuser' component={CreateUser} />
             <Route path ='/map' component={FamilyMap} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Timeline.css';
 import './../App.css';
-import firebase from './../Firebase';
+import {firebase} from './../Firebase';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import homeIcon from './elements/familyjewelsgem.svg'
 
@@ -97,7 +97,7 @@ class Timeline extends Component {
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }            
+            }
             this.setState({searchKey: filter});
         }
     }
@@ -148,9 +148,9 @@ class Timeline extends Component {
         }
         var resultList = tempList
             .sort((a, b) => a.date.localeCompare(b.date));
-        
+
         this.isArchiveBackground = this.state.switch;
-        
+
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -168,7 +168,7 @@ class Timeline extends Component {
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row" 
+                            class="form-row"
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
@@ -181,7 +181,7 @@ class Timeline extends Component {
                     <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Login</a></li>
                 </ul>
             </div>
-            
+
         </nav>
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
@@ -234,7 +234,7 @@ class Timeline extends Component {
                                             <p>{heirloom.description}</p>
                                         </div>
                                     </div>
-                                    
+
                                     </a></li>
                         )}
                         </ul>
