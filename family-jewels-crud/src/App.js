@@ -89,9 +89,26 @@ class App extends Component {
     }
 
     /**
-     * 
+     * Renders the main App page
+     * @override
      */
     render() {
+        /**
+         * List of Heirlooms must be filtered based on current board 
+         * (Heirlooms/Archive), and filtered again based on Search Terms.
+         * 
+         * Board filtering is implemented in setCollection(), and dictates 
+         * which Firebase board is being accessed. This Firebase board is later 
+         * filtered across Search terms.
+         * 
+         * If Search term filtering is implemented as an 'OnChange' event for 
+         * the Search field, it will not update when the Boards toggle is 
+         * switched.
+         * To ensure both filters are applied, instead Search filter is 
+         * implemented here, since any update to the main App page involves 
+         * changing filters (in which the Search filter is required) or 
+         * navigating to another page (in which the filters are irrelevant).
+         */
         let tempList = [];
         if (this.state.searchKey !== "") {
             var filter = this.state.searchKey.toLowerCase();
