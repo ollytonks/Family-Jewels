@@ -134,17 +134,30 @@ class Show extends Component {
 
     renderEditDelete() {
         if (this.state.target === 'boards') {
+            if (this.state.nextguardian === ''){
+                return(
+                    <div>
+                        <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                        <div class="divider"></div>
+                        <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                        <div class="divider"></div>
+                        <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                    </div>
+                );
+            }
+            else {
             return(
-            <div>
-            <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
-            <div class="divider"></div>
-            <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
-            <div class="divider"></div>
-            <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
-            <div class="divider"></div>
-            <button onClick = {this.inherit.bind(this, this.state.key)} class = "btn btn-outline-warning">Inherit</button>
-            </div>
-            );
+                <div>
+                    <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                    <div class="divider"></div>
+                    <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                    <div class="divider"></div>
+                    <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                    <div class="divider"></div>
+                    <button onClick = {this.inherit.bind(this, this.state.key)} class = "btn btn-outline-warning">Inherit</button>
+                </div>
+                );
+            }
         } else {
             return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
         }

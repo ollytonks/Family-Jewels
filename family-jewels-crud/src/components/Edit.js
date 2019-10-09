@@ -25,7 +25,7 @@ class Edit extends Component {
                     title: board.title,
                     description: board.description,
                     guardian: board.guardian,
-                    nextguardian: board.guardian,
+                    nextguardian: board.nextguardian,
                     imagesLocations: board.imagesLocations
                 });
             } else {
