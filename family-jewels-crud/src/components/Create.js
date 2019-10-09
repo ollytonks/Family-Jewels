@@ -4,11 +4,13 @@ import Dropzone from 'react-dropzone'
 
   
 
-const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
-const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
+const acceptedFileTypes =
+    'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
+const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => 
+    {return item.trim()})
 function uuidv4(){
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
 }
@@ -99,7 +101,8 @@ class Create extends Component {
         uploadTask.on('state_changed', 
         (snapshot) => {
             // progrss function ....
-            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            const progress = Math.round((snapshot.bytesTransferred /
+                snapshot.totalBytes) * 100);
             this.setState({progress});
         }, 
         (error) => {
@@ -156,7 +159,9 @@ class Create extends Component {
                 console.error("Error adding document: ", error);
                 });
             } else {
-                window.alert("An heirloom must have a title, description, and guardian.");
+                window.alert(
+                    "An heirloom must have a title, description, and guardian."
+                    );
             }
         } else {
             window.alert("An heirloom already exists with that title.");
@@ -183,24 +188,31 @@ class Create extends Component {
         const { title, description, guardian, nextguardian } = this.state;
         return (
             <div>
-                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+                <nav class=
+                    "navbar navbar-default navbar-expand-lg d-none d-lg-block">
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        <li class="navbar-brand nav-item nav-link">
+                            <a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/login">Login</a></li>
                     </ul>
                 </div>
             </nav>
             <nav class="navbar navbar-default navbar-expand d-lg-none">
                     <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        <li class="navbar-brand nav-item nav-link">
+                            <a href="/">FJ</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/login">Login</a></li>
                     </ul>
             </nav>
         <div class="container">
@@ -214,27 +226,57 @@ class Create extends Component {
                 <form onSubmit={this.onSubmit}>
                 <div class="form-group">
                     <label for="title">Title: *</label>
-                    <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="title"
+                        value={title}
+                        onChange={this.onChange}
+                        placeholder="Title" />
                 </div>
                 <div class="form-group">
                     <label for="description">Description: </label>
-                    <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
+                    <textArea
+                        class="form-control"
+                        name="description"
+                        onChange={this.onChange}
+                        placeholder="Description"
+                        cols="80"
+                        rows="3">
+                        {description}
+                    </textArea>
                 </div>
                 <div class="form-group">
                     <label for="guardian">Guardian: *</label>
-                    <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian" />
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="guardian"
+                        value={guardian}
+                        onChange={this.onChange}
+                        placeholder="Guardian" />
                 </div>
                 <div class="form-group">
                     <label for="nextguardian">Next Guardian:</label>
-                    <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="nextguardian"
+                        value={nextguardian}
+                        onChange={this.onChange}
+                        placeholder="Next guardian" />
                 </div>
                 <label for="imageDropzone">Images: *</label>
-                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
+                <Dropzone
+                    name="imageDropzone"
+                    onDrop={this.handleOnDrop}
+                    accept={acceptedFileTypes}>
                     {({getRootProps, getInputProps}) => (
                         <section class="dropzone">
                             <div {...getRootProps()}>
                                 <input {...getInputProps()} />
-                                <p>Drag and drop files here, or click HERE to select files</p>
+                                <p>Drag and drop files here, or click HERE to 
+                                    select files</p>
                             </div>
                             <aside class="thumbs-container">
                                 {thumbs}
@@ -245,7 +287,13 @@ class Create extends Component {
                 <div/>
                 <label for="submitButton"><i>* fields are mandatory</i></label>
                 <div/>
-                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                <button
+                    name="submitButton"
+                    type="submit"
+                    class="btn btn-outline-warning"
+                    disabled={!this.state.images.length}>
+                    Submit
+                </button>
                 </form>
             </div>
             </div>

@@ -27,7 +27,8 @@ class Show extends Component {
     }
 
     componentDidMount() {
-        const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
+        const ref = firebase.firestore().collection(this.state.target).doc
+            (this.props.match.params.id);
         var imageRefs = [];
         ref.get().then((doc) => {
             if (doc.exists) {
@@ -37,16 +38,18 @@ class Show extends Component {
                     heirloom: doc.data(),
                     key: doc.id,
                     isLoading: false,
-
                     title: data.title,
                     description: data.description,
                     guardian: data.guardian,
                     nextguardian: data.nextguardian,
                     imagesLocations: data.imagesLocations,
                 });
-                firebase.storage().ref('images').child(data.imagesLocations[0]).getDownloadURL().then(url => {
+                firebase.storage().ref('images').child(data.imagesLocations[0])
+                    .getDownloadURL().then(url => {
                     for (var i = 0; i < data.imagesLocations.length; i++){
-                        firebase.storage().ref('images').child(data.imagesLocations[i]).getDownloadURL().then(url => {
+                        firebase.storage().ref('images').child(
+                            data.imagesLocations[i]).getDownloadURL()
+                            .then(url => {
                             imageRefs.push(url);
                             this.setState({
                                 images: imageRefs,
@@ -59,11 +62,13 @@ class Show extends Component {
                 console.log("No such document!");
             }
         });
-        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 
+            'Restore';
     }
 
     componentDidUpdate() {
-        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 
+            'Restore';
     }
 
     /* If current, archives. If archived, unarchives. */
@@ -86,15 +91,23 @@ class Show extends Component {
 
     /* Creates a text file of heirloom info server-side then downloads it */
     downloadTxtFile(id){
-        firebase.firestore().collection(this.state.target).doc(id).get().then((doc) => {
+        firebase.firestore().collection(this.state.target).doc(id).get().then(
+            (doc) => {
             if (doc.exists) {
                 var ng = "None assigned";
                 if (this.state.nextguardian) {
                     ng = this.state.nextguardian;
                 }
-                var blob = new Blob(["Title: ", this.state.title, "\nDescription: ",
-                    this.state.description, "\nGuardian: ", this.state.guardian,
-                    "\nNext guardian: ", ng], {type: "text/plain;charset=utf-8"});
+                var blob = new Blob([
+                    "Title: ",
+                    this.state.title, 
+                    "\nDescription: ",
+                    this.state.description,
+                    "\nGuardian: ",
+                    this.state.guardian,
+                    "\nNext guardian: ",
+                    ng],
+                    {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.title + ".txt");
             }
             }).catch((error) => {
@@ -104,11 +117,13 @@ class Show extends Component {
 
     /* Changes nextguardian to guardian, asks for new nextguardian */
     inherit(id){
-        var futureguardian = prompt("Optional: Please state the new Next Guardian.");
+        var futureguardian = prompt(
+            "Optional: Please state the new Next Guardian.");
         console.log("Old Guardian: " + this.state.guardian);
         console.log("New Guardian: " + this.state.nextguardian);
         console.log("Future Guardian: " + futureguardian);
-        const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+        const updateRef = firebase.firestore().collection('boards')
+            .doc(this.state.key);
         updateRef.set({
             title:this.state.title,
             description:this.state.description,
@@ -137,29 +152,42 @@ class Show extends Component {
             if (this.state.nextguardian === ''){
                 return(
                     <div>
-                        <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                        <a href={`/edit/${this.state.key}`} class =
+                            "btn btn-outline-warning">Edit</a>
                         <div class="divider"></div>
-                        <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                        <button onClick={this.downloadTxtFile.bind(this, 
+                            this.state.key)} class =
+                            "btn btn-outline-warning">Download</button>
                         <div class="divider"></div>
-                        <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                        <button onClick={this.archive.bind(this,
+                            this.state.key)} class="btn btn-outline-warning">
+                            {this.state.archive_text}</button>
                     </div>
                 );
             }
             else {
             return(
                 <div>
-                    <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
+                    <a href={`/edit/${this.state.key}`} class =
+                        "btn btn-outline-warning">Edit</a>
                     <div class="divider"></div>
-                    <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
+                    <button onClick={this.downloadTxtFile.bind(this,
+                        this.state.key)} class =
+                        "btn btn-outline-warning">Download</button>
                     <div class="divider"></div>
-                    <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                    <button onClick={this.archive.bind(this, this.state.key)} 
+                        class="btn btn-outline-warning">
+                        {this.state.archive_text}</button>
                     <div class="divider"></div>
-                    <button onClick = {this.inherit.bind(this, this.state.key)} class = "btn btn-outline-warning">Inherit</button>
+                    <button onClick = {this.inherit.bind(this, this.state.key)} 
+                        class = "btn btn-outline-warning">Inherit</button>
                 </div>
                 );
             }
         } else {
-            return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
+            return( <button onClick={this.archive.bind(this, this.state.key)} 
+                class="btn btn-outline-warning">{this.state.archive_text}
+                </button>);
         }
     }
     setIndex(i){
@@ -173,24 +201,31 @@ class Show extends Component {
     render() {
         return (
             <div>
-            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+            <nav class=
+                "navbar navbar-default navbar-expand-lg d-none d-lg-block">
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        <li class="navbar-brand nav-item nav-link">
+                            <a href="/">Family Jewels</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/login">Login</a></li>
                     </ul>
                 </div>
             </nav>
             <nav class="navbar navbar-default navbar-expand d-lg-none">
                     <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                        <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                        <li class="navbar-brand nav-item nav-link">
+                            <a href="/">FJ</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/create">Add Heirloom</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                        <li class="nav-item nav-link">
+                            <a href="/login">Login</a></li>
                     </ul>
             </nav>
             <div class="container">
@@ -206,16 +241,23 @@ class Show extends Component {
                     <dd>{this.state.heirloom.description}</dd>
                     <dt>Guardian</dt>
                     <dd>{this.state.heirloom.guardian}</dd>
-                    <dt>{this.state.heirloom.nextguardian === "" ? "" : "Next guardian"}</dt>
+                    <dt>{this.state.heirloom.nextguardian === "" ? "" :
+                        "Next guardian"}</dt>
                     <dd>{this.state.heirloom.nextguardian}</dd>
-                    <dd><Gallery class="gallery" index={this.state.index}
-                            onRequestChange={i => {
+                    <dd><Gallery
+                        class="gallery"
+                        index={this.state.index}
+                        onRequestChange={i => {
                                 this.setState({
                                     index: this.setIndex(i)
                                 })
                             }}>
-                                {this.state.images.map(image => (
-                            <GalleryImage class="galleryImage" objectFit="contain" key={image} src={image} />
+                            {this.state.images.map(image => (
+                            <GalleryImage
+                                class="galleryImage"
+                                objectFit="contain"
+                                key={image} 
+                                src={image} />
                             ))}
                         </Gallery></dd>
                 </dl>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
@@ -21,12 +20,14 @@ class App extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    /* On querySnapshot event, gets Firebase colelction */
+    /* On querySnapshot event, gets Firebase */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian, imagesLocations} = doc.data();
-            firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
+            const { title, description, guardian, nextguardian, imagesLocations}
+                = doc.data();
+            firebase.storage().ref('images').child(imagesLocations[0])
+                .getDownloadURL().then(url => {
                 list.push({
                     key: doc.id,
                     icon: url,
@@ -59,6 +60,10 @@ class App extends Component {
         this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
     }
 
+    /** 
+     * Updates the current search term, called whenever search input is 
+     * changed. 
+     */
     handleChange(e){
         {
             console.log(e.target.value);
@@ -78,7 +83,8 @@ class App extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian;
+                let lc = "" + item.title + ":" + item.description + ":" + 
+                    item.guardian + ":" + item.nextguardian;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
                     if (lc.includes(filter)) {
@@ -98,12 +104,15 @@ class App extends Component {
         this.isArchiveBackground = this.state.switch;
         
         return (
-        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
+        <div class={this.isArchiveBackground ? "mainbodyArchive" : 
+            "mainbodyClassic"}>
         <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
-                    <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    <li class="navbar-brand nav-item nav-link" ><a href="/
+                        ">Family Jewels</a></li>
+                    <li class="nav-item nav-link"><a href="/create">Add 
+                        Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
                     <li>
@@ -117,18 +126,22 @@ class App extends Component {
                         />
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login">
+                        Login</a></li>
                 </ul>
             </div>
         </nav>
         
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                    <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
+                    <li class="navbar-brand nav-item nav-link"><a href="/">
+                        FJ</a></li>
+                    <li class="nav-item nav-link"><a href="/create">
+                        Add Heirloom</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item nav-link"><a href="/login">Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login">
+                        Login</a></li>
                 </ul>
                 <input
                     type="search"
@@ -155,8 +168,11 @@ class App extends Component {
                     isArchiveBackground = {this.isArchiveBackground}
                     handleToggle={() =>
                         {
-                            this.setState(prevState => ({switch: !prevState.switch}));
-                            this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
+                            this.setState(prevState => ({switch: 
+                                !prevState.switch}));
+                            this.setState(prevState => ({target: 
+                                this.state.switch ? 'archived_boards' :
+                                    'boards'}));
                             this.setCollection();
                         }
                     }
@@ -167,18 +183,23 @@ class App extends Component {
             <div class="panel-body">
                 <div class="grid">
                     {resultList.map(heirloom =>
-                        <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
+                        <div class={this.isArchiveBackground ? "tileArchive" : 
+                            "tile"}>
                             <div class="imgbox">
                                 <img class="tileimg" src={heirloom.icon}></img>
                             </div>
                             <div class="infobox">
-                                <a class={this.isArchiveBackground ? "subArchive" : "sub"} href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <a class={this.isArchiveBackground ? 
+                                    "subArchive" : "sub"} href={`/show/$
+                                    {this.state.switch ? 'archived_boards' : 
+                                    'boards'}/${heirloom.key}`}>
                                     <b>{heirloom.title}</b>
                                     <br></br>
                                 </a>
                                 <a class="plain">
                                     {(heirloom.description.length > 80) ?
-                                        heirloom.description.slice(0,80).concat("...")
+                                        heirloom.description.slice(0,80).concat
+                                            ("...")
                                         : heirloom.description
                                     }
                                     <br></br>
@@ -187,7 +208,10 @@ class App extends Component {
                                     {"Guardian: " + heirloom.guardian} <br></br>
                                 </a>
                                 <a class="plain">
-                                    {heirloom.nextguardian === "" ? "" : "Next guardian: " + heirloom.nextguardian} <br></br>
+                                    {heirloom.nextguardian === "" ? "" : 
+                                        "Next guardian: " + 
+                                            heirloom.nextguardian} 
+                                        <br></br>
                                 </a>
                             </div>
                         </div>
