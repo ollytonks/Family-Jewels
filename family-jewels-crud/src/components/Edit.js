@@ -39,18 +39,21 @@ class Edit extends Component {
             if (doc.exists) {
                 const board = doc.data();
                 for (var i = 0; i < board.imagesLocations.length; i++){
-                    firebase.storage().ref('images').child(board.imagesLocations[i]).getDownloadURL().then(url => {
+                    var currImage = board.imagesLocations[i];
+                    firebase.storage().ref('images').child(currImage).getDownloadURL().then((url, currImage) => {
+                        var id =  url.substr(87,36)
                         imageURLs.push(url);
-                        imageRefs.push(firebase.storage().ref('images/'+board.imagesLocations[i]));
+                        imageRefs.push(firebase.storage().ref('images/'+id));
+                        
                         this.setState({
                             key: doc.id,
                             title: board.title,
                             description: board.description,
                             guardian: board.guardian,
                             nextguardian: board.guardian,
-                            imagesLocations: board.imagesLocations,
-                            images: imageRefs,
-                            previews: imageURLs.map(imageURL =>Object.assign(imageURL, {preview: imageURL}))
+                            imagesLocations: board.imagesLocations.sort(),
+                            images: imageRefs.sort(),
+                            previews: imageURLs.map(imageURL =>Object.assign(imageURL.substr(87,36), {preview: imageURL})).sort()
                         });
                         if (board.date !== undefined) {
                             console.log("Setting date");
@@ -100,12 +103,14 @@ class Edit extends Component {
                     images: files,
                     previews: filePreviews.map(file => {
                         if (file instanceof File) {
-                            return Object.assign(file, {
+                            console.log(file, '1');
+                            return Object.assign(uuidv4(), {
                                 preview: URL.createObjectURL(file)
                             });
                         } else {
+                            console.log(file, '2');
                             return Object.assign(file, {
-                                preview: file
+                                preview: file.preview
                             });
                         }
                     })
@@ -169,7 +174,8 @@ class Edit extends Component {
 
         images.splice(index,1);
         previews.splice(index, 1);
-        
+        console.log(images);
+        console.log(previews);
         this.setState({
             images: images,
             previews: previews
@@ -183,7 +189,7 @@ class Edit extends Component {
         var uploads = false;
         var imagesID = [];
         var imagesLocations = [];
-        var prevLocations = this.state.imagesLocations;
+        var prevLocations = this.state.previews;
 
         const { title, description, guardian, nextguardian, date, marker } = this.state;
         if (title && description && guardian && this.state.previews.length != 0) {
@@ -197,11 +203,13 @@ class Edit extends Component {
                     uploads = true;
                 }
                 else {
-                    console.log(images[i]);
-                    imagesLocations.push(prevLocations[0]);
+                    console.log(prevLocations[0]);
+
+                    imagesLocations.push(String(prevLocations[0]));
                     prevLocations.shift();
                 } 
             }
+           
             updateRef.set({
                 title,
                 description,
@@ -219,7 +227,9 @@ class Edit extends Component {
                     nextguardian: '',
                     imagesLocations: [],
                     date: '',
-                    marker: null
+                    marker: null,
+                    previews: [],
+                    images: []
                 });
                 if (!uploads) {
                     this.props.history.push("/");
