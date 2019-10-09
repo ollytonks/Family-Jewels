@@ -82,7 +82,7 @@ class Edit extends Component {
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
-        var username = "Login";
+        var username = "";
         if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;

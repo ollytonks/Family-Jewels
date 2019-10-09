@@ -77,7 +77,7 @@ class App extends Component {
         this.isArchiveBackground = this.state.switch;
         //authentication
         console.log(this.props);
-        var username = "Login";
+        var username = "";
         if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;

@@ -214,13 +214,16 @@ class Create extends Component {
            </div>
         ));
         const { title, description, guardian, nextguardian } = this.state;
+        if(this.state.isAuth == false){
+            return (<div></div>);
+        }
         //user is not logged in
         if(this.state.user == null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
-        var username = "Login";
+        var username = "";
         if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;

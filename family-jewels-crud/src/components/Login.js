@@ -127,7 +127,7 @@ class Login extends Component {
 
     //redirect to edit editProfile
     editProfile() {
-        this.props.history.push("/EditProfile");
+        this.props.history.push("/editprofile");
     }
 
     //rederict to Login page from password reset
@@ -137,14 +137,21 @@ class Login extends Component {
     }
 
     render() {
-        //check if user is signed in
-        if(this.state.user) {
+        console.log(this.state.isAuth);
+        /*prevent elements rendering until authentication variables have
+          finished initialising*/
+        if(this.state.isAuth == false){
+            console.log("not finished initialising");
+            return(<div></div>)
+        }
+        //ensure user is signed in
+        else if(this.state.user) {
             var username;
             //verify if they have a display name
                 if(this.state.user.displayName){
                      username = this.state.user.displayName;
                  }
-                 //use email as username
+                 //use email as display name
                  else {
                      username = this.state.user.email;
                  }

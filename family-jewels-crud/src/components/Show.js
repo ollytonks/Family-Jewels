@@ -95,7 +95,7 @@ class Show extends Component {
     }
 
     render() {
-        var username = "Login";
+        var username = "";
         if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
