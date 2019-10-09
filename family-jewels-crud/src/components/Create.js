@@ -148,7 +148,7 @@ class Create extends Component {
         }
         if (!found) {
             const { title, description, guardian, nextguardian } = this.state;
-            if (title && description && guardian) {
+            if (title && description && guardian && this.state.previews.length != 0) {
                 for (var i = 0; i < images.length; i++){
                     var id = uuidv4()
                     imagesID.push([images[i], id]);
