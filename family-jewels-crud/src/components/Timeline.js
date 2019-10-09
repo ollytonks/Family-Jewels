@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './FamilyMap.css';
+import './Timeline.css';
 import './../App.css';
 import firebase from './../Firebase';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
@@ -7,7 +7,7 @@ import homeIcon from './elements/familyjewelsgem.svg'
 
 
 
-class FamilyMap extends Component {
+class Timeline extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
@@ -34,15 +34,24 @@ class FamilyMap extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, marker, guardian } = doc.data();
-                list.push({
-                    key: doc.id,
-                    doc, // DocumentSnapshot
-                    title,
-                    marker,
-                    guardian
-                });
-                this.forceUpdate();
+
+            const { title, description, guardian, nextguardian, imagesLocations, date} = doc.data();
+            firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
+                if (date) {
+                    list.push({
+                        key: doc.id,
+                        icon: url,
+                        doc, // DocumentSnapshot
+                        title,
+                        description,
+                        guardian,
+                        nextguardian,
+                        imagesLocations,
+                        date
+                    });
+                    this.forceUpdate();
+                }
+            })
         });
         if (this.state.searchKey !== '') {
             this.setState({
@@ -138,48 +147,8 @@ class FamilyMap extends Component {
             tempList = this.state.heirlooms;
         }
         var resultList = tempList
-            .sort((a, b) => a.title.localeCompare(b.title));
-
-        // Create markers
-        for (var i = 0; i < resultList.length; i++) {
-            if (resultList[i].marker) {
-                markers.push( 
-                    <Marker
-                    key={[i]}
-                title={resultList[i].guardian}
-                name={resultList[i].title}
-                position={{lat: resultList[i].marker[0], lng: resultList[i].marker[1]}}
-                onClick={this.onMarkerClick}
-            />
-            )
-                infowds.push(
-                    <InfoWindow
-                        marker={this.state.activeMarker}
-                        visible={this.state.showingInfoWindow}
-                        onClose={this.onClose}
-                    >
-                        <div>
-                            <a class="map-info">{this.state.selectedPlace.title} : {this.state.selectedPlace.name}</a>
-                        </div>
-                    </InfoWindow> 
-                )
-            }
-        }
-        // Create map
-        map = 
-            <Map google={this.props.google}
-                    style={style}
-                    initialCenter={{
-                        lat: -37.794921,
-                        lng: 144.961446
-                    }}
-                    zoom={2}
-                >
-                {markers}
-                {infowds}
-            </Map>
+            .sort((a, b) => a.date.localeCompare(b.date));
         
-
         this.isArchiveBackground = this.state.switch;
         
         return (
@@ -240,17 +209,38 @@ class FamilyMap extends Component {
                         <div class="col"></div>
                         <div class="col">
                             <h2 class="centre-title">
-                            {'HEIRLOOMS'}
+                            {'TIMELINE'}
                             </h2>
                         </div>
                         <div class="col">
                         </div>
                     </div>
                 </div>
-
-                <div class="map-container">
-                    {map}
+                <div class="container mt-5 mb-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="timeline">
+                        {resultList.map(heirloom =>
+                                <li> <a href={`/show/boards/`+ heirloom.key}>
+                                    <div class="header"><a target="_blank">{heirloom.title}</a></div>
+                                    <div class="timeline-row">
+                                        <div class="left-image">
+                                            <div class="imgbox">
+                                                <img class="tileimg" src={heirloom.icon}></img>
+                                            </div>
+                                        </div>
+                                        <div class="right-text">
+                                            <a class="float-right">{heirloom.date}</a>
+                                            <p>{heirloom.description}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    </a></li>
+                        )}
+                        </ul>
+                    </div>
                 </div>
+            </div>
                 </div>
             </div>
             </div>
@@ -259,11 +249,4 @@ class FamilyMap extends Component {
     }
 }
 
-const style = {
-    width: '80vw',
-    height: '80vh',
-}
-
-export default GoogleApiWrapper({
-    apiKey: ('AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs')
-  })(FamilyMap)
+export default Timeline;

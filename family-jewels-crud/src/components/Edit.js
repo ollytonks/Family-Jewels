@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
 import Navbar from './elements/Navbar';
+import MapContainer from './elements/MapContainer';
 
 
 class Edit extends Component {
@@ -13,7 +14,9 @@ class Edit extends Component {
             description: '',
             guardian: '',
             nextguardian: '',
-            imagesLocations: []
+            imagesLocations: [],
+            date: '',
+            marker: null
         };
     }
 
@@ -28,11 +31,23 @@ class Edit extends Component {
                 description: board.description,
                 guardian: board.guardian,
                 nextguardian: board.guardian,
-                imagesLocations: board.imagesLocations
+                imagesLocations: board.imagesLocations,
                 });
+                if (board.date !== undefined) {
+                    console.log("Setting date");
+                    this.setState ({
+                        date: board.date,
+                    })
+                }
+                if (board.marker !== undefined) {
+                    this.setState ({
+                        marker: board.marker,
+                    })
+                }
             } else {
                 console.log("No such document!");
             }
+            console.log(this.state);
         });
     }
 
@@ -46,7 +61,7 @@ class Edit extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { title, description, guardian, nextguardian, imagesLocations } = this.state;
+        const { title, description, guardian, nextguardian, imagesLocations, date, marker } = this.state;
         if (title && description && guardian) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             updateRef.set({
@@ -54,7 +69,9 @@ class Edit extends Component {
                 description,
                 guardian,
                 nextguardian,
-                imagesLocations: this.state.imagesLocations
+                date,
+                marker,
+                imagesLocations
             }).then((docRef) => {
                 this.setState({
                     key: '',
@@ -62,7 +79,9 @@ class Edit extends Component {
                     description: '',
                     guardian: '',
                     nextguardian: '',
-                    imagesLocations: []
+                    imagesLocations: [],
+                    date: '',
+                    marker: null
                 });
                 this.props.history.push("/")
             })
@@ -77,9 +96,9 @@ class Edit extends Component {
     render() {
         document.title = "Edit heirloom";
         return (
-            <div class="panel nav-bar">
-            <Navbar/>
-                <div class="container">
+            <div class="create-container-main">
+                <Navbar/>
+                <div class="create-container">
                     <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -88,9 +107,9 @@ class Edit extends Component {
                     </div>
                     <div class="panel-body">
                         <form onSubmit={this.onSubmit}>
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                        <div class="form-group form-control-text">
+                            <input type="text" class="form-control form-control-text-major" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                            <input type="text" class="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin date"/>
                         </div>
                         <div class="form-group">
                             <label for="description">Description:</label>
@@ -104,9 +123,22 @@ class Edit extends Component {
                             <label for="nextguardian">Next Guardian:</label>
                             <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                         </div>
-                        <button type="submit" class="btn btn-outline-warning">Submit</button>
-                        <div class="divider"></div>
-                        <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
+                        <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                        <div class="map-container">
+                            {<MapContainer
+                                saveMarker={(t, map, c) => {
+                                    this.setState({
+                                        marker: [c.latLng.lat(),c.latLng.lng()]
+                                    })
+                                }}>
+                            </MapContainer>}
+                        </div>
+                        <div class="floating-button-large">
+                            <div class ="floating-button-tile">
+                                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.imagesLocations.length}>Submit</button>
+                                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
+                            </div>
+                        </div>
                         </form>
                     </div>
                     </div>

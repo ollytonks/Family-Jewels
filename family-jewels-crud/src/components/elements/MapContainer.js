@@ -97,11 +97,11 @@ export class MapContainer extends Component {
     return (
       <div class="map-box">
         <Map google={this.props.google}
-          style={style}
           initialCenter={{
               lat: -37.794921,
               lng: 144.961446
           }}
+          style={style}
           zoom={5}
           onClick={this.props.saveMarker}
         >

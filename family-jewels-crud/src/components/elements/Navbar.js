@@ -14,6 +14,7 @@ const Navbar = () => {
                         <li class="navbar-brand nav-item nav-link"><a href="/"><img width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
                         <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
                         <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
+                        <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
                         <li class="navbar-brand nav-item nav-link">
@@ -29,6 +30,7 @@ const Navbar = () => {
                         <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/> </a></li>
                         <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
                         <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
+                        <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
