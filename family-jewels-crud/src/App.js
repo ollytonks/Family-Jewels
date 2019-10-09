@@ -3,6 +3,11 @@ import './App.css';
 import firebase from './Firebase';
 import Switch from './components/elements/Switch';
 
+/**
+ * @fileoverview App provides the React Component for the main page, as well as 
+ * providing the majority of initialisation functions.
+ * @extends React.Component
+ */
 class App extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +25,9 @@ class App extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    /* On querySnapshot event, gets Firebase */
+    /**
+     * On querySnapshot event, fetches Firebase and commits to local memory.
+     */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
@@ -46,11 +53,17 @@ class App extends Component {
         });
     }
 
+    /**
+     * Loaded
+     * @override
+     */
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
-    /* Sets the current reference to Firebase collection to the target */
+    /**
+     * Sets the current reference to Firebase collection to the target
+     */
     setCollection() {
         this.ref = firebase.firestore().collection(this.state.target);
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
@@ -75,6 +88,9 @@ class App extends Component {
         }
     }
 
+    /**
+     * 
+     */
     render() {
         let tempList = [];
         if (this.state.searchKey !== "") {
