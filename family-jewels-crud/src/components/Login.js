@@ -259,9 +259,9 @@ class Login extends Component {
                     ? <p></p>
                     : <div>
                         <div class="col-md-12" align="center">
-                            <button class="btn btn-warning btn-sm" type="button" onClick={this.createprofile}>Create account</button>
+                            <button class="btn btn-warning btn-sm" type="button" onClick={this.createProfile}>Create account</button>
                         </div>
-                        <button class="btn btn-link btn-sm" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
+                        <button class="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
                     </div>
                     }
                     </div>
