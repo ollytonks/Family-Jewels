@@ -23,6 +23,7 @@ class Login extends Component {
         }
         this.editProfile = this.editProfile.bind(this);
         this.returnToLogin = this.returnToLogin.bind(this);
+        this.createProfile = this.createProfile.bind(this);
     }
 
     componentDidMount() {
@@ -128,6 +129,11 @@ class Login extends Component {
     //redirect to edit editProfile
     editProfile() {
         this.props.history.push("/editprofile");
+    }
+
+    //rederict to create a profile
+    createProfile() {
+        this.props.history.push("/createuser");
     }
 
     //rederict to Login page from password reset
@@ -251,7 +257,12 @@ class Login extends Component {
                     <div class="col-md-12" align="center">
                     { this.state.resetPassword
                     ? <p></p>
-                    : <button class="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
+                    : <div>
+                        <div class="col-md-12" align="center">
+                            <button class="btn btn-warning btn-sm" type="button" onClick={this.createprofile}>Create account</button>
+                        </div>
+                        <button class="btn btn-link btn-sm" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
+                    </div>
                     }
                     </div>
             </div>
