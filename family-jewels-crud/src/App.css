@@ -342,8 +342,8 @@ div .col-1 {
     border: 1px solid #eaeaea;
     margin-bottom: 1%;
     margin-right: 1%;
-    width: 15vw;
-    height: 15vw;
+    width: 30vw;
+    height: 30vw;
     padding: 1%;
     box-sizing: border-box;
 }
@@ -361,8 +361,8 @@ div .col-1 {
     position: relative;
     top: 0;
     left: 80%;
-    height: 0;
-    width: 0;
+    height: 1%;
+    width: 1%;
 }
 .bigdivider {
     width: 20px;
