@@ -185,7 +185,7 @@ class Edit extends Component {
         var imagesLocations = [];
         var prevLocations = this.state.imagesLocations;
 
-        const { title, description, guardian, nextguardian, imagesLocations, date, marker } = this.state;
+        const { title, description, guardian, nextguardian, date, marker } = this.state;
         if (title && description && guardian && this.state.previews.length != 0) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             for (var i = 0; i < images.length; i++){
