@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
+import { Link, Redirect} from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import { Gallery, GalleryImage } from "react-gesture-gallery";
-
+import Navbar from './elements/Navbar';
 
 class Show extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -20,6 +20,8 @@ class Show extends Component {
             guardian: '',
             nextguardian: '',
             imagesLocations: [],
+            user: firebase.auth().currentUser,
+            isAuth: false,
             index: 0
         };
         console.log(this.state.hlist);
@@ -62,10 +64,20 @@ class Show extends Component {
                 console.log("No such document!");
             }
         });
-        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 
-            'Restore';
-    }
+        this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 'Restore';
 
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            console.log("auth state changed");
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+            console.log(this.state.isAuth);
+        });
+        console.log("has mounted");
+        console.log(this.state.isAuth);
+
+
+    }
     componentDidUpdate() {
         this.state.archive_text = this.state.target === 'boards' ? 'Archive' : 
             'Restore';
@@ -146,6 +158,18 @@ class Show extends Component {
             window.alert("Error performing Inheritance, please edit manually.")
         });
     }
+    // Function downloads an image
+    // Due to security limitations, only opens a single image in a new tab
+    // Does not download
+    downloadImgFile(id) {
+        for (var i = 0; i < this.state.images.length; i++) {
+            var link = document.createElement("a");
+            link.id=i;
+            link.download = this.state.images[i];
+            link.href = this.state.images[i];
+            link.click();
+        }
+    };
 
     renderEditDelete() {
         if (this.state.target === 'boards') {
@@ -199,35 +223,26 @@ class Show extends Component {
     }
 
     render() {
+        var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
+        document.title = this.state.heirlooms.title;
         return (
             <div>
-            <nav class=
-                "navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link">
-                            <a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link">
-                            <a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link">
-                            <a href="/login">Login</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <nav class="navbar navbar-default navbar-expand d-lg-none">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link">
-                            <a href="/">FJ</a></li>
-                        <li class="nav-item nav-link">
-                            <a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link">
-                            <a href="/login">Login</a></li>
-                    </ul>
-            </nav>
+            <Navbar/>
             <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">

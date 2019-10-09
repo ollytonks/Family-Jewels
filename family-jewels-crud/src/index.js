@@ -10,6 +10,11 @@ import Edit from './components/Edit';
 import Create from './components/Create';
 import Show from './components/Show';
 import Login from './components/Login';
+import EditProfile from './components/EditProfile';
+import CreateUser from './components/CreateUser';
+import FamilyMap from './components/FamilyMap';
+import Timeline from './components/Timeline';
+import 'font-awesome/css/font-awesome.min.css';
 
 ReactDOM.render(
     <Router>
@@ -19,6 +24,10 @@ ReactDOM.render(
             <Route path='/create' component={Create} />
             <Route path='/show/:collection/:id' component={Show} />
             <Route path ='/login' component={Login} />
+            <Route path='/editprofile' component={EditProfile} />
+            <Route path='/createuser' component={CreateUser} />
+            <Route path ='/map' component={FamilyMap} />
+            <Route path ='/timeline' component={Timeline} />
         </div>
     </Router>,
     document.getElementById('root')

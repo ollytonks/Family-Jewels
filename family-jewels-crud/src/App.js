@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import './App.css';
-import firebase from './Firebase';
+import {firebase, firebaseAuth} from './Firebase';
 import Switch from './components/elements/Switch';
+import homeIcon from './components/elements/familyjewelsgem.svg'
+
 
 /**
  * @fileoverview App provides the React Component for the main page, as well as 
@@ -14,13 +17,18 @@ class App extends Component {
         this.ref = firebase.firestore().collection('boards');
         this.isArchiveBackground=false;
         this.unsubscribe = null;
+        //this.authenticated = true;
         this.state = false;
         this.state = {
             heirlooms: [],
             switch: false,
             target: 'archived_boards',
             searchKey: '',
-            heading: 'HEIRLOOMS'
+            searchResult: [],
+            heading: 'HEIRLOOMS',
+            searching: false,
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -59,6 +67,22 @@ class App extends Component {
      */
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+            console.log("Auth state changed");
+            console.log(this.state.user);
+        });
+        console.log(this.state);
+
+        var locstate = this.props.location.payload;
+        if (locstate !== undefined) {
+            if (locstate.searching == true) {
+                this.setState({
+                    searching: true
+                })
+            }
+        }
     }
 
     /**
@@ -71,6 +95,9 @@ class App extends Component {
 
     componentDidUpdate() {
         this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
+        if (this.state.searching) {
+            this.nameInput.focus();
+        }
     }
 
     /** 
@@ -83,7 +110,7 @@ class App extends Component {
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }            
+            }
             this.setState({searchKey: filter});
         }
     }
@@ -109,6 +136,7 @@ class App extends Component {
          * changing filters (in which the Search filter is required) or 
          * navigating to another page (in which the filters are irrelevant).
          */
+        document.title = "Home";
         let tempList = [];
         if (this.state.searchKey !== "") {
             var filter = this.state.searchKey.toLowerCase();
@@ -135,20 +163,42 @@ class App extends Component {
             .sort((a, b) => a.title.localeCompare(b.title));
 
         this.isArchiveBackground = this.state.switch;
-        
+        //authentication
+        console.log(this.props);
+        var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
+        //console.log(username);
+        //console.log(firebase.auth().currentUser);
+
+        //user not authenticated, redirect to login page
+        if(this.state.user == null && this.state.isAuth){
+            console.log("not authenticated");
+            console.log(firebase.auth().currentUser);
+            this.props.history.push("/Login");
+            return <Redirect to= '/login'/>
+        }
+        console.log("authenticated");
         return (
-        <div class={this.isArchiveBackground ? "mainbodyArchive" : 
-            "mainbodyClassic"}>
-        <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
+            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link" ><a href="/
-                        ">Family Jewels</a></li>
-                    <li class="nav-item nav-link"><a href="/create">Add 
-                        Heirloom</a></li>
+                    <li class="navbar-brand nav-item nav-link" ><a href="/"> <img width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
+                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
+                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
+                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-                    <li>
+
+                    <li class={this.state.searching ? '' : 'collapse'}>
                         <input
                             type="search"
                             className="input"
@@ -156,25 +206,30 @@ class App extends Component {
                             placeholder="Search..."
                             class="form-row"
                             autoFocus
+                            ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
+                    <li className={this.state.searching ? 'collapse' : ''} class="navbar-brand nav-item nav-link">
+                        <div onClick={() => {
+                                this.setState({searching: true});
+                        }}><i className="fa fa-search"/></div>
+                    </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login">
-                        Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/>{username}</a></li>
                 </ul>
             </div>
+
         </nav>
         
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/">
-                        FJ</a></li>
-                    <li class="nav-item nav-link"><a href="/create">
-                        Add Heirloom</a></li>
+                    <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/> FJ</a></li>
+                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
+                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
+                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item nav-link"><a href="/login">
-                        Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
                 </ul>
                 <input
                     type="search"
@@ -184,79 +239,65 @@ class App extends Component {
                     autoFocus
                 />
         </nav>
-        <div class="container">
-            <div class="panel panel-default">
-            <div class="panel-body">
+            <div class="container">
+                <div class="panel">
+                <div class="panel-body">
 
-                <div>
-                <div class="row">
-                <div class="col-md-10">
-                    <h2 class="panel-title">
-                    {this.state.heading}
-                    </h2>
-                </div>
-                <div class="col-md-2">
-                <Switch
-                    isOn={this.state.switch}
-                    isArchiveBackground = {this.isArchiveBackground}
-                    handleToggle={() =>
-                        {
-                            this.setState(prevState => ({switch: 
-                                !prevState.switch}));
-                            this.setState(prevState => ({target: 
-                                this.state.switch ? 'archived_boards' :
-                                    'boards'}));
-                            this.setCollection();
-                        }
-                    }
-                />
-                </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="grid">
-                    {resultList.map(heirloom =>
-                        <div class={this.isArchiveBackground ? "tileArchive" : 
-                            "tile"}>
-                            <div class="imgbox">
-                                <img class="tileimg" src={heirloom.icon}></img>
-                            </div>
-                            <div class="infobox">
-                                <a class={this.isArchiveBackground ? 
-                                    "subArchive" : "sub"} href={`/show/$
-                                    {this.state.switch ? 'archived_boards' : 
-                                    'boards'}/${heirloom.key}`}>
-                                    <b>{heirloom.title}</b>
-                                    <br></br>
-                                </a>
-                                <a class="plain">
-                                    {(heirloom.description.length > 80) ?
-                                        heirloom.description.slice(0,80).concat
-                                            ("...")
-                                        : heirloom.description
-                                    }
-                                    <br></br>
-                                </a>
-                                <a class="plain">
-                                    {"Guardian: " + heirloom.guardian} <br></br>
-                                </a>
-                                <a class="plain">
-                                    {heirloom.nextguardian === "" ? "" : 
-                                        "Next guardian: " + 
-                                            heirloom.nextguardian} 
-                                        <br></br>
-                                </a>
-                            </div>
+                    <div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <h2 class="centre-title">
+                            {'HEIRLOOMS'}
+                            </h2>
                         </div>
-                    )}
+                        <div class="col">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="grid">
+                        {resultList.map(heirloom =>
+                            <div class={this.isArchiveBackground ? "tileArchive" : "tile"}>
+                                <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <div class="tiletitle">
+                                    <a class={this.isArchiveBackground ? "subArchive" : "sub"}>
+                                        <b>{heirloom.title}</b>
+                                        <br></br>
+                                    </a>
+                                </div>
+                                <div class="imgbox">
+                                    <img class="tileimg" src={heirloom.icon}></img>
+                                </div>
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                </div>
+                <div class='floating'>
+                    <div class="floating-tile">
+                        <b>{this.isArchiveBackground ? "Return" : "Go to archive"}</b>
+                        <Switch
+                            isOn={this.state.switch}
+                            isArchiveBackground = {this.isArchiveBackground}
+                            handleToggle={() =>
+                                {
+                                    this.setState(prevState => ({switch: !prevState.switch}));
+                                    this.setState(prevState => ({target: this.state.switch ? 'archived_boards' : 'boards'}));
+                                    this.setCollection();
+                                }
+                            }
+                        />
+                    </div>
                 </div>
             </div>
             </div>
-        </div>
-        </div>
         </div>
         );
     }
 }
+
+
 
 export default App;

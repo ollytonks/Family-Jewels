@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
+import { Link, Redirect } from 'react-router-dom';
+import Navbar from './elements/Navbar';
+import MapContainer from './elements/MapContainer';
+
 import Dropzone from 'react-dropzone';
 
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
@@ -21,8 +25,12 @@ class Edit extends Component {
             guardian: '',
             nextguardian: '',
             imagesLocations: [],
+            date: '',
+            marker: null,
             previews: [],
-            images: []
+            images: [],
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
     }
 
@@ -34,24 +42,43 @@ class Edit extends Component {
             if (doc.exists) {
                 const board = doc.data();
                 for (var i = 0; i < board.imagesLocations.length; i++){
-                    firebase.storage().ref('images').child(board.imagesLocations[i]).getDownloadURL().then(url => {
+                    var currImage = board.imagesLocations[i];
+                    firebase.storage().ref('images').child(currImage).getDownloadURL().then((url, currImage) => {
+                        var id =  url.substr(87,36)
                         imageURLs.push(url);
-                        imageRefs.push(firebase.storage().ref('images/'+board.imagesLocations[i]));
+                        imageRefs.push(firebase.storage().ref('images/'+id));
+
                         this.setState({
                             key: doc.id,
                             title: board.title,
                             description: board.description,
                             guardian: board.guardian,
                             nextguardian: board.nextguardian,
-                            imagesLocations: board.imagesLocations,
-                            images: imageRefs,
-                            previews: imageURLs.map(imageURL =>Object.assign(imageURL, {preview: imageURL}))
+                            imagesLocations: board.imagesLocations.sort(),
+                            images: imageRefs.sort(),
+                            previews: imageURLs.map(imageURL =>Object.assign(imageURL.substr(87,36), {preview: imageURL})).sort()
                         });
+                        if (board.date !== undefined) {
+                            console.log("Setting date");
+                            this.setState ({
+                                date: board.date,
+                            })
+                        }
+                        if (board.marker !== undefined) {
+                            this.setState ({
+                                marker: board.marker,
+                            })
+                        }
                     });
                 }
             } else {
                 console.log("No such document!");
             }
+            console.log(this.state);
+        });
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
         });
     }
 
@@ -83,12 +110,14 @@ class Edit extends Component {
                     images: files,
                     previews: filePreviews.map(file => {
                         if (file instanceof File) {
-                            return Object.assign(file, {
+                            console.log(file, '1');
+                            return Object.assign(uuidv4(), {
                                 preview: URL.createObjectURL(file)
                             });
                         } else {
+                            console.log(file, '2');
                             return Object.assign(file, {
-                                preview: file
+                                preview: file.preview
                             });
                         }
                     })
@@ -110,17 +139,17 @@ class Edit extends Component {
     }
     individualUpload = (file, id, i, imagesLength) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        
-        if (i === imagesLength - 1) {uploadTask.on('state_changed', 
+
+        if (i === imagesLength - 1) {uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 const progress = 0;
@@ -128,16 +157,16 @@ class Edit extends Component {
                 this.setState({progress});
                 this.props.history.push("/")
             });
-        } else { uploadTask.on('state_changed', 
+        } else { uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 console.log("success - more to come");
@@ -152,11 +181,12 @@ class Edit extends Component {
 
         images.splice(index,1);
         previews.splice(index, 1);
-        
+        console.log(images);
+        console.log(previews);
         this.setState({
             images: images,
             previews: previews
-        });    
+        });
     }
 
     /* Updates heirloom info on submit from forms */
@@ -166,9 +196,9 @@ class Edit extends Component {
         var uploads = false;
         var imagesID = [];
         var imagesLocations = [];
-        var prevLocations = this.state.imagesLocations;
+        var prevLocations = this.state.previews;
 
-        const { title, description, guardian, nextguardian} = this.state;
+        const { title, description, guardian, nextguardian, date, marker } = this.state;
         if (title && description && guardian && this.state.previews.length != 0) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             for (var i = 0; i < images.length; i++){
@@ -180,16 +210,20 @@ class Edit extends Component {
                     uploads = true;
                 }
                 else {
-                    console.log(images[i]);
-                    imagesLocations.push(prevLocations[0]);
+                    console.log(prevLocations[0]);
+
+                    imagesLocations.push(String(prevLocations[0]));
                     prevLocations.shift();
-                } 
+                }
             }
+
             updateRef.set({
                 title,
                 description,
                 guardian,
                 nextguardian,
+                date,
+                marker,
                 imagesLocations: imagesLocations
             }).then((docRef) => {
                 this.setState({
@@ -198,7 +232,11 @@ class Edit extends Component {
                     description: '',
                     guardian: '',
                     nextguardian: '',
-                    imagesLocations: []
+                    imagesLocations: [],
+                    date: '',
+                    marker: null,
+                    previews: [],
+                    images: []
                 });
                 if (!uploads) {
                     this.props.history.push("/");
@@ -213,6 +251,23 @@ class Edit extends Component {
     }
 
     render() {
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
+        var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
+        document.title = "Edit heirloom";
         const thumbs = this.state.previews.map((file,index) => (
             <div class="thumb" key={file.name}>
                 <button type="button" class="close" aria-label="Close" onClick={() => this.removePreview(index)}>
@@ -224,110 +279,71 @@ class Edit extends Component {
            </div>
         ));
         return (
-            <div class="panel nav-bar">
-                <nav class=
-                    "navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link">
-                            <a href="/">Family Jewels</a></li>
-                        <li class="nav-item nav-link">
-                            <a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link">
-                            <a href="/login">Login</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <nav class="navbar navbar-default navbar-expand d-lg-none">
-                    <ul class="nav navbar-nav">
-                        <li class="navbar-brand nav-item nav-link">
-                            <a href="/">FJ</a></li>
-                        <li class="nav-item nav-link">
-                            <a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link">
-                            <a href="/login">Login</a></li>
-                    </ul>
-            </nav>
-        <div class="container">
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                EDIT HEIRLOOM
-                </h3>
-            </div>
-            <div class="panel-body">
-                <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="title"
-                        value={this.state.title}
-                        onChange={this.onChange}
-                        placeholder="Title" />
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="description"
-                        value={this.state.description}
-                        onChange={this.onChange}
-                        placeholder="Description" />
-                </div>
-                <div class="form-group">
-                    <label for="guardian">Guardian:</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="guardian"
-                        value={this.state.guardian}
-                        onChange={this.onChange}
-                        placeholder="Guardian" />
-                </div>
-                <div class="form-group">
-                    <label for="nextguardian">Next Guardian:</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="nextguardian"
-                        value={this.state.nextguardian}
-                        onChange={this.onChange}
-                        placeholder="Next guardian" />
-                </div>
-                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
-                    {({getRootProps, getInputProps}) => (
-                        <section class="dropzone">
-                            <div {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <p>Drag and drop files here, or click HERE to select files</p>
+            <div class="create-container-main">
+                <Navbar/>
+                <div class="create-container">
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                        EDIT HEIRLOOM
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form onSubmit={this.onSubmit}>
+                        <div class="form-group form-control-text">
+                            <input type="text" class="form-control form-control-text-major" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                            <input type="text" class="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin date"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian">Guardian:</label>
+                            <input type="text" class="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
+                        </div>
+                        <div class="form-group">
+                            <label for="nextguardian">Next Guardian:</label>
+                            <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
+                        </div>
+                        <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
+                            {({getRootProps, getInputProps}) => (
+                                <section class="dropzone">
+                                    <div {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <p>Drag and drop files here, or click HERE to select files</p>
+                                    </div>
+                                    <aside class="thumbs-container">
+                                        {thumbs}
+                                    </aside>
+                                </section>
+                            )}
+                        </Dropzone>
+                        <div class="divider"/>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
+                        </div>
+                        <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                        <div class="map-container">
+                            {<MapContainer
+                                saveMarker={(t, map, c) => {
+                                    this.setState({
+                                        marker: [c.latLng.lat(),c.latLng.lng()]
+                                    })
+                                }}>
+                            </MapContainer>}
+                        </div>
+                        <div class="floating-button-large">
+                            <div class ="floating-button-tile">
+                                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.imagesLocations.length}>Submit</button>
+                                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
                             </div>
-                            <aside class="thumbs-container">
-                                {thumbs}
-                            </aside>
-                        </section>
-                    )}
-                </Dropzone>
-                <div class="divider"/>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
                 </div>
-                <div class="divider"/>
-                <button type="submit" class="btn btn-outline-warning">Submit</button>
-                <div class="divider"></div>
-                <a href={`/show/boards/${this.state.key}`}
-                    class="btn btn-outline-danger">Cancel</a>
-                </form>
             </div>
-            </div>
-        </div>
-        </div>
         );
     }
 }
