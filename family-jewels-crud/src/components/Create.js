@@ -200,7 +200,7 @@ class Create extends Component {
         }
 
     }
-
+/*
     createMap() {
         return (
             <div class="map-box">
@@ -223,12 +223,11 @@ class Create extends Component {
         this.setState({
             marker: [c.latLng.lat(),c.latLng.lng()]
         })
-    }
-
+    }*/
+/*
     createMarker() {
         console.log("being called");
         if (this.state.marker) {
-            console.log("rendering");
             return (
                 <Marker
                     title={this.state.title}
@@ -239,7 +238,7 @@ class Create extends Component {
         } else {
             return (null);
         }
-    }
+    }*/
 
     removePreview = (index) => {
         var images = [], previews = [];

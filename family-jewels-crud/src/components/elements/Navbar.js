@@ -28,7 +28,7 @@ const Navbar = () => {
             <nav class="navbar navbar-default navbar-expand d-lg-none">
                     <ul class="nav navbar-nav">
                         <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/> </a></li>
-                        <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
+                        <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
                         <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
                         <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
                     </ul>

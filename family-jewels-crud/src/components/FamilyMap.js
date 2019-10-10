@@ -34,13 +34,14 @@ class FamilyMap extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, marker, guardian } = doc.data();
+            const { title, marker, guardian, date } = doc.data();
                 list.push({
                     key: doc.id,
                     doc, // DocumentSnapshot
                     title,
                     marker,
-                    guardian
+                    guardian,
+                    date
                 });
                 this.forceUpdate();
         });
@@ -123,7 +124,7 @@ class FamilyMap extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian;
+                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian + ":" + item.date;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
                     if (lc.includes(filter)) {
@@ -216,7 +217,7 @@ class FamilyMap extends Component {
         </nav>
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/> FJ</a></li>
+                    <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/></a></li>
                     <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
                     <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
                     <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>

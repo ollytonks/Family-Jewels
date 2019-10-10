@@ -192,7 +192,9 @@ class Edit extends Component {
         var prevLocations = this.state.previews;
 
         const { title, description, guardian, nextguardian, date, marker } = this.state;
-        if (title && description && guardian && this.state.previews.length != 0) {
+        if (title.length > 55) {
+            window.alert("Title has a 55 character limit. You have " + title.length.toString() + ".");
+        } else if (title && description && guardian && this.state.previews.length != 0) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             for (var i = 0; i < images.length; i++){
                 if (images[i] instanceof File){
@@ -209,7 +211,6 @@ class Edit extends Component {
                     prevLocations.shift();
                 } 
             }
-           
             updateRef.set({
                 title,
                 description,

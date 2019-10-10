@@ -384,6 +384,18 @@ div .col-1 {
     height: 60px;
  }
 
+ .floating-row {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    width: auto;
+    height: 60px;
+
+    background: rgb(72, 61, 87);
+    border-radius: 4px;
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.8);
+ }
+
  .floating-button {
     position: fixed;
     bottom: 5%;

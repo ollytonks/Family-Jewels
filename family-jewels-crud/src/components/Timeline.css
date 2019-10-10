@@ -4,6 +4,7 @@ ul.timeline {
     padding-left: 50px;
     width: 80vw;
 }
+
 ul.timeline:before {
     content: ' ';
     background: #d4d9df;
@@ -51,12 +52,14 @@ div.header {
 
 .timeline-row > div.left-image{
     grid-column-start: 1 ;
-    grid-column-end: 1;
+    grid-column-end: 2;
 }
 
 .timeline-row > div.right-text{
     grid-column-start: 2;
-    grid-column-end: 5;
+    grid-column-end: 6;
+    overflow-y: scroll;
+    text-decoration: none;
 }
 
 ul.timeline > li.a.float-right {

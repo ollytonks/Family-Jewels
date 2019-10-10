@@ -5,23 +5,6 @@ import axios from 'axios';
 
 
 export class MapContainer extends Component {
-/*
-  constructor(props) {
-    super(props);
-    this.state = {
-      locations: []
-    };
-    this.handleMapClick = this.handleMapClick.bind(this);
-  }
-
-  handleMapClick = (ref, map, ev) => {
-    const location = ev.latLng;
-    this.setState(prevState => ({
-      locations: [...prevState.locations, location]
-    }));
-    map.panTo(location);
-  };*/
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,23 +13,7 @@ export class MapContainer extends Component {
       selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
     };
   }
-
 /*
-  constructor(props){
-    super(props);
-
-    this.state={
-      googleReverseGeolocation:null,
-      lati:null,
-      lngi:null,
-      marker:null
-    }
-  }*/
-
-  onMapClick(props, marker, e) {
-    console.log(e);
-  }
-
   onMapClicked = (event) =>{
     this.setState({
       markers:
@@ -56,8 +23,8 @@ export class MapContainer extends Component {
           defaultAnimation: 2,
         }
     })
-  }
-
+  }*/
+/*
   mapClicked = (mapProps, map, event) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
@@ -72,7 +39,7 @@ export class MapContainer extends Component {
        this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
        console.log(this.state);
     });
-  }
+  }*/
 
 
 
@@ -119,19 +86,3 @@ const style = {
 export default GoogleApiWrapper({
   apiKey: ('AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs')
 })(MapContainer)
-
-/*
-<Marker
-          onClick={this.onMarkerClick}
-          name={'Kenyatta International Convention Centre'}
-        />
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.onClose}
-        >
-          <div>
-            <h4>{this.state.selectedPlace.name}</h4>
-          </div>
-        </InfoWindow>
-        */

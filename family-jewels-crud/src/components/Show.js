@@ -3,6 +3,9 @@ import firebase from '../Firebase';
 import { saveAs } from 'file-saver';
 import { Gallery, GalleryImage } from "react-gesture-gallery";
 import Navbar from './elements/Navbar';
+import './Show.css';
+import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+
 
 class Show extends Component {
     constructor(props) {
@@ -99,7 +102,7 @@ class Show extends Component {
     renderEditDelete() {
         if (this.state.target === 'boards') {
             return(
-            <div class="button-row">
+            <div class="button-row floating-row">
             <a href={`/edit/${this.state.key}`} class = "btn btn-outline-warning">Edit</a>
             <div class="divider"></div>
             <button onClick={this.downloadTxtFile.bind(this, this.state.key)} class = "btn btn-outline-warning">Download</button>
@@ -108,7 +111,10 @@ class Show extends Component {
             </div>
             );
         } else {
-            return( <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>);
+            return( 
+                <div class="button-row floating-row">
+                    <button onClick={this.archive.bind(this, this.state.key)} class="btn btn-outline-warning">{this.state.archive_text}</button>
+                </div>);
         }
     }
     setIndex(i){
@@ -121,42 +127,91 @@ class Show extends Component {
 
     render() {
         document.title = this.state.heirlooms.title;
+
+        let map;
+        let markers = [];
+
+        // Create markers
+        if(this.state.heirlooms.marker !== undefined) {
+            markers.push(
+                <Marker
+                key={0}
+                position={{
+                    lat: this.state.heirlooms.marker[0],
+                    lng: this.state.heirlooms.marker[1]}}/>
+            )
+            console.log(this.state.heirlooms.marker);
+        }
+
+        // Create map
+        if (this.state.heirlooms.marker !== undefined) {map = 
+            <Map google={this.props.google}
+                    style={style}
+                    initialCenter={{
+                        lat: this.state.heirlooms.marker[0], 
+                        lng: this.state.heirlooms.marker[1]
+                    }}
+                    zoom={4}
+                >
+                {markers}
+            </Map>
+        }
+
         return (
             <div>
             <Navbar/>
-            <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="container show-container">
                 <h3 class="panel-title">
-                    {this.state.heirlooms.title}
+                    {this.state.heirlooms.title} {this.state.heirlooms.date !== undefined ? (": " + this.state.heirlooms.date) : ""}
                 </h3>
-                </div>
-                <div class="panel-body">
-                <dl>
-                    <dt>Description</dt>
-                    <dd>{this.state.heirlooms.description}</dd>
-                    <dt>Guardian</dt>
-                    <dd>{this.state.heirlooms.guardian}</dd>
-                    <dt>{this.state.heirlooms.nextguardian === "" ? "" : "Next guardian"}</dt>
-                    <dd>{this.state.heirlooms.nextguardian}</dd>
-                    <dd><Gallery class="gallery" index={this.state.index}
+                <div class="show-grid">
+                    <div class="show-description">
+                        <dt>Description</dt>
+                    </div>
+                    <div class="show-description-info">
+                        <dt>{this.state.heirlooms.description}</dt>
+                    </div>
+                    <div class="show-guardian">
+                        <dt>Guardian</dt>
+                    </div>
+                    <div class="show-guardian-info">
+                        <dt>{this.state.heirlooms.guardian}</dt>
+                    </div>
+                    <div class="show-nextguardian">
+                        <dt>Next guardian</dt>
+                    </div>
+                    <div class="show-nextguardian-info">
+                        <dt>{this.state.heirlooms.nextguardian === "" ? "None" : this.state.heirlooms.nextguardian}</dt>
+                    </div>
+                    <div class="show-images">
+                        <dd class="image-dd"><Gallery class="gallery" index={this.state.index}
                             onRequestChange={i => {
                                 this.setState({
                                     index: this.setIndex(i)
                                 })
                             }}>
                                 {this.state.images.map(image => (
-                            <GalleryImage class="galleryImage" objectFit="contain" key={image} src={image} />
-                            ))}
-                        </Gallery></dd>
-                </dl>
-                <div>{this.renderEditDelete()}</div>
+                                    <GalleryImage class="galleryImage" objectFit="contain" key={image} src={image} />
+                                    ))}
+                    </Gallery></dd>
+                    </div>
+                    <div class="show-map">
+                            {this.state.heirlooms.marker !== undefined || this.state.heirlooms.marker !== "" ? map : "No location set"}
+                    </div>
                 </div>
-            </div>
+                <div>{this.renderEditDelete()}</div>
             </div>
             </div>
         );
     }
 }
 
-export default Show;
+const style = {
+    width: '95%',
+    height: '100%',
+    margin: 'auto',
+}
+
+export default GoogleApiWrapper({
+    apiKey: ('AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs')
+  })(Show);
