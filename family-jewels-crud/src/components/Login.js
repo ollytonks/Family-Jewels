@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import withFirebaseAuth from 'react-with-firebase-auth'
 import firebaseApp from '../Firebase';
 import '../App.css';
+import Navbar from './elements/Navbar';
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -163,32 +164,14 @@ class Login extends Component {
                  }
             return(
                 <div>
-                <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
-                            <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link"><a href="/login">{username}</a></li>
-
-                        </ul>
-                    </div>
-                </nav>
-                <nav class="navbar navbar-default navbar-expand d-lg-none">
-                        <ul class="nav navbar-nav">
-                            <li class="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                            <li class="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item nav-link"><a href="/login">{username}</a></li>
-                        </ul>
-                </nav>
+                <Navbar/>
                 <div class="profile-container">
                     <div class="col-md-12" align="center">
-                    <h2 class="panel-title">
-                        Hello {username}
+                    <div class="col">
+                    <h2 class="centre-title">
+                    {'Hello ' + username }
                     </h2>
+                    </div>
                     </div>
                     <div class="col-md-12" align="center">
                     <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
