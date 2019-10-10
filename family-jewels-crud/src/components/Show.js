@@ -199,12 +199,12 @@ class Show extends Component {
                         this.state.key)} class =
                         "btn btn-outline-warning">Download</button>
                     <div class="divider"></div>
+                    <button onClick = {this.inherit.bind(this, this.state.key)} 
+                        class = "btn btn-outline-warning">Inherit</button>
+                    <div class="divider"></div>
                     <button onClick={this.archive.bind(this, this.state.key)} 
                         class="btn btn-outline-warning">
                         {this.state.archive_text}</button>
-                    <div class="divider"></div>
-                    <button onClick = {this.inherit.bind(this, this.state.key)} 
-                        class = "btn btn-outline-warning">Inherit</button>
                 </div>
                 );
             }
