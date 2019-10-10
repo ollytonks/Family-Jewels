@@ -224,7 +224,7 @@ class FamilyMap extends Component {
                         }}><i className="fa fa-search"/></div>
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
 

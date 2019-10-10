@@ -163,9 +163,9 @@ class App extends Component {
             .sort((a, b) => a.title.localeCompare(b.title));
 
         this.isArchiveBackground = this.state.switch;
-        //authentication
+        //get display name
         console.log(this.props);
-        var username = "";
+        /*var username = "";
         if(this.state.user){
             if(this.state.user.displayName){
                  username = this.state.user.displayName;
@@ -174,9 +174,7 @@ class App extends Component {
              else {
                  username = this.state.user.email;
              }
-        }
-        //console.log(username);
-        //console.log(firebase.auth().currentUser);
+        }*/
 
         //user not authenticated, redirect to login page
         if(this.state.user == null && this.state.isAuth){
@@ -215,7 +213,7 @@ class App extends Component {
                         }}><i className="fa fa-search"/></div>
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/>{username}</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
 
