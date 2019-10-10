@@ -7,7 +7,7 @@ import homeIcon from './components/elements/familyjewelsgem.svg'
 
 
 /**
- * @fileoverview App provides the React Component for the main page, as well as 
+ * @fileoverview App provides the React Component for the main page, as well as
  * providing the majority of initialisation functions.
  * @extends React.Component
  */
@@ -100,9 +100,9 @@ class App extends Component {
         }
     }
 
-    /** 
-     * Updates the current search term, called whenever search input is 
-     * changed. 
+    /**
+     * Updates the current search term, called whenever search input is
+     * changed.
      */
     handleChange(e){
         {
@@ -121,19 +121,19 @@ class App extends Component {
      */
     render() {
         /**
-         * List of Heirlooms must be filtered based on current board 
+         * List of Heirlooms must be filtered based on current board
          * (Heirlooms/Archive), and filtered again based on Search Terms.
-         * 
-         * Board filtering is implemented in setCollection(), and dictates 
-         * which Firebase board is being accessed. This Firebase board is later 
+         *
+         * Board filtering is implemented in setCollection(), and dictates
+         * which Firebase board is being accessed. This Firebase board is later
          * filtered across Search terms.
-         * 
-         * If Search term filtering is implemented as an 'OnChange' event for 
-         * the Search field, it will not update when the Boards toggle is 
+         *
+         * If Search term filtering is implemented as an 'OnChange' event for
+         * the Search field, it will not update when the Boards toggle is
          * switched.
-         * To ensure both filters are applied, instead Search filter is 
-         * implemented here, since any update to the main App page involves 
-         * changing filters (in which the Search filter is required) or 
+         * To ensure both filters are applied, instead Search filter is
+         * implemented here, since any update to the main App page involves
+         * changing filters (in which the Search filter is required) or
          * navigating to another page (in which the filters are irrelevant).
          */
         document.title = "Home";
@@ -144,7 +144,7 @@ class App extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + 
+                let lc = "" + item.title + ":" + item.description + ":" +
                     item.guardian + ":" + item.nextguardian;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
@@ -220,7 +220,7 @@ class App extends Component {
             </div>
 
         </nav>
-        
+
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
                     <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/> FJ</a></li>

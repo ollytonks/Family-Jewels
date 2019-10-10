@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './FamilyMap.css';
 import './../App.css';
-import {firebase} from './../Firebase';
+import {firebase, firebaseAuth} from './../Firebase';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import homeIcon from './elements/familyjewelsgem.svg'
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -25,7 +26,9 @@ class FamilyMap extends Component {
             markers: null,
             showingInfoWindow: false,  //Hides or the shows the infoWindow
             activeMarker: {},          //Shows the active marker upon click
-            selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
+            selectedPlace: {},          //Shows the infoWindow to the selected place upon a marker
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -67,6 +70,11 @@ class FamilyMap extends Component {
                 })
             }
         }
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+        });
     }
 
     /* Sets the current reference to Firebase collection to the target */
@@ -109,6 +117,13 @@ class FamilyMap extends Component {
     }}
 
     render() {
+
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
         document.title = "Family map";
 
         let map;
