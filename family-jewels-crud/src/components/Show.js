@@ -239,7 +239,7 @@ class Show extends Component {
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
-        document.title = this.state.heirlooms.title;
+        document.title = this.state.title;
         return (
             <div>
             <Navbar/>
