@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './FamilyMap.css';
 import './../App.css';
-import firebase from './../Firebase';
+import {firebase, firebaseAuth} from './../Firebase';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import homeIcon from './elements/familyjewelsgem.svg'
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -25,7 +26,9 @@ class FamilyMap extends Component {
             markers: null,
             showingInfoWindow: false,  //Hides or the shows the infoWindow
             activeMarker: {},          //Shows the active marker upon click
-            selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
+            selectedPlace: {},          //Shows the infoWindow to the selected place upon a marker
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -68,6 +71,11 @@ class FamilyMap extends Component {
                 })
             }
         }
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+        });
     }
 
     /* Sets the current reference to Firebase collection to the target */
@@ -89,7 +97,7 @@ class FamilyMap extends Component {
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }            
+            }
             this.setState({searchKey: filter});
         }
     }
@@ -110,6 +118,13 @@ class FamilyMap extends Component {
     }}
 
     render() {
+
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
         document.title = "Family map";
 
         let map;
@@ -144,7 +159,7 @@ class FamilyMap extends Component {
         // Create markers
         for (var i = 0; i < resultList.length; i++) {
             if (resultList[i].marker) {
-                markers.push( 
+                markers.push(
                     <Marker
                     key={[i]}
                 title={resultList[i].guardian}
@@ -162,12 +177,12 @@ class FamilyMap extends Component {
                         <div>
                             <a class="map-info">{this.state.selectedPlace.title} : {this.state.selectedPlace.name}</a>
                         </div>
-                    </InfoWindow> 
+                    </InfoWindow>
                 )
             }
         }
         // Create map
-        map = 
+        map =
             <Map google={this.props.google}
                     style={style}
                     initialCenter={{
@@ -179,10 +194,10 @@ class FamilyMap extends Component {
                 {markers}
                 {infowds}
             </Map>
-        
+
 
         this.isArchiveBackground = this.state.switch;
-        
+
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -200,7 +215,7 @@ class FamilyMap extends Component {
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row" 
+                            class="form-row"
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
@@ -210,10 +225,10 @@ class FamilyMap extends Component {
                         }}><i className="fa fa-search"/></div>
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
-            
+
         </nav>
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">

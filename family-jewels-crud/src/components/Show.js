@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from './../Firebase';
 import { saveAs } from 'file-saver';
 import { Gallery, GalleryImage } from "react-gesture-gallery";
 import Navbar from './elements/Navbar';
 import './Show.css';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+import { Redirect } from 'react-router-dom';
 
 
 class Show extends Component {
@@ -24,6 +25,12 @@ class Show extends Component {
     }
 
     componentDidMount() {
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+        });
+
         const ref = firebase.firestore().collection(this.state.target).doc(this.props.match.params.id);
         var imageRefs = [];
         ref.get().then((doc) => {
@@ -126,6 +133,13 @@ class Show extends Component {
     }
 
     render() {
+
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
+
         document.title = this.state.heirlooms.title;
 
         let map;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import {firebase, firebaseAuth} from '../Firebase';
+import { Link, Redirect } from 'react-router-dom';
 import Navbar from './elements/Navbar';
 import MapContainer from './elements/MapContainer';
 
@@ -27,7 +28,9 @@ class Edit extends Component {
             date: '',
             marker: null,
             previews: [],
-            images: []
+            images: [],
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
     }
 
@@ -44,13 +47,13 @@ class Edit extends Component {
                         var id =  url.substr(87,36)
                         imageURLs.push(url);
                         imageRefs.push(firebase.storage().ref('images/'+id));
-                        
+
                         this.setState({
                             key: doc.id,
                             title: board.title,
                             description: board.description,
                             guardian: board.guardian,
-                            nextguardian: board.guardian,
+                            nextguardian: board.nextguardian,
                             imagesLocations: board.imagesLocations.sort(),
                             images: imageRefs.sort(),
                             previews: imageURLs.map(imageURL =>Object.assign(imageURL.substr(87,36), {preview: imageURL})).sort()
@@ -72,6 +75,10 @@ class Edit extends Component {
                 console.log("No such document!");
             }
             console.log(this.state);
+        });
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
         });
     }
 
@@ -132,17 +139,17 @@ class Edit extends Component {
     }
     individualUpload = (file, id, i, imagesLength) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        
-        if (i === imagesLength - 1) {uploadTask.on('state_changed', 
+
+        if (i === imagesLength - 1) {uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 const progress = 0;
@@ -150,16 +157,16 @@ class Edit extends Component {
                 this.setState({progress});
                 this.props.history.push("/")
             });
-        } else { uploadTask.on('state_changed', 
+        } else { uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 console.log("success - more to come");
@@ -179,7 +186,7 @@ class Edit extends Component {
         this.setState({
             images: images,
             previews: previews
-        });    
+        });
     }
 
     /* Updates heirloom info on submit from forms */
@@ -209,7 +216,7 @@ class Edit extends Component {
 
                     imagesLocations.push(String(prevLocations[0]));
                     prevLocations.shift();
-                } 
+                }
             }
             updateRef.set({
                 title,
@@ -245,6 +252,22 @@ class Edit extends Component {
     }
 
     render() {
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
+        var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
         document.title = "Edit heirloom";
         const thumbs = this.state.previews.map((file,index) => (
             <div class="thumb" key={file.name}>

@@ -1,16 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import './App.css';
-import firebase from './Firebase';
+import {firebase, firebaseAuth} from './Firebase';
 import Switch from './components/elements/Switch';
 import homeIcon from './components/elements/familyjewelsgem.svg'
 
 
+/**
+ * @fileoverview App provides the React Component for the main page, as well as
+ * providing the majority of initialisation functions.
+ * @extends React.Component
+ */
 class App extends Component {
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('boards');
         this.isArchiveBackground=false;
         this.unsubscribe = null;
+        //this.authenticated = true;
         this.state = false;
         this.state = {
             heirlooms: [],
@@ -19,17 +26,23 @@ class App extends Component {
             searchKey: '',
             searchResult: [],
             heading: 'HEIRLOOMS',
-            searching: false
+            searching: false,
+            user: firebase.auth().currentUser,
+            isAuth: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
-    /* On querySnapshot event, gets Firebase colelction */
+    /**
+     * On querySnapshot event, fetches Firebase and commits to local memory.
+     */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian, imagesLocations, date} = doc.data();
-            firebase.storage().ref('images').child(imagesLocations[0]).getDownloadURL().then(url => {
+            const { title, description, guardian, nextguardian, 
+                imagesLocations, date} = doc.data();
+            firebase.storage().ref('images').child(imagesLocations[0])
+                .getDownloadURL().then(url => {
                 list.push({
                     key: doc.id,
                     icon: url,
@@ -44,20 +57,25 @@ class App extends Component {
                 this.forceUpdate();
             })
         });
-        if (this.state.searchKey !== '') {
-            this.setState({
-                heirlooms: list
-            });
-        }
-        else {
-            this.setState({
-                heirlooms: list, searchResult : list
-            });
-        }
+        this.setState({
+            heirlooms: list
+        });
     }
 
+    /**
+     * Loaded
+     * @override
+     */
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+            console.log("Auth state changed");
+            console.log(this.state.user);
+        });
+        console.log(this.state);
+
         var locstate = this.props.location.payload;
         if (locstate !== undefined) {
             if (locstate.searching == true) {
@@ -68,7 +86,9 @@ class App extends Component {
         }
     }
 
-    /* Sets the current reference to Firebase collection to the target */
+    /**
+     * Sets the current reference to Firebase collection to the target
+     */
     setCollection() {
         this.ref = firebase.firestore().collection(this.state.target);
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
@@ -81,31 +101,52 @@ class App extends Component {
         }
     }
 
+    /**
+     * Updates the current search term, called whenever search input is
+     * changed.
+     */
     handleChange(e){
         {
             console.log(e.target.value);
             let filter = e.target.value;
             if (filter !== "") {
                 filter.toLowerCase();
-            }            
+            }
             this.setState({searchKey: filter});
         }
     }
 
+    /**
+     * Renders the main App page
+     * @override
+     */
     render() {
+        /**
+         * List of Heirlooms must be filtered based on current board
+         * (Heirlooms/Archive), and filtered again based on Search Terms.
+         *
+         * Board filtering is implemented in setCollection(), and dictates
+         * which Firebase board is being accessed. This Firebase board is later
+         * filtered across Search terms.
+         *
+         * If Search term filtering is implemented as an 'OnChange' event for
+         * the Search field, it will not update when the Boards toggle is
+         * switched.
+         * To ensure both filters are applied, instead Search filter is
+         * implemented here, since any update to the main App page involves
+         * changing filters (in which the Search filter is required) or
+         * navigating to another page (in which the filters are irrelevant).
+         */
         document.title = "Home";
-
         let tempList = [];
-        let filter = this.state.searchKey;
-        if (filter !== "") {
-            filter.toLowerCase();
-        }
-        if (filter !== "") {
+        if (this.state.searchKey !== "") {
+            var filter = this.state.searchKey.toLowerCase();
             let currentList = this.state.heirlooms;
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + item.guardian + ":" + item.nextguardian + ":" + item.date;
+                let lc = "" + item.title + ":" + item.description + ":" + 
+                    item.guardian + ":" + item.nextguardian + ":" + item.date;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
                     if (lc.includes(filter)) {
@@ -123,7 +164,27 @@ class App extends Component {
             .sort((a, b) => a.title.localeCompare(b.title));
 
         this.isArchiveBackground = this.state.switch;
-        
+        //get display name
+        console.log(this.props);
+        /*var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }*/
+
+        //user not authenticated, redirect to login page
+        if(this.state.user == null && this.state.isAuth){
+            console.log("not authenticated");
+            console.log(firebase.auth().currentUser);
+            this.props.history.push("/Login");
+            return <Redirect to= '/login'/>
+        }
+        console.log("authenticated");
         return (
         <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -135,13 +196,15 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
+
                     <li class={this.state.searching ? '' : 'collapse'}>
                         <input
-                            type="text"
+                            type="search"
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row" 
+                            class="form-row"
+                            autoFocus
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
@@ -151,11 +214,12 @@ class App extends Component {
                         }}><i className="fa fa-search"/></div>
                     </li>
                     <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Login</a></li>
+                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
-            
+
         </nav>
+
         <nav class="navbar navbar-default navbar-expand d-lg-none">
                 <ul class="nav navbar-nav">
                     <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/></a></li>
@@ -167,10 +231,11 @@ class App extends Component {
                     <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
                 </ul>
                 <input
-                    type="text"
+                    type="search"
                     className="input"
                     onChange={this.handleChange}
                     placeholder="Search..."
+                    autoFocus
                 />
         </nav>
             <div class="container">
@@ -231,5 +296,7 @@ class App extends Component {
         );
     }
 }
+
+
 
 export default App;

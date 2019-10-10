@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import ReactDOM from 'react-dom';
+import {firebase, firebaseAuth} from '../Firebase';
+import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 import Navbar from './elements/Navbar';
 import MapContainer from './elements/MapContainer';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
-  
 
-const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
-const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
+
+const acceptedFileTypes =
+    'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
+const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => 
+    {return item.trim()})
 function uuidv4(){
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
 }
@@ -31,6 +35,8 @@ class Create extends Component {
             images: [],
             imagesLocations: [],
             previews: [],
+            user: firebase.auth().currentUser,
+            isAuth: false,
             marker: null,
             googleReverseGeolocation:null,
             date: ''
@@ -58,6 +64,11 @@ class Create extends Component {
 
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        //authentication
+        firebaseAuth.onAuthStateChanged(user => {
+            this.setState({ user: firebase.auth().currentUser });
+            this.setState({ isAuth: true });
+        });
     }
 
     onChange = (e) => {
@@ -104,16 +115,16 @@ class Create extends Component {
     }
     individualUpload = (file, id, currFile, numImages) => {
         const uploadTask = firebase.storage().ref(`images/${id}`).put(file);
-        if (currFile === numImages - 1) {uploadTask.on('state_changed', 
+        if (currFile === numImages - 1) {uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 const progress = 0;
@@ -121,16 +132,16 @@ class Create extends Component {
                 this.setState({progress});
                 this.props.history.push("/")
             });
-        } else { uploadTask.on('state_changed', 
+        } else { uploadTask.on('state_changed',
             (snapshot) => {
                 // progress function ....
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 this.setState({progress});
-            }, 
+            },
             (error) => {
                 // error function ....
                 console.log(error);
-            }, 
+            },
             () => {
                 // complete function ....
                 console.log("success - more to come");
@@ -149,7 +160,7 @@ class Create extends Component {
         const images = this.state.images;
         var imagesID = [];
         var imagesLocations = [];
-        
+
         for (let i=0; i < this.state.heirlooms.length; i++) {
             if (this.state.heirlooms[i].title === this.state.title) {
                 found = true;
@@ -244,17 +255,17 @@ class Create extends Component {
         var images = [], previews = [];
         images = images.concat(this.state.images);
         previews = previews.concat(this.state.previews);
-        
+
         images.splice(index,1);
         previews.splice(index, 1);
-       
+
         this.setState({
             images: images,
             previews: previews
         });
     }
-       
-    render() {             
+
+    render() {
         document.title = "Add heirloom";
         const thumbs = this.state.previews.map((file,index) => (
             <div class="thumb" key={file.name}>
@@ -267,6 +278,25 @@ class Create extends Component {
            </div>
         ));
         const { title, date, description, guardian, nextguardian } = this.state;
+        if(this.state.isAuth == false){
+            return (<div></div>);
+        }
+        //user is not logged in
+        if(this.state.user == null && this.state.isAuth){
+            console.log(" not authenticated");
+            console.log(firebase.auth().currentUser);
+            return <Redirect to= '/login'/>
+        }
+        var username = "";
+        if(this.state.user){
+            if(this.state.user.displayName){
+                 username = this.state.user.displayName;
+                 console.log(this.state.user.displayName);
+             }
+             else {
+                 username = this.state.user.email;
+             }
+        }
         return (
             <div class="create-container-main">
             <Navbar/>
@@ -349,7 +379,7 @@ class Create extends Component {
                                 marker: {position:{lat:event.latLng.lat(),lng:event.latLng.lng()}},
                                 });
                             this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
-                            console.log(this.state); 
+                            console.log(this.state);
                             });*/
 
 const style = {
