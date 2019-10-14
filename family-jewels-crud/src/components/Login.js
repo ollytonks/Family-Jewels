@@ -6,6 +6,7 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import firebaseApp from '../Firebase';
 import '../App.css';
 import Navbar from './elements/Navbar';
+import loginLogo from './elements/loginlogo.svg'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -187,10 +188,8 @@ class Login extends Component {
         //user not signed in, prompt login
         return (
             <div class="login-container">
-                <div class="panel-heading">
-                <h2 class="panel-title">
-                    LOGIN
-                </h2>
+                <div class="col-md-12" align="center">
+                <img width="250" height="250" src={loginLogo}/>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
                     <div class="row">
