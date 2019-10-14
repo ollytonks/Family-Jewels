@@ -188,8 +188,10 @@ class Login extends Component {
         //user not signed in, prompt login
         return (
             <div class="login-container">
+                <div class="row">
                 <div class="col-md-12" align="center">
-                <img width="250" height="250" src={loginLogo}/>
+                <img width="200" height="200" src={loginLogo}/>
+                </div>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
                     <div class="row">
