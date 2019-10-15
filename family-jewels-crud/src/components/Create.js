@@ -14,14 +14,11 @@
 
 // import all relevant libraries
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
 import Navbar from './elements/Navbar';
 import MapContainer from './elements/MapContainer';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-
 
 // accepted image types, don't want to accept files that are not images
 const acceptedFileTypes =
@@ -322,13 +319,13 @@ class Create extends Component {
          generated display images and maps them to display within the dropzone
          also generates a remove button that calls remove preview*/
         const thumbs = this.state.previews.map((file,index) => (
-            <div class="thumb" key={file.name}>
-                <button type="button" class="close" aria-label="Close" 
+            <div className="thumb" key={file.name}>
+                <button type="button" className="close" aria-label="Close" 
                     onClick={() => this.removePreview(index)}>
                         <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="thumb-inner">
-                    <img src={file.preview} class="thumb-img"/>
+                <div className="thumb-inner">
+                    <img alt="Thumb" src={file.preview} className="thumb-img"/>
                 </div>
            </div>
         ));
@@ -346,56 +343,73 @@ class Create extends Component {
 
         // return rest of structure
         return (
-            <div class="create-container-main">
+            <div className="create-container-main">
             <Navbar/>
-            <div class="create-container">
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
+            <div className="create-container">
+            <div className="panel panel-default">
+            <div className="panel-heading">
+                <h3 className="panel-title">
                 ADD HEIRLOOM
                 </h3>
             </div>
-            <div class="panel-body">
+            <div className="panel-body">
                 <form onSubmit={this.onSubmit}>
-                <div class="form-group form-control-text">
-                    <input type="text" class="form-control form-control-text-major" name="title" value={title} onChange={this.onChange} placeholder="Title*"/>
-                    <input type="text" class="form-control form-control-text-minor" name="date" value={date} onChange={this.onChange} placeholder="Origin date"/>
+                <div className="form-group form-control-text">
+                    <input type="text" 
+                        className="form-control form-control-text-major" 
+                        name="title" value={title} onChange={this.onChange} 
+                        placeholder="Title*"/>
+                    <input type="text" 
+                        className="form-control form-control-text-minor" 
+                        name="date" value={date} onChange={this.onChange} 
+                        placeholder="Origin year"/>
                 </div>
-                <div class="form-group">
-                    <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
+                <div className="form-group">
+                    <textArea className="form-control" name="description" 
+                        onChange={this.onChange} placeholder="Description" 
+                        cols="80" rows="3">{description}</textArea>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="guardian" value={guardian} onChange={this.onChange} placeholder="Guardian*" />
+                <div className="form-group">
+                    <input type="text" className="form-control" name="guardian" 
+                        value={guardian} onChange={this.onChange} 
+                        placeholder="Guardian*" />
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="nextguardian" value={nextguardian} onChange={this.onChange} placeholder="Next guardian" />
+                <div className="form-group">
+                    <input type="text" className="form-control" 
+                        name="nextguardian" value={nextguardian} 
+                        onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
+                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} 
+                    accept={acceptedFileTypes}>
                     {({getRootProps, getInputProps}) => (
-                        <section class="dropzone">
+                        <section className="dropzone">
                             <div {...getRootProps()}>
                                 <input {...getInputProps()} />
-                                <p>Drag and drop files here, or click HERE to select files*</p>
+                                <p>Drag and drop files here, or 
+                                    click HERE to select files*</p>
                             </div>
-                            <aside class="thumbs-container">
+                            <aside className="thumbs-container">
                                 {thumbs}
                             </aside>
                         </section>
                     )}
                 </Dropzone>
-                <div class="divider"/>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
+                <div className="divider"/>
+                <div className="progress">
+                    <div className="progress-bar progress-bar-striped progress-bar-animated" 
+                    style={{width: this.state.progress+'%'}}></div>
                 </div>
-                <div class="divider"/>
+                <div className="divider"/>
                 <div/>
                 <label for="submitButton"><i>* fields are mandatory</i></label>
                 <br></br>
                 <a>Click a location relevant to the item</a>
                 <br></br>
-                <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                <a>{this.state.marker ? 'Currently selected: ' + 
+                    this.state.marker[0] + ', ' + this.state.marker[1] : 
+                    'Nothing selected'}</a>
                 <div/>
-                <div class="map-container">
+                <div className="map-container">
                     {<MapContainer
                         saveMarker={(t, map, c) => {
                             this.setState({
@@ -404,9 +418,11 @@ class Create extends Component {
                         }}>
                     </MapContainer>}
                 </div>
-                <div class="floating-button">
+                <div className="floating-button">
                     <div class ="floating-button-tile">
-                        <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.images.length}>Submit</button>
+                        <button name="submitButton" type="submit" 
+                        className="btn btn-outline-warning" 
+                        disabled={!this.state.images.length}>Submit</button>
                     </div>
                 </div>
                 </form>

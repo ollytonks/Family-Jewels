@@ -1,19 +1,36 @@
+/**
+ * Copyright (c) 2019
+ *
+ * File authenticates a user via firebase. If the user does not have a profile
+ * it directs the user towards profile creation. Once authenticated, the user
+ * is presented with the option to be navigated to profile management.
+ *
+ * @summary Authenticates a user
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-09-20
+ * Last modified  : 2019-10-15
+ */
+
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Redirect } from 'react-router-dom';
-import withFirebaseAuth from 'react-with-firebase-auth'
-import firebaseApp from '../Firebase';
 import '../App.css';
 import Navbar from './elements/Navbar';
 import loginLogo from './elements/loginlogo.svg'
+//loginLogo}
 
+//authentication provider for google accounts
 const provider = new firebase.auth.GoogleAuthProvider();
 
+/* Login component to handle user authentication and direct profile management
+*/
 class Login extends Component {
 
+    //flag variable to track whether elements have been mounted
     _isMounted = false;
 
+    /** React function to initialise Login component and its state
+    **/
     constructor() {
         super();
         this.state = {
@@ -21,17 +38,23 @@ class Login extends Component {
             email : "",
             password : "",
             resetPassword: false,
-            isAuth: false
+            isAuth: false /*flag variable to track whether firebase
+                            authentication has finished initialising */
         }
+        /* bindings of the component state to functions in order
+        to permit redirection to other components */
         this.editProfile = this.editProfile.bind(this);
         this.returnToLogin = this.returnToLogin.bind(this);
         this.createProfile = this.createProfile.bind(this);
     }
 
+    /** React function called when components have been mounted
+     *  Loads authentication information from firebase
+    **/
     componentDidMount() {
         //ensure mounted correctly
         this._isMounted = true;
-        //check if still signed in
+        //check if user is still signed in
         if(this._isMounted) {
             firebaseAuth.onAuthStateChanged(user => {
                 console.log("Auth state changed")
@@ -42,11 +65,15 @@ class Login extends Component {
         }
     }
 
+    /** React function called before component is unmounted
+    **/
     componentWillUnmount() {
+        //reset flag variable
         this._isMounted = false;
     }
 
-    //sign in with Google
+    /** Authenticates user through their google account
+    **/
     loginWithGoogle = (e) => {
         e.preventDefault();
         firebase
@@ -57,9 +84,7 @@ class Login extends Component {
             .auth()
             .signInWithPopup(provider)
             .then(() => {
-                //console.log.(" ")
                 this.props.history.push("/");
-                //this.user = firebase.auth().currentUser;
             })
             .catch(errors => {
                 console.log(errors);
@@ -68,12 +93,14 @@ class Login extends Component {
 
     }
 
-    //sign in with email and password
+    /** Authenticates user through email and password registered in firebase
+    **/
     loginEmailPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
+        //authenticate user with firebase
         else {
             e.preventDefault();
             firebase
@@ -88,9 +115,11 @@ class Login extends Component {
                 })
                 .catch(errors => {
                     console.log(errors);
+                    //user has entered the wrong password
                     if(errors.code.includes("wrong-password")) {
                         alert("Incorrect password");
                     }
+                    //email not in firebase
                     else if(errors.code.includes("user-not-found")) {
                         alert("Incorrect email");
                     }
@@ -102,19 +131,21 @@ class Login extends Component {
         }
     }
 
-    //reset user password
+    /** Reset user's password through firebase
+    **/
     resetPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
+        //reset password through firebase
         else {
             e.preventDefault();
             firebase
             .auth()
             .sendPasswordResetEmail(this.state.email)
             .then(() => {
-                alert("Please check your email to reset your password.");
+                alert("Please check your email to reset your password");
             })
             .catch(errors =>{
                 console.log(errors);
@@ -123,32 +154,39 @@ class Login extends Component {
         }
     }
 
-    //sign the user out
+    /** Signs the user out through firebase
+    **/
     logout() {
         firebase.auth().signOut();
     }
 
-    //redirect to edit editProfile
+    /** Redirects user to edit their profile
+    **/
     editProfile() {
         this.props.history.push("/editprofile");
     }
 
-    //rederict to create a profile
+    /** Redericts user to create a profile
+    **/
     createProfile() {
         this.props.history.push("/createuser");
     }
 
-    //rederict to Login page from password reset
+    /** Redericts user to original Login page from password reset
+    **/
     returnToLogin() {
         //refresh page to return to original sign in options
         window.location.reload();
     }
 
+    /** React's render function which renders the Login component to the UI
+        @return HTML to be rendered
+    **/
     render() {
         console.log(this.state.isAuth);
         /*prevent elements rendering until authentication variables have
           finished initialising*/
-        if(this.state.isAuth == false){
+        if(this.state.isAuth === false){
             console.log("not finished initialising");
             return(<div></div>)
         }
@@ -168,86 +206,106 @@ class Login extends Component {
                 <Navbar/>
                 <div class="profile-container">
                     <div class="col-md-12" align="center">
-                    <div class="col">
-                    <h2 class="centre-title">
-                    {'Hello ' + username }
-                    </h2>
-                    </div>
-                    </div>
-                    <div class="col-md-12" align="center">
-                    <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
+                        <div class="col">
+                            <h2 class="centre-title">
+                            {'Hello ' + username }
+                            </h2>
+                        </div>
                     </div>
                     <div class="col-md-12" align="center">
-                    <button type="submit" class="btn btn-outline-warning" onClick={this.editProfile}>Edit profile</button>
+                        <button type="submit" class="btn btn-outline-warning"
+                            onClick={this.logout}>Sign out</button>
+                    </div>
+                    <div class="col-md-12" align="center">
+                        <button type="submit" class="btn btn-outline-warning"
+                            onClick={this.editProfile}>Edit profile</button>
                     </div>
                 </div>
                 </div>
             );
         }
-        console.log(this.state.user);
-        //user not signed in, prompt login
+        //user not yet authenticated
         return (
             <div class="login-container">
                 <div class="row">
-                <div class="col-md-12" align="center">
-                <img width="200" height="200" src={loginLogo}/>
-                </div>
+                    <div class="col-md-12" align="center">
+                        <img width="200" height="200" src={loginLogo}/>
+                    </div>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <input type="email" class="form-control"
-                            name="username" placeholder="Username" value={this.state.email}
-                             onChange={e => this.setState({email: e.target.value})} />
+                            name="username" placeholder="Username"
+                                value={this.state.email}
+                                onChange={e => this.setState({email:
+                                     e.target.value})} />
                         </div>
                     </div>
                     {this.state.resetPassword
-                    ? <div>
-                        <div class="col-md-12" align="center">
-                            <button type="submit" class="btn btn-outline-warning" onClick={this.resetPassword}>Send password reset</button>
+                        ? <div>
+                            <div class="col-md-12" align="center">
+                                <button type="submit"
+                                    class="btn btn-outline-warning"
+                                    onClick={this.resetPassword}>
+                                    Send password reset
+                                </button>
+                            </div>
+                            <div class="col-md-12" align="center">
+                                <button type="button"
+                                    class="btn btn-outline-warning"
+                                    onClick={this.returnToLogin}>Return</button>
+                            </div>
                         </div>
-                        <div class="col-md-12" align="center">
-                            <button type="button" class="btn btn-outline-warning" onClick={this.returnToLogin}>Return</button>
+                        : <div class="row">
+                            <div class="col-md-12 form-group">
+                                <input type="password" class="form-control"
+                                name="password" placeholder="Password"
+                                value={this.state.password}
+                                onChange={e => this.setState({password:
+                                     e.target.value})}/>
+                            </div>
                         </div>
-                    </div>
-                    :<div class="row">
-                        <div class="col-md-12 form-group">
-                            <input type="password" class="form-control"
-                            name="password" placeholder="Password"
-                            value={this.state.password}
-                            onChange={e => this.setState({password: e.target.value})} />
-                        </div>
-                    </div>
                     }
                     <div class="row">
                         <div class="col-md-12">
-                        {this.state.resetPassword
-                        ? <p></p>
-                        : <button type="submit" class="btn btn-outline-warning btn-block" onClick={this.submit}>Sign in</button>
-                        }
+                            {this.state.resetPassword
+                                ? <p></p>
+                                : <button type="submit"
+                                class="btn btn-outline-warning btn-block"
+                                onClick={this.submit}>Sign in</button>
+                            }
                         </div>
                     </div>
                 </form>
                 <div class="row">
                     <div class="col-md-12" align="center">
-                    {this.state.resetPassword
-                        ? <p></p>
-                        : <button class="btn btn-outline-warning btn-block" onClick={this.loginWithGoogle}>Sign in with Google</button>
-                    }
+                        {this.state.resetPassword
+                            ? <p></p>
+                            : <button class="btn btn-outline-warning btn-block"
+                            onClick={this.loginWithGoogle}>Sign in with Google
+                            </button>
+                        }
                     </div>
                 </div>
-                <div class="row">
+                <div className="row">
                 </div>
                     <div class="col-md-12" align="center">
-                    { this.state.resetPassword
-                    ? <p></p>
-                    : <div>
-                        <div class="col-md-12" align="center">
-                            <button class="btn btn-warning btn-sm" type="button" onClick={this.createProfile}>Create account</button>
-                        </div>
-                        <button class="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
-                    </div>
-                    }
+                        { this.state.resetPassword
+                            ? <p></p>
+                            : <div>
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-warning btn-sm"
+                                    type="button" onClick={this.createProfile}>
+                                    Create account
+                                    </button>
+                                </div>
+                                <button class="btn btn-link"
+                                onClick={() => {this.setState({resetPassword:
+                                     true})}}>Forgot password
+                                </button>
+                            </div>
+                        }
                     </div>
             </div>
         );

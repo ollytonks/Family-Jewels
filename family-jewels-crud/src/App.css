@@ -226,8 +226,8 @@ h2.panel-title {
     text-decoration-line: none;
     text-decoration-style: initial;
     text-decoration-color: initial;
-    width: 200px;
-    height: 200px;
+
+
 }
 
 .tiletitle {
@@ -409,11 +409,13 @@ div .col-1 {
 
  .floating-row {
     position: fixed;
-    bottom: 5%;
-    right: 5%;
-    width: auto;
+    bottom: 2%;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
     height: 60px;
-
+    width: 270px;
     background: rgb(72, 61, 87);
     border-radius: 4px;
     box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.8);
@@ -421,10 +423,17 @@ div .col-1 {
 
  .floating-button {
     position: fixed;
-    bottom: 5%;
-    right: 5%;
-    width: 79px;
-    height: 39px;
+    bottom: 2%;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    height: fit-content;
+    padding: 3px;
+    background: rgb(72, 61, 87);
+    border-radius: 4px;
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.8);
  }
 
  .floating-button-large {
@@ -487,8 +496,7 @@ div .col-1 {
  }
 
  .map-container {
-    width: 100%;
-    height: 80%;
+    height: 80vh;
  }
 
  .create-container-main {
