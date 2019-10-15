@@ -1,8 +1,6 @@
 import * as firebase from 'firebase';
 import "firebase/auth";
 
-const settings = {timestampsInSnapshots: true};
-
 const config = {
     apiKey: "AIzaSyCBvZdocIgvv1jBTUHi1XuDK86ZL2yvxzk",
     authDomain: "family-jewels-8b7ef.firebaseapp.com",
@@ -18,6 +16,5 @@ const firebaseApp = firebase.initializeApp(config);
 //handles authentication
 const firebaseAuth = firebaseApp.auth();
 
-firebase.firestore().settings(settings);
 
 export { firebase, firebaseAuth };

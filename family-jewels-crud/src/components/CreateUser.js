@@ -10,11 +10,7 @@
  * Last modified  : 2019-10-15
  */
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import {firebase, firebaseAuth} from '../Firebase';
-import { Redirect } from 'react-router-dom';
-import withFirebaseAuth from 'react-with-firebase-auth'
-import firebaseApp from '../Firebase';
+import {firebase} from '../Firebase';
 import '../App.css';
 
 /* Create User component to handle user profile creation */
@@ -35,11 +31,11 @@ class CreateUser extends Component {
     **/
     createUser = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Please enter an email")
         }
         //ensure password entered
-        else if(this.state.password == null || this.state.password == "") {
+        else if(this.state.password === null || this.state.password === "") {
             alert("Please enter a password")
         }
         //create user on firebase
@@ -83,9 +79,9 @@ class CreateUser extends Component {
                                  e.target.value})} />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <input type="password" class="form-control"
+                    <div className="row">
+                        <div className="col-md-12 form-group">
+                            <input type="password" className="form-control"
                             name="password" placeholder="Password"
                             value={this.state.password}
                             onChange={e => this.setState({password:

@@ -13,11 +13,7 @@
  */
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Redirect } from 'react-router-dom';
-import withFirebaseAuth from 'react-with-firebase-auth'
-import firebaseApp from '../Firebase';
 import '../App.css';
 import Navbar from './elements/Navbar';
 import loginLogo from './elements/loginlogo.svg'
@@ -101,7 +97,7 @@ class Login extends Component {
     **/
     loginEmailPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
         //authenticate user with firebase
@@ -139,7 +135,7 @@ class Login extends Component {
     **/
     resetPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
         //reset password through firebase
@@ -190,7 +186,7 @@ class Login extends Component {
         console.log(this.state.isAuth);
         /*prevent elements rendering until authentication variables have
           finished initialising*/
-        if(this.state.isAuth == false){
+        if(this.state.isAuth === false){
             console.log("not finished initialising");
             return(<div></div>)
         }
@@ -292,7 +288,7 @@ class Login extends Component {
                         }
                     </div>
                 </div>
-                <div class="row">
+                <div className="row">
                 </div>
                     <div class="col-md-12" align="center">
                         { this.state.resetPassword

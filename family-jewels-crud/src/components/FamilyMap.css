@@ -1,3 +1,7 @@
 .a.map-info {
     color: rgb(0, 0, 0);
 }
+
+#root > div > div > div.mainbodyClassic > div > div > div > div.map-container > div {
+    position: relative !important;
+}
