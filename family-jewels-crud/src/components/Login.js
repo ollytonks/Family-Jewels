@@ -204,19 +204,19 @@ class Login extends Component {
             return(
                 <div>
                 <Navbar/>
-                <div class="profile-container">
-                    <div class="col-md-12" align="center">
-                        <div class="col">
-                            <h2 class="centre-title">
+                <div className="profile-container">
+                    <div className="col-md-12" align="center">
+                        <div className="col">
+                            <h2 className="centre-title">
                             {'Hello ' + username }
                             </h2>
                         </div>
                     </div>
-                    <div class="col-md-12" align="center">
-                        <button type="submit" class="btn btn-outline-warning"
+                    <div className="col-md-12" align="center">
+                        <button type="submit" className="btn btn-outline-warning"
                             onClick={this.logout}>Sign out</button>
                     </div>
-                    <div class="col-md-12" align="center">
+                    <div className="col-md-12" align="center">
                         <button type="submit" class="btn btn-outline-warning"
                             onClick={this.editProfile}>Edit profile</button>
                     </div>
@@ -226,16 +226,16 @@ class Login extends Component {
         }
         //user not yet authenticated
         return (
-            <div class="login-container">
-                <div class="row">
-                    <div class="col-md-12" align="center">
+            <div className="login-container">
+                <div className="row">
+                    <div className="col-md-12" align="center">
                         <img width="200" height="200" src={loginLogo}/>
                     </div>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <input type="email" class="form-control"
+                    <div className="row">
+                        <div className="col-md-12 form-group">
+                            <input type="email" className="form-control"
                             name="username" placeholder="Username"
                                 value={this.state.email}
                                 onChange={e => this.setState({email:
@@ -244,22 +244,22 @@ class Login extends Component {
                     </div>
                     {this.state.resetPassword
                         ? <div>
-                            <div class="col-md-12" align="center">
+                            <div className="col-md-12" align="center">
                                 <button type="submit"
-                                    class="btn btn-outline-warning"
+                                    className="btn btn-outline-warning"
                                     onClick={this.resetPassword}>
                                     Send password reset
                                 </button>
                             </div>
-                            <div class="col-md-12" align="center">
+                            <div className="col-md-12" align="center">
                                 <button type="button"
                                     class="btn btn-outline-warning"
                                     onClick={this.returnToLogin}>Return</button>
                             </div>
                         </div>
-                        : <div class="row">
+                        : <div className="row">
                             <div class="col-md-12 form-group">
-                                <input type="password" class="form-control"
+                                <input type="password" className="form-control"
                                 name="password" placeholder="Password"
                                 value={this.state.password}
                                 onChange={e => this.setState({password:
@@ -267,19 +267,19 @@ class Login extends Component {
                             </div>
                         </div>
                     }
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div className="row">
+                        <div className="col-md-12">
                             {this.state.resetPassword
                                 ? <p></p>
                                 : <button type="submit"
-                                class="btn btn-outline-warning btn-block"
+                                className="btn btn-outline-warning btn-block"
                                 onClick={this.submit}>Sign in</button>
                             }
                         </div>
                     </div>
                 </form>
-                <div class="row">
-                    <div class="col-md-12" align="center">
+                <div className="row">
+                    <div className="col-md-12" align="center">
                         {this.state.resetPassword
                             ? <p></p>
                             : <button class="btn btn-outline-warning btn-block"
@@ -290,17 +290,17 @@ class Login extends Component {
                 </div>
                 <div className="row">
                 </div>
-                    <div class="col-md-12" align="center">
+                    <div className="col-md-12" align="center">
                         { this.state.resetPassword
                             ? <p></p>
                             : <div>
-                                <div class="col-md-12" align="center">
-                                    <button class="btn btn-warning btn-sm"
+                                <div className="col-md-12" align="center">
+                                    <button className="btn btn-warning btn-sm"
                                     type="button" onClick={this.createProfile}>
                                     Create account
                                     </button>
                                 </div>
-                                <button class="btn btn-link"
+                                <button className="btn btn-link"
                                 onClick={() => {this.setState({resetPassword:
                                      true})}}>Forgot password
                                 </button>
