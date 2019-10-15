@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {firebase, firebaseAuth} from '../Firebase';
 import '../App.css';
 import Navbar from './elements/Navbar';
+import loginLogo from './elements/loginlogo.svg'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -183,10 +184,10 @@ class Login extends Component {
         //user not signed in, prompt login
         return (
             <div className="login-container">
-                <div className="panel-heading">
-                <h2 className="panel-title">
-                    LOGIN
-                </h2>
+                <div className="row">
+                <div className="col-md-12" align="center">
+                <img width="200" height="200" src={loginLogo}/>
+                </div>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
                     <div className="row">
