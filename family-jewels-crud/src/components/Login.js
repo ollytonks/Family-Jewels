@@ -66,7 +66,7 @@ class Login extends Component {
     //sign in with email and password
     loginEmailPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
         else {
@@ -100,7 +100,7 @@ class Login extends Component {
     //reset user password
     resetPassword = (e) => {
         //ensure email entered
-        if(this.state.email == null || this.state.email == "") {
+        if(this.state.email === null || this.state.email === "") {
             alert("Email must be provided")
         }
         else {
@@ -143,7 +143,7 @@ class Login extends Component {
         console.log(this.state.isAuth);
         /*prevent elements rendering until authentication variables have
           finished initialising*/
-        if(this.state.isAuth == false){
+        if(this.state.isAuth === false){
             console.log("not finished initialising");
             return(<div></div>)
         }
@@ -161,19 +161,19 @@ class Login extends Component {
             return(
                 <div>
                 <Navbar/>
-                <div class="profile-container">
-                    <div class="col-md-12" align="center">
-                    <div class="col">
-                    <h2 class="centre-title">
+                <div className="profile-container">
+                    <div className="col-md-12" align="center">
+                    <div className="col">
+                    <h2 className="centre-title">
                     {'Hello ' + username }
                     </h2>
                     </div>
                     </div>
-                    <div class="col-md-12" align="center">
-                    <button type="submit" class="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
+                    <div className="col-md-12" align="center">
+                    <button type="submit" className="btn btn-outline-warning" onClick={this.logout}>Sign out</button>
                     </div>
-                    <div class="col-md-12" align="center">
-                    <button type="submit" class="btn btn-outline-warning" onClick={this.editProfile}>Edit profile</button>
+                    <div className="col-md-12" align="center">
+                    <button type="submit" className="btn btn-outline-warning" onClick={this.editProfile}>Edit profile</button>
                     </div>
                 </div>
                 </div>
@@ -182,65 +182,65 @@ class Login extends Component {
         console.log(this.state.user);
         //user not signed in, prompt login
         return (
-            <div class="login-container">
-                <div class="panel-heading">
-                <h2 class="panel-title">
+            <div className="login-container">
+                <div className="panel-heading">
+                <h2 className="panel-title">
                     LOGIN
                 </h2>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <input type="email" class="form-control"
+                    <div className="row">
+                        <div className="col-md-12 form-group">
+                            <input type="email" className="form-control"
                             name="username" placeholder="Username" value={this.state.email}
                              onChange={e => this.setState({email: e.target.value})} />
                         </div>
                     </div>
                     {this.state.resetPassword
                     ? <div>
-                        <div class="col-md-12" align="center">
-                            <button type="submit" class="btn btn-outline-warning" onClick={this.resetPassword}>Send password reset</button>
+                        <div className="col-md-12" align="center">
+                            <button type="submit" className="btn btn-outline-warning" onClick={this.resetPassword}>Send password reset</button>
                         </div>
-                        <div class="col-md-12" align="center">
-                            <button type="button" class="btn btn-outline-warning" onClick={this.returnToLogin}>Return</button>
+                        <div className="col-md-12" align="center">
+                            <button type="button" className="btn btn-outline-warning" onClick={this.returnToLogin}>Return</button>
                         </div>
                     </div>
-                    :<div class="row">
-                        <div class="col-md-12 form-group">
-                            <input type="password" class="form-control"
+                    :<div className="row">
+                        <div className="col-md-12 form-group">
+                            <input type="password" className="form-control"
                             name="password" placeholder="Password"
                             value={this.state.password}
                             onChange={e => this.setState({password: e.target.value})} />
                         </div>
                     </div>
                     }
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div className="row">
+                        <div className="col-md-12">
                         {this.state.resetPassword
                         ? <p></p>
-                        : <button type="submit" class="btn btn-outline-warning btn-block" onClick={this.submit}>Sign in</button>
+                        : <button type="submit" className="btn btn-outline-warning btn-block" onClick={this.submit}>Sign in</button>
                         }
                         </div>
                     </div>
                 </form>
-                <div class="row">
-                    <div class="col-md-12" align="center">
+                <div className="row">
+                    <div className="col-md-12" align="center">
                     {this.state.resetPassword
                         ? <p></p>
-                        : <button class="btn btn-outline-warning btn-block" onClick={this.loginWithGoogle}>Sign in with Google</button>
+                        : <button className="btn btn-outline-warning btn-block" onClick={this.loginWithGoogle}>Sign in with Google</button>
                     }
                     </div>
                 </div>
-                <div class="row">
+                <div className="row">
                 </div>
-                    <div class="col-md-12" align="center">
+                    <div className="col-md-12" align="center">
                     { this.state.resetPassword
                     ? <p></p>
                     : <div>
-                        <div class="col-md-12" align="center">
-                            <button class="btn btn-warning btn-sm" type="button" onClick={this.createProfile}>Create account</button>
+                        <div className="col-md-12" align="center">
+                            <button className="btn btn-warning btn-sm" type="button" onClick={this.createProfile}>Create account</button>
                         </div>
-                        <button class="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
+                        <button className="btn btn-link" onClick={() => {this.setState({resetPassword: true})}}>Forgot password</button>
                     </div>
                     }
                     </div>

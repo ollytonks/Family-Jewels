@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Navbar from './elements/Navbar';
 import MapContainer from './elements/MapContainer';
 
@@ -10,7 +10,7 @@ const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpegf, image
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
 function uuidv4(){
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
 }
@@ -201,7 +201,7 @@ class Edit extends Component {
         const { title, description, guardian, nextguardian, date, marker } = this.state;
         if (title.length > 55) {
             window.alert("Title has a 55 character limit. You have " + title.length.toString() + ".");
-        } else if (title && description && guardian && this.state.previews.length != 0) {
+        } else if (title && description && guardian && this.state.previews.length !== 0) {
             const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
             for (var i = 0; i < images.length; i++){
                 if (images[i] instanceof File){
@@ -253,7 +253,7 @@ class Edit extends Component {
 
     render() {
         //user is not logged in
-        if(this.state.user == null && this.state.isAuth){
+        if(this.state.user === null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
@@ -270,62 +270,62 @@ class Edit extends Component {
         }
         document.title = "Edit heirloom";
         const thumbs = this.state.previews.map((file,index) => (
-            <div class="thumb" key={file.name}>
-                <button type="button" class="close" aria-label="Close" onClick={() => this.removePreview(index)}>
+            <div className="thumb" key={file.name}>
+                <button type="button" className="close" aria-label="Close" onClick={() => this.removePreview(index)}>
                         <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="thumb-inner">
-                    <img src={file.preview} class="thumb-img"/>
+                <div className="thumb-inner">
+                    <img alt="Thumb" src={file.preview} className="thumb-img"/>
                 </div>
            </div>
         ));
         return (
-            <div class="create-container-main">
+            <div className="create-container-main">
                 <Navbar/>
-                <div class="create-container">
-                    <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
+                <div className="create-container">
+                    <div className="panel panel-default">
+                    <div className="panel-heading">
+                        <h3 className="panel-title">
                         EDIT HEIRLOOM
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <div className="panel-body">
                         <form onSubmit={this.onSubmit}>
-                        <div class="form-group form-control-text">
-                            <input type="text" class="form-control form-control-text-major" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
-                            <input type="text" class="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin year"/>
+                        <div className="form-group form-control-text">
+                            <input type="text" className="form-control form-control-text-major" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                            <input type="text" className="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin year"/>
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                             <label for="description">Description:</label>
-                            <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
+                            <input type="text" className="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                             <label for="guardian">Guardian:</label>
-                            <input type="text" class="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
+                            <input type="text" className="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                             <label for="nextguardian">Next Guardian:</label>
-                            <input type="text" class="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
+                            <input type="text" className="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                         </div>
                         <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
                             {({getRootProps, getInputProps}) => (
-                                <section class="dropzone">
+                                <section className="dropzone">
                                     <div {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         <p>Drag and drop files here, or click HERE to select files</p>
                                     </div>
-                                    <aside class="thumbs-container">
+                                    <aside className="thumbs-container">
                                         {thumbs}
                                     </aside>
                                 </section>
                             )}
                         </Dropzone>
-                        <div class="divider"/>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
+                        <div className="divider"/>
+                        <div className="progress">
+                            <div className="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
                         </div>
                         <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
-                        <div class="map-container">
+                        <div className="map-container">
                             {<MapContainer
                                 saveMarker={(t, map, c) => {
                                     this.setState({
@@ -334,12 +334,11 @@ class Edit extends Component {
                                 }}>
                             </MapContainer>}
                         </div>
-                        <div class="floating-button-large">
-                            <div class ="floating-button-tile">
-                                <button name="submitButton" type="submit" class="btn btn-outline-warning" disabled={!this.state.imagesLocations.length}>Submit</button>
-                                <a href={`/show/boards/${this.state.key}`} class="btn btn-outline-danger">Cancel</a>
+                            <div class ="floating-button">
+                                <button name="submitButton" type="submit" className="btn btn-outline-warning" disabled={!this.state.imagesLocations.length}>Submit</button>
+                                <div className='divider'></div>
+                                <a href={`/show/boards/${this.state.key}`} className="btn btn-outline-danger">Cancel</a>
                             </div>
-                        </div>
                         </form>
                     </div>
                     </div>

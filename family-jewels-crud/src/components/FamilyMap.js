@@ -1,4 +1,18 @@
-import React, { Component } from 'react';
+/**
+ * Copyright (c) 2019
+ *
+ * Displays a page with a map, on which is loaded clickable markers of all
+ * heirlooms with locations attached. Clicking on the markers reveals more
+ * information.
+ *
+ * @summary Displays a map of heirlooms
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-10-02
+ * Last modified  : 2019-10-15
+ */
+
+ import React, { Component } from 'react';
 import './FamilyMap.css';
 import './../App.css';
 import {firebase, firebaseAuth} from './../Firebase';
@@ -61,11 +75,14 @@ class FamilyMap extends Component {
         }
     }
 
+    /**
+     * On componenet mount, load locations from props and authentication info
+     */
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
         var locstate = this.props.location.payload;
         if (locstate !== undefined) {
-            if (locstate.searching == true) {
+            if (locstate.searching === true) {
                 this.setState({
                     searching: true
                 })
@@ -84,13 +101,9 @@ class FamilyMap extends Component {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
-    componentDidUpdate() {
-        this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
-        if (this.state.searching) {
-            this.nameInput.focus();
-        }
-    }
-
+    /**
+     * Search on change
+     */
     handleChange(e){
         {
             console.log(e.target.value);
@@ -102,6 +115,9 @@ class FamilyMap extends Component {
         }
     }
 
+    /**
+     * Load info on marker click to display
+     */
     onMarkerClick = (props, marker, e) =>
         this.setState({
             selectedPlace: props,
@@ -109,6 +125,9 @@ class FamilyMap extends Component {
             showingInfoWindow: true
     });
 
+    /**
+     * Don't show info window on close
+     */
     onClose = () => {
         if (this.state.showingInfoWindow) {
         this.setState({
@@ -119,18 +138,19 @@ class FamilyMap extends Component {
 
     render() {
 
-        //user is not logged in
+        // User is not logged in
         if(this.state.user == null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
-        document.title = "Family map";
+        document.title = "Map";
 
         let map;
         let markers = [];
         let infowds = [];
 
+        // Load seach items
         let tempList = [];
         let filter = this.state.searchKey;
         if (filter !== "") {
@@ -175,7 +195,7 @@ class FamilyMap extends Component {
                         onClose={this.onClose}
                     >
                         <div>
-                            <a class="map-info">{this.state.selectedPlace.title} : {this.state.selectedPlace.name}</a>
+                            <a className="map-info">{this.state.selectedPlace.title} : {this.state.selectedPlace.name}</a>
                         </div>
                     </InfoWindow>
                 )
@@ -199,46 +219,46 @@ class FamilyMap extends Component {
         this.isArchiveBackground = this.state.switch;
 
         return (
-        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
-            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link" ><a href="/"> <img width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
-                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
-                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
-                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
+        <div className={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
+            <nav className="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+            <div className="collapse navbar-collapse">
+                <ul className="nav navbar-nav">
+                    <li className="navbar-brand nav-item nav-link" ><a href="/"> <img alt="Home icon" width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
+                    <li className="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
+                    <li className="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
+                    <li className="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                 </ul>
-                <ul class="nav navbar-nav ml-auto">
-                    <li class={this.state.searching ? '' : 'collapse'}>
+                <ul className="nav navbar-nav ml-auto">
+                    <li className={this.state.searching ? '' : 'collapse'}>
                         <input
                             type="text"
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row"
+                            className="form-row"
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
-                    <li className={this.state.searching ? 'collapse' : ''} class="navbar-brand nav-item nav-link">
+                    <li className={this.state.searching ? 'collapse' : ''} className="navbar-brand nav-item nav-link">
                         <div onClick={() => {
                                 this.setState({searching: true});
                         }}><i className="fa fa-search"/></div>
                     </li>
-                    <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
+                    <li className="bigdivider"></li>
+                    <li className="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
 
         </nav>
-        <nav class="navbar navbar-default navbar-expand d-lg-none">
-                <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/></a></li>
-                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
-                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
-                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
+        <nav className="navbar navbar-default navbar-expand d-lg-none">
+                <ul className="nav navbar-nav">
+                    <li className="navbar-brand nav-item nav-link"><a href="/"><img alt="Home icon" width="16" height="16" src={homeIcon}/></a></li>
+                    <li className="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
+                    <li className="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
+                    <li className="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
                 </ul>
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
+                <ul className="nav navbar-nav ml-auto">
+                    <li className="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
                 </ul>
                 <input
                     type="text"
@@ -247,23 +267,23 @@ class FamilyMap extends Component {
                     placeholder="Search..."
                 />
         </nav>
-            <div class="container">
-                <div class="panel">
-                <div class="panel-body">
+            <div className="container">
+                <div className="panel">
+                <div className="panel-body">
                     <div>
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col">
-                            <h2 class="centre-title">
+                    <div className="row">
+                        <div className="col"></div>
+                        <div className="col">
+                            <h2 className="centre-title">
                             FAMILY MAP
                             </h2>
                         </div>
-                        <div class="col">
+                        <div className="col">
                         </div>
                     </div>
                 </div>
 
-                <div class="map-container">
+                <div className="map-container">
                     {map}
                 </div>
                 </div>

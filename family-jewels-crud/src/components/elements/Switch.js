@@ -1,10 +1,19 @@
-import React from 'react';
-import './Switch.css';
+/**
+ * Copyright (c) 2019
+ *
+ * Loads a pluggable toggle-switch with functions that can be used on any page
+ * but must be handled in parent component. IsOn checks its state, handled
+ * in parent, and handleToggle is a lambda function in parent.
+ *
+ * @summary Displays a timeline of heirlooms
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-10-02
+ * Last modified  : 2019-10-15
+ */
 
-/* This is a simple class for a switch which can be used on any page
-  It uses isOn to check its state, handled in the parent component.
-  handleToggle is a lambda function in parent component.
-  */
+ import React from 'react';
+import './Switch.css';
 
 const Switch = ( {isOn, handleToggle, isArchiveBackground} ) => {
 

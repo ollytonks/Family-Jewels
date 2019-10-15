@@ -1,8 +1,19 @@
-import React, { Component } from 'react';
+/**
+ * Copyright (c) 2019
+ *
+ * Displays a timeline of heirlooms with date information
+ *
+ * @summary Displays a timeline of heirlooms
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-10-02
+ * Last modified  : 2019-10-15
+ */
+
+ import React, { Component } from 'react';
 import './Timeline.css';
 import './../App.css';
 import {firebase, firebaseAuth} from './../Firebase';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import homeIcon from './elements/familyjewelsgem.svg'
 import { Redirect } from 'react-router-dom';
 
@@ -69,17 +80,19 @@ class Timeline extends Component {
         }
     }
 
+    /**
+     * On componenet mount, load locations from props and authentication info
+     */
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
         var locstate = this.props.location.payload;
         if (locstate !== undefined) {
-            if (locstate.searching == true) {
+            if (locstate.searching === true) {
                 this.setState({
                     searching: true
                 })
             }
         }
-        //authentication
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
             this.setState({ isAuth: true });
@@ -92,13 +105,9 @@ class Timeline extends Component {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
-    componentDidUpdate() {
-        this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
-        if (this.state.searching) {
-            this.nameInput.focus();
-        }
-    }
-
+    /**
+     * On change in searchbar, filter heirlooms
+     */
     handleChange(e){
         {
             console.log(e.target.value);
@@ -112,18 +121,15 @@ class Timeline extends Component {
 
     render() {
         //user is not logged in
-        if(this.state.user == null && this.state.isAuth){
+        if(this.state.user === null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
 
-        document.title = "Family map";
+        document.title = "Timeline";
 
-        let map;
-        let markers = [];
-        let infowds = [];
-
+        // Filter items on searchbar input
         let tempList = [];
         let filter = this.state.searchKey;
         if (filter !== "") {
@@ -152,46 +158,46 @@ class Timeline extends Component {
         this.isArchiveBackground = this.state.switch;
 
         return (
-        <div class={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
-            <nav class="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link" ><a href="/"> <img width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
-                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
-                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
-                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
+        <div className={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
+            <nav className="navbar navbar-default navbar-expand-lg d-none d-lg-block">
+            <div className="collapse navbar-collapse">
+                <ul className="nav navbar-nav">
+                    <li className="navbar-brand nav-item nav-link" ><a href="/"> <img alt="Home icon" width="25" height="25" src={homeIcon}/> Family Jewels</a></li>
+                    <li className="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/> Heirloom</a></li>
+                    <li className="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/> Our map</a></li>
+                    <li className="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/> Our history</a></li>
                 </ul>
-                <ul class="nav navbar-nav ml-auto">
-                    <li class={this.state.searching ? '' : 'collapse'}>
+                <ul className="nav navbar-nav ml-auto">
+                    <li className={this.state.searching ? '' : 'collapse'}>
                         <input
                             type="text"
                             className="input"
                             onChange={this.handleChange}
                             placeholder="Search..."
-                            class="form-row"
+                            className="form-row"
                             ref={(input) => { this.nameInput = input; }}
                         />
                     </li>
-                    <li className={this.state.searching ? 'collapse' : ''} class="navbar-brand nav-item nav-link">
+                    <li className={this.state.searching ? 'collapse' : ''} className="navbar-brand nav-item nav-link">
                         <div onClick={() => {
                                 this.setState({searching: true});
                         }}><i className="fa fa-search"/></div>
                     </li>
-                    <li class="bigdivider"></li>
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
+                    <li className="bigdivider"></li>
+                    <li className="nav-item nav-link"><a href="/login"><i className="fa fa-user"/> Account</a></li>
                 </ul>
             </div>
 
         </nav>
-        <nav class="navbar navbar-default navbar-expand d-lg-none">
-                <ul class="nav navbar-nav">
-                    <li class="navbar-brand nav-item nav-link"><a href="/"><img width="16" height="16" src={homeIcon}/></a></li>
-                    <li class="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
-                    <li class="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
-                    <li class="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
+        <nav className="navbar navbar-default navbar-expand d-lg-none">
+                <ul className="nav navbar-nav">
+                    <li className="navbar-brand nav-item nav-link"><a href="/"><img alt="Home icon" width="16" height="16" src={homeIcon}/></a></li>
+                    <li className="nav-item nav-link"><a href="/create"><i className="fa fa-plus-square"/></a></li>
+                    <li className="nav-item nav-link"><a href="/map"><i className="fa fa-globe"/></a></li>
+                    <li className="nav-item nav-link"><a href="/timeline"><i className="fa fa-calendar"/></a></li>
                 </ul>
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
+                <ul className="nav navbar-nav ml-auto">
+                    <li className="nav-item nav-link"><a href="/login"><i className="fa fa-user"/></a></li>
                 </ul>
                 <input
                     type="text"
@@ -200,36 +206,36 @@ class Timeline extends Component {
                     placeholder="Search..."
                 />
         </nav>
-            <div class="container">
-                <div class="panel">
-                <div class="panel-body">
+            <div className="container">
+                <div className="panel">
+                <div className="panel-body">
 
                     <div>
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col">
-                            <h2 class="centre-title">
-                            {'TIMELINE'}
+                    <div className="row">
+                        <div className="col"></div>
+                        <div className="col">
+                            <h2 className="centre-title">
+                            {'FAMILY TIMELINE'}
                             </h2>
                         </div>
-                        <div class="col">
+                        <div className="col">
                         </div>
                     </div>
                 </div>
-                <div class="container mt-5 mb-5">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="timeline">
+                <div className="container mt-5 mb-5">
+                <div className="row">
+                    <div className="col-md-12">
+                        <ul className="timeline">
                         {resultList.map(heirloom =>
                                 <li> <a href={`/show/boards/`+ heirloom.key}>
-                                    <div class="header"><a target="_blank">{heirloom.date}: {heirloom.title}</a></div>
-                                    <div class="timeline-row">
-                                        <div class="left-image">
-                                            <div class="imgbox">
-                                                <img class="tileimg" src={heirloom.icon}></img>
+                                    <div className="header"><a target="_blank">{heirloom.date}: {heirloom.title}</a></div>
+                                    <div className="timeline-row">
+                                        <div className="left-image">
+                                            <div className="imgbox">
+                                                <img alt="Tile" className="tileimg" src={heirloom.icon}></img>
                                             </div>
                                         </div>
-                                        <div class="right-text">
+                                        <div className="right-text">
                                             <p>{heirloom.description}</p>
                                         </div>
                                     </div>

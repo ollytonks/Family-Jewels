@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Map, GoogleApiWrapper} from 'google-maps-react';
 import './Map.css';
-import axios from 'axios';
 
 
 export class MapContainer extends Component {
@@ -62,7 +61,7 @@ export class MapContainer extends Component {
 
   render() {
     return (
-      <div class="map-box">
+      <div className="map-box">
         <Map google={this.props.google}
           initialCenter={{
               lat: -37.794921,
