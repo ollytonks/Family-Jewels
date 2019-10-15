@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2019
+ *
+ * File handles management of user display information.
+ *
+ * @summary Manages user display information
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-09-28
+ * Last modified  : 2019-10-15
+ */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
@@ -6,8 +17,11 @@ import { thisTypeAnnotation } from '@babel/types';
 import withFirebaseAuth from 'react-with-firebase-auth'
 import firebaseApp from '../Firebase';
 
+/* EditProfile component to manage user display information */
 class EditProfile extends Component {
 
+    /** React function to initialise EditProfile component and its state
+    **/
     constructor() {
         super();
         this.state = {
@@ -17,6 +31,9 @@ class EditProfile extends Component {
         }
     }
 
+    /** React function called when components have been mounted
+     *  Loads authentication information from firebase
+    **/
     componentDidMount() {
         //check if still signed in
         firebaseAuth.onAuthStateChanged(user => {
@@ -27,19 +44,26 @@ class EditProfile extends Component {
 
     }
 
-    //update user's display name
+    /** Update user's display name through firebase
+    **/
     updateProfile = (e) => {
+        //ensure user has entered a name
         if(this.state.displayName == null || this.state.displayName == ""){
             alert("No name entered")
         }
+        //update display name
         else {
             this.state.user.updateProfile( {
                 displayName: this.state.displayName
             });
+            //redirect to app
             this.props.history.push("/");
         }
     }
 
+    /** React's render function which renders the EditProfile component to the UI
+        @return HTML to be rendered
+    **/
     render() {
         //check if user is signed in
         console.log(this.state.user);

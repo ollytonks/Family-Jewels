@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2019
+ *
+ * File creates a user profile through firebase.
+ *
+ * @summary Creates user profile
+ * @author FamilyJewels
+ *
+ * Created at     : 2019-09-30
+ * Last modified  : 2019-10-15
+ */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
@@ -6,9 +17,11 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import firebaseApp from '../Firebase';
 import '../App.css';
 
+/* Create User component to handle user profile creation */
 class CreateUser extends Component {
 
-
+    /** React function to initialise CreateUser component and its state
+    **/
     constructor() {
         super();
         this.state = {
@@ -18,9 +31,8 @@ class CreateUser extends Component {
         this.returnToLogin = this.returnToLogin.bind(this);
     }
 
-    componentDidMount() {
-    }
-
+    /** Creates a user profile through firebase
+    **/
     createUser = (e) => {
         //ensure email entered
         if(this.state.email == null || this.state.email == "") {
@@ -45,25 +57,30 @@ class CreateUser extends Component {
         }
     }
 
-    //rederict to Login page from create user
+    //rederict to Login page
     returnToLogin() {
         this.props.history.push("/Login");
     }
 
+    /** React's render function which renders the CreateUser component to the UI
+        @return HTML to be rendered
+    **/
     render() {
         return (
             <div class="login-container">
                 <div class="panel-heading">
-                <h2 class="panel-title">
-                    Create Account
-                </h2>
+                    <h2 class="panel-title">
+                        Create Account
+                    </h2>
                 </div>
                 <form onSubmit={this.createUser}>
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <input type="email" class="form-control"
-                            name="email" placeholder="Email" value={this.state.email}
-                             onChange={e => this.setState({email: e.target.value})} />
+                            name="email" placeholder="Email"
+                            value={this.state.email}
+                             onChange={e => this.setState({email:
+                                 e.target.value})} />
                         </div>
                     </div>
                     <div class="row">
@@ -71,12 +88,16 @@ class CreateUser extends Component {
                             <input type="password" class="form-control"
                             name="password" placeholder="Password"
                             value={this.state.password}
-                            onChange={e => this.setState({password: e.target.value})} />
+                            onChange={e => this.setState({password:
+                                 e.target.value})} />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                         <button type="submit" class="btn btn-outline-warning btn-block" onClick={this.submit}>Create Account</button>
+                         <button type="submit"
+                         class="btn btn-outline-warning btn-block"
+                         onClick={this.submit}>Create Account
+                         </button>
                         </div>
                     </div>
                 </form>
