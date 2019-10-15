@@ -176,7 +176,7 @@ class Show extends Component {
             <Navbar/>
             <div class="container show-container">
                 <h3 class="panel-title">
-                    {this.state.heirlooms.title} {this.state.heirlooms.date !== undefined ? (": " + this.state.heirlooms.date) : ""}
+                    {this.state.heirlooms.title} {this.state.heirlooms.date !== undefined ? ("- " + this.state.heirlooms.date) : ""}
                 </h3>
                 <div class="show-grid">
                     <div class="show-description">

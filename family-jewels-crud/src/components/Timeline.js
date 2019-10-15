@@ -218,7 +218,7 @@ class Timeline extends Component {
                 </div>
                 <div class="container mt-5 mb-5">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <ul class="timeline">
                         {resultList.map(heirloom =>
                                 <li> <a href={`/show/boards/`+ heirloom.key}>

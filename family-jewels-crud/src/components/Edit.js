@@ -293,7 +293,7 @@ class Edit extends Component {
                         <form onSubmit={this.onSubmit}>
                         <div class="form-group form-control-text">
                             <input type="text" class="form-control form-control-text-major" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
-                            <input type="text" class="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin date"/>
+                            <input type="text" class="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin year"/>
                         </div>
                         <div class="form-group">
                             <label for="description">Description:</label>

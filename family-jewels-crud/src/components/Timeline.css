@@ -2,7 +2,6 @@ ul.timeline {
     list-style-type: none;
     position: relative;
     padding-left: 50px;
-    width: 80vw;
 }
 
 ul.timeline:before {

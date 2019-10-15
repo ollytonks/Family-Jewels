@@ -250,13 +250,12 @@ class FamilyMap extends Component {
             <div class="container">
                 <div class="panel">
                 <div class="panel-body">
-
                     <div>
                     <div class="row">
                         <div class="col"></div>
                         <div class="col">
                             <h2 class="centre-title">
-                            {'HEIRLOOMS'}
+                            FAMILY MAP
                             </h2>
                         </div>
                         <div class="col">
@@ -276,8 +275,8 @@ class FamilyMap extends Component {
 }
 
 const style = {
-    width: '80vw',
-    height: '80vh',
+    width: 'auto',
+    height: '100%',
 }
 
 export default GoogleApiWrapper({

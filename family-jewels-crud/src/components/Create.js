@@ -311,7 +311,7 @@ class Create extends Component {
                 <form onSubmit={this.onSubmit}>
                 <div class="form-group form-control-text">
                     <input type="text" class="form-control form-control-text-major" name="title" value={title} onChange={this.onChange} placeholder="Title*"/>
-                    <input type="text" class="form-control form-control-text-minor" name="date" value={date} onChange={this.onChange} placeholder="Origin date"/>
+                    <input type="text" class="form-control form-control-text-minor" name="date" value={date} onChange={this.onChange} placeholder="Origin year"/>
                 </div>
                 <div class="form-group">
                     <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
