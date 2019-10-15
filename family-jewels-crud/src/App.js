@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import './App.css';
 import {firebase, firebaseAuth} from './Firebase';
 import Switch from './components/elements/Switch';
@@ -78,7 +78,7 @@ class App extends Component {
 
         var locstate = this.props.location.payload;
         if (locstate !== undefined) {
-            if (locstate.searching == true) {
+            if (locstate.searching === true) {
                 this.setState({
                     searching: true
                 })

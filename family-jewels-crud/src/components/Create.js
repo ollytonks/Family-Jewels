@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
 import { Link, Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone'
@@ -370,17 +369,18 @@ class Create extends Component {
     }
 }
 
-/*                             const lat = event.latLng.lat();
-                            const lng = event.latLng.lng();
-                            let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs`
-                            axios.get(url).then(response => {
-                                this.setState({
-                                googleReverseGeolocation: response.data.results[0].formatted_address,
-                                marker: {position:{lat:event.latLng.lat(),lng:event.latLng.lng()}},
-                                });
-                            this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
-                            console.log(this.state);
-                            });*/
+/* const lat = event.latLng.lat();
+   const lng = event.latLng.lng();
+    let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNows5nkmeLel6-_ecsqGzlK1E2xqr4bs`
+    axios.get(url).then(response => {
+        this.setState({
+            googleReverseGeolocation: response.data.results[0].formatted_address,
+            marker: {position:{lat:event.latLng.lat(),lng:event.latLng.lng()}},
+        });
+    this.props.onMapClickChange(lat, lng, response.data.results[0].formatted_address);
+    console.log(this.state);
+    });
+*/
 
 const style = {
     width: '80%',

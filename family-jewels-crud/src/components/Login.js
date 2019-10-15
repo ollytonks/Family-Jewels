@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {firebase, firebaseAuth} from '../Firebase';
-import { Redirect } from 'react-router-dom';
-import withFirebaseAuth from 'react-with-firebase-auth'
-import firebaseApp from '../Firebase';
 import '../App.css';
 import Navbar from './elements/Navbar';
 
