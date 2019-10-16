@@ -71,8 +71,6 @@ class App extends Component {
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
             this.setState({ isAuth: true });
-            console.log("Auth state changed");
-            console.log(this.state.user);
         });
 
         var locstate = this.props.location.payload;
@@ -169,12 +167,9 @@ class App extends Component {
 
         //user not authenticated, redirect to login page
         if(this.state.user == null && this.state.isAuth){
-            console.log("not authenticated");
-            console.log(firebase.auth().currentUser);
             this.props.history.push("/Login");
             return <Redirect to= '/login'/>
         }
-        console.log("authenticated");
         return (
         <div className={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav className="navbar navbar-default navbar-expand-lg d-none d-lg-block">

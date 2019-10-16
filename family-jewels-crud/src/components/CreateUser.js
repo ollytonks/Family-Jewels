@@ -41,7 +41,6 @@ class CreateUser extends Component {
         //create user on firebase
         else {
             e.preventDefault();
-            console.log("created new account" + this.state.email);
             firebase
             .auth()
             .createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
