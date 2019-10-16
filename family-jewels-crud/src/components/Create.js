@@ -365,7 +365,7 @@ class Create extends Component {
                         placeholder="Origin year"/>
                 </div>
                 <div className="form-group">
-                    <textarea className="form-control" name="description"
+                    <textarea value={this.state.description} className="form-control" name="description"
                         onChange={this.onChange} placeholder="Description*"
                         cols="80" rows="3">{description}</textarea>
                 </div>
