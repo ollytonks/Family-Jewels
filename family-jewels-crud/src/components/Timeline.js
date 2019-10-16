@@ -232,8 +232,8 @@ class Timeline extends Component {
                     <div className="col-md-12">
                         <ul className="timeline">
                         {resultList.map(heirloom =>
-                                <li> <a href={`/show/boards/`+ heirloom.key}>
-                                    <div className="header"><a target="_blank">{heirloom.date}: {heirloom.title}</a></div>
+                                <li key={heirloom.key}> <a href={`/show/boards/`+ heirloom.key}>
+                                    <div className="header"><div target="_blank">{heirloom.date}: {heirloom.title}</div></div>
                                     <div className="timeline-row">
                                         <div className="left-image">
                                             <div className="imgbox">
@@ -245,7 +245,7 @@ class Timeline extends Component {
                                         </div>
                                     </div>
 
-                                    </a></li>
+                                </a></li>
                         )}
                         </ul>
                     </div>

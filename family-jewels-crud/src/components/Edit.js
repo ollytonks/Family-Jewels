@@ -376,7 +376,7 @@ class Edit extends Component {
          remove button that calls remove preview */
         const thumbs = this.state.previews.map((file,index) => (
             <div className="thumb" key={file.name}>
-                <button type="button" class="close" aria-label="Close" 
+                <button type="button" className="close" aria-label="Close" 
                     onClick={() => this.removePreview(index)}>
                         <span aria-hidden="true">&times;</span>
                 </button>
@@ -404,15 +404,15 @@ class Edit extends Component {
                             <input type="text" className="form-control form-control-text-minor" name="date" value={this.state.date} onChange={this.onChange} placeholder="Origin year"/>
                         </div>
                         <div className="form-group">
-                            <label for="description">Description:</label>
+                            <label htmlfor="description">Description:</label>
                             <input type="text" className="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
                         </div>
                         <div className="form-group">
-                            <label for="guardian">Guardian:</label>
+                            <label htmlfor="guardian">Guardian:</label>
                             <input type="text" className="form-control" name="guardian" value={this.state.guardian} onChange={this.onChange} placeholder="Guardian" />
                         </div>
                         <div className="form-group">
-                            <label for="nextguardian">Next Guardian:</label>
+                            <label htmlfor="nextguardian">Next Guardian:</label>
                             <input type="text" className="form-control" name="nextguardian" value={this.state.nextguardian} onChange={this.onChange} placeholder="Next guardian" />
                         </div>
                         <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} accept={acceptedFileTypes}>
@@ -442,7 +442,7 @@ class Edit extends Component {
                                 }}>
                             </MapContainer>}
                         </div>
-                            <div class ="floating-button">
+                            <div className ="floating-button">
                                 <button name="submitButton" type="submit" className="btn btn-outline-warning" disabled={!this.state.imagesLocations.length}>Submit</button>
                                 <div className='divider'></div>
                                 <a href={`/show/boards/${this.state.key}`} className="btn btn-outline-danger">Cancel</a>
