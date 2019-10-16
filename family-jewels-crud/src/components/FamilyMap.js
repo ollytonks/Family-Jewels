@@ -190,6 +190,7 @@ class FamilyMap extends Component {
             )
                 infowds.push(
                     <InfoWindow
+                        key={[i]}
                         marker={this.state.activeMarker}
                         visible={this.state.showingInfoWindow}
                         onClose={this.onClose}

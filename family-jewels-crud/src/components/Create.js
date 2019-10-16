@@ -333,7 +333,7 @@ class Create extends Component {
                 <br></br>
                 <a>Click a location relevant to the item</a>
                 <br></br>
-                <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + '°, ' + this.state.marker[1] + '°' : 'Nothing selected'}</a>
                 <div/>
                 <div className="map-container">
                     {<MapContainer
