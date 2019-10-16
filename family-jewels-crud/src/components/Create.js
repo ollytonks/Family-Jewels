@@ -246,7 +246,7 @@ class Create extends Component {
 
             // make sure has all required fields, otherwise alert
             if (title && description && guardian && this.state.previews.length 
-                != 0) {
+                !== 0) {
                 
                 /* perform individual upload on each image, keeping track of 
                  all locations and ID's */
@@ -331,11 +331,11 @@ class Create extends Component {
         ));
 
         // check authentication
-        if(this.state.isAuth == false){
+        if(this.state.isAuth === false){
             return (<div></div>);
         }
         // user is not logged in
-        if(this.state.user == null && this.state.isAuth){
+        if(this.state.user === null && this.state.isAuth){
             console.log(" not authenticated");
             console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
