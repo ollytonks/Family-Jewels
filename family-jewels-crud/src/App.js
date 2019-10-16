@@ -39,7 +39,7 @@ class App extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian, 
+            const { title, description, guardian, nextguardian,
                 imagesLocations, date} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0])
                 .getDownloadURL().then(url => {
@@ -71,8 +71,6 @@ class App extends Component {
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
             this.setState({ isAuth: true });
-            console.log("Auth state changed");
-            console.log(this.state.user);
         });
 
         var locstate = this.props.location.payload;
@@ -135,6 +133,11 @@ class App extends Component {
          * changing filters (in which the Search filter is required) or
          * navigating to another page (in which the filters are irrelevant).
          */
+         /*prevent elements rendering until authentication variables have
+           finished initialising*/
+         if(this.state.isAuth === false){
+             return(<div></div>)
+         }
         document.title = "Home";
         let tempList = [];
         if (this.state.searchKey !== "") {
@@ -143,7 +146,7 @@ class App extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + 
+                let lc = "" + item.title + ":" + item.description + ":" +
                     item.guardian + ":" + item.nextguardian + ":" + item.date;
                 lc = lc.toLowerCase();
                 if (lc !== null) {
@@ -164,12 +167,9 @@ class App extends Component {
 
         //user not authenticated, redirect to login page
         if(this.state.user == null && this.state.isAuth){
-            console.log("not authenticated");
-            console.log(firebase.auth().currentUser);
             this.props.history.push("/Login");
             return <Redirect to= '/login'/>
         }
-        console.log("authenticated");
         return (
         <div className={this.isArchiveBackground ? "mainbodyArchive" : "mainbodyClassic"}>
             <nav className="navbar navbar-default navbar-expand-lg d-none d-lg-block">
@@ -243,17 +243,17 @@ class App extends Component {
                     <div className="grid">
                         {resultList.map(heirloom =>
                             <div className={this.isArchiveBackground ? "tileArchive" : "tile"} key={heirloom.key} >
-                                <b href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
                                 <div className="tiletitle">
-                                    <a className={this.isArchiveBackground ? "subArchive" : "sub"}>
+                                    <div className={this.isArchiveBackground ? "subArchive" : "sub"}>
                                         <b>{heirloom.title}</b>
                                         <br></br>
-                                    </a>
+                                    </div>
                                 </div>
                                 <div className="imgbox">
                                     <img className="tileimg" src={heirloom.icon}></img>
                                 </div>
-                                </b>
+                                </a>
                             </div>
                         )}
                     </div>

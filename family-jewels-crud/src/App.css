@@ -104,7 +104,7 @@ div.mainbodyArchive
 .login-container{
     width:40%;
     max-width:100%;
-    margin:10% auto;
+    margin:5% auto;
 }
 .login-container h2{
     text-align:center;
@@ -228,6 +228,7 @@ h2.panel-title {
     text-decoration-color: initial;
 
 
+
 }
 
 .tiletitle {
@@ -251,8 +252,7 @@ h2.panel-title {
     text-decoration-line: none;
     text-decoration-style: initial;
     text-decoration-color: initial;
-    width: 200px;
-    height: 200px;
+    
 }
 
 .imgbox {
@@ -280,31 +280,31 @@ h2.panel-title {
     /*text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/
 }
 
-.grid a.sub {
+.grid div.sub {
     color: #FEBD59;
 }
 
-.grid a.sub:visited {
+.grid div.sub:visited {
     color: #ffd38f;
 }
 
-.grid a.sub:hover {
+.grid div.sub:hover {
     color: #FEBD59;
 }
 
-.grid a.subArchive {
+.grid div.subArchive {
     color: rgb(47, 40, 58);
 }
 
-.grid a.subArchive:visited {
+.grid div.subArchive:visited {
     color: rgb(47, 40, 58);
 }
 
-.grid a.subArchive:hover {
+.grid div.subArchive:hover {
     color: rgb(47, 40, 58);
 }
 
-.grid a.plain {
+.grid div.plain {
     font-family: 'Roboto', serif;
     font-weight: 500;
     font-size: 15px;
@@ -314,7 +314,7 @@ h2.panel-title {
     color: #fff;
 }
 
-.grid a.plain:hover {
+.grid div.plain:hover {
     color: #fff;
 }
 

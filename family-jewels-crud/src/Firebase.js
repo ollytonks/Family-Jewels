@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-
 import "firebase/auth";
 
 const config = {
@@ -13,10 +12,9 @@ const config = {
 };
 
 const firebaseApp = firebase.initializeApp(config);
-//for authentication
+
+//handles authentication
 const firebaseAuth = firebaseApp.auth();
 
 
-//changed for authentication
 export { firebase, firebaseAuth };
-//export default firebase;

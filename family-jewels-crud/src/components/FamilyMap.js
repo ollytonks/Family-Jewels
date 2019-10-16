@@ -181,13 +181,13 @@ class FamilyMap extends Component {
             if (resultList[i].marker) {
                 markers.push(
                     <Marker
-                    key={[i]}
-                title={resultList[i].guardian}
-                name={resultList[i].title}
-                position={{lat: resultList[i].marker[0], lng: resultList[i].marker[1]}}
-                onClick={this.onMarkerClick}
-            />
-            )
+                        key={[i]}
+                        title={resultList[i].guardian}
+                        name={resultList[i].title}
+                        position={{lat: resultList[i].marker[0], lng: resultList[i].marker[1]}}
+                        onClick={this.onMarkerClick}
+                    />
+                )
                 infowds.push(
                     <InfoWindow
                         key={[i]}

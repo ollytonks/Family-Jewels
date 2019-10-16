@@ -120,6 +120,11 @@ class Timeline extends Component {
     }
 
     render() {
+        /*prevent elements rendering until authentication variables have
+          finished initialising*/
+        if(this.state.isAuth === false){
+            return(<div></div>)
+        }
         //user is not logged in
         if(this.state.user === null && this.state.isAuth){
             console.log(" not authenticated");
@@ -227,8 +232,8 @@ class Timeline extends Component {
                     <div className="col-md-12">
                         <ul className="timeline">
                         {resultList.map(heirloom =>
-                                <li> <a href={`/show/boards/`+ heirloom.key}>
-                                    <div className="header"><a target="_blank">{heirloom.date}: {heirloom.title}</a></div>
+                                <li key={heirloom.key}> <a href={`/show/boards/`+ heirloom.key}>
+                                    <div className="header"><div target="_blank">{heirloom.date}: {heirloom.title}</div></div>
                                     <div className="timeline-row">
                                         <div className="left-image">
                                             <div className="imgbox">
@@ -240,7 +245,7 @@ class Timeline extends Component {
                                         </div>
                                     </div>
 
-                                    </a></li>
+                                </a></li>
                         )}
                         </ul>
                     </div>
