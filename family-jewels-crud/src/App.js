@@ -245,10 +245,10 @@ class App extends Component {
                             <div className={this.isArchiveBackground ? "tileArchive" : "tile"} key={heirloom.key} >
                                 <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
                                 <div className="tiletitle">
-                                    <a className={this.isArchiveBackground ? "subArchive" : "sub"}>
+                                    <div className={this.isArchiveBackground ? "subArchive" : "sub"}>
                                         <b>{heirloom.title}</b>
                                         <br></br>
-                                    </a>
+                                    </div>
                                 </div>
                                 <div className="imgbox">
                                     <img className="tileimg" src={heirloom.icon}></img>
