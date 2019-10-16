@@ -69,32 +69,17 @@ class Show extends Component {
             } else {
                 console.log("No such document!");
             }
+            if (this.state.target === 'boards') {
+                this.setState({
+                    archive_text: 'Archive'
+                })
+            } else {
+                this.setState({
+                    archive_text: 'Restore'
+                })
+            }
         });
-        if (this.state.target === 'boards') {
-            this.setState({
-                archive_text: 'Archive'
-            })
-        } else {
-            this.setState({
-                archive_text: 'Restore'
-            })
-        }
-    }
-
-    /**
-     * On update checks where the item is stored, so buttons can be named
-     * dynamically.
-     */
-    componentDidUpdate() {
-        if (this.state.target === 'boards') {
-            this.setState({
-                archive_text: 'Archive'
-            })
-        } else {
-            this.setState({
-                archive_text: 'Restore'
-            })
-        }
+       
     }
 
     /* If current, archives. If archived, unarchives. */

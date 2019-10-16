@@ -243,7 +243,7 @@ class App extends Component {
                     <div className="grid">
                         {resultList.map(heirloom =>
                             <div className={this.isArchiveBackground ? "tileArchive" : "tile"} key={heirloom.key} >
-                                <b href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
+                                <a href={`/show/${this.state.switch ? 'archived_boards' : 'boards'}/${heirloom.key}`}>
                                 <div className="tiletitle">
                                     <a className={this.isArchiveBackground ? "subArchive" : "sub"}>
                                         <b>{heirloom.title}</b>
@@ -253,7 +253,7 @@ class App extends Component {
                                 <div className="imgbox">
                                     <img className="tileimg" src={heirloom.icon}></img>
                                 </div>
-                                </b>
+                                </a>
                             </div>
                         )}
                     </div>
