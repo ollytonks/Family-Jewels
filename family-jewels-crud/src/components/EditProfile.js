@@ -12,6 +12,8 @@
 import React, { Component } from 'react';
 import {firebase, firebaseAuth} from '../Firebase';
 import { Redirect} from 'react-router-dom';
+import '../App.css';
+import Navbar from './elements/Navbar';
 
 /* EditProfile component to manage user display information */
 class EditProfile extends Component {
@@ -33,7 +35,6 @@ class EditProfile extends Component {
     componentDidMount() {
         //check if still signed in
         firebaseAuth.onAuthStateChanged(user => {
-            console.log("Auth state changed")
             this.setState({ user: firebase.auth().currentUser });
             this.setState({ isAuth: true});
         });
@@ -62,12 +63,8 @@ class EditProfile extends Component {
     **/
     render() {
         //check if user is signed in
-        console.log(this.state.user);
-        console.log(this.state.isAuth);
-        //user not authenticated, redirect to login page
         if(this.state.user === null && this.state.isAuth){
-            console.log("not authenticated");
-            console.log(firebase.auth().currentUser);
+            //user not authenticated, redirect to login page
             this.props.history.push("/Login");
             return <Redirect to= '/login'/>
         }
@@ -85,35 +82,17 @@ class EditProfile extends Component {
         }
         return(
             <div>
-            <nav className="navbar navbar-default navbar-expand-lg d-none d-lg-block">
-                <div className="collapse navbar-collapse">
-                    <ul className="nav navbar-nav">
-                        <li className="navbar-brand nav-item nav-link" ><a href="/">Family Jewels</a></li>
-                        <li className="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul className="nav navbar-nav ml-auto">
-                    <li className="nav-item nav-link"><a href="/login">{username}</a></li>
-
-                    </ul>
-                </div>
-            </nav>
-            <nav className="navbar navbar-default navbar-expand d-lg-none">
-                    <ul className="nav navbar-nav">
-                        <li className="navbar-brand nav-item nav-link"><a href="/">FJ</a></li>
-                        <li className="nav-item nav-link"><a href="/create">Add Heirloom</a></li>
-                    </ul>
-                    <ul className="nav navbar-nav ml-auto">
-                        <li className="nav-item nav-link"><a href="/login">{username}</a></li>
-                    </ul>
-            </nav>
+            <Navbar/>
                 <div className="profile-container">
                 <div className="col-md-12" align="center">
-                    <h2 className="panel-title">
-                        Hello {username}
-                    </h2>
+                    <div className="col">
+                        <h2 className="centre-title">
+                        {username}
+                        </h2>
+                    </div>
                 </div>
                     <input type="text" className="form-control"
-                    name="displayName" placeholder="Your display name" value={this.state.displayName}
+                    name="displayName" placeholder={username} value={this.state.displayName}
                         onChange={e => this.setState({displayName: e.target.value})}/>
                     <div className="col-md-12" align="center">
                      <button type="button" className="btn btn-outline-warning" onClick= {this.updateProfile}>

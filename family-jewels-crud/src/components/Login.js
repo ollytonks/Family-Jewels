@@ -213,7 +213,7 @@ class Login extends Component {
                             onClick={this.logout}>Sign out</button>
                     </div>
                     <div className="col-md-12" align="center">
-                        <button type="submit" class="btn btn-outline-warning"
+                        <button type="submit" className="btn btn-outline-warning"
                             onClick={this.editProfile}>Edit profile</button>
                     </div>
                 </div>
@@ -249,12 +249,12 @@ class Login extends Component {
                             </div>
                             <div className="col-md-12" align="center">
                                 <button type="button"
-                                    class="btn btn-outline-warning"
+                                    className="btn btn-outline-warning"
                                     onClick={this.returnToLogin}>Return</button>
                             </div>
                         </div>
                         : <div className="row">
-                            <div class="col-md-12 form-group">
+                            <div className="col-md-12 form-group">
                                 <input type="password" className="form-control"
                                 name="password" placeholder="Password"
                                 value={this.state.password}
@@ -278,7 +278,7 @@ class Login extends Component {
                     <div className="col-md-12" align="center">
                         {this.state.resetPassword
                             ? <p></p>
-                            : <button class="btn btn-outline-warning btn-block"
+                            : <button className="btn btn-outline-warning btn-block"
                             onClick={this.loginWithGoogle}>Sign in with Google
                             </button>
                         }

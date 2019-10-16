@@ -9,7 +9,7 @@
  * @summary Displays an heirloom
  * @author FamilyJewels
  *
- * Created at     : 2019-08-28 
+ * Created at     : 2019-08-28
  * Last modified  : 2019-10-15
  */
 
@@ -79,7 +79,7 @@ class Show extends Component {
                 })
             }
         });
-       
+
     }
 
     /* If current, archives. If archived, unarchives. */
@@ -110,7 +110,7 @@ class Show extends Component {
                 if (this.state.heirlooms.nextguardian) {
                     ng = this.state.heirlooms.nextguardian;
                 }
-                var blob = new Blob([JSON.stringify(this.state.heirlooms)], 
+                var blob = new Blob([JSON.stringify(this.state.heirlooms)],
                     {type: "text/plain;charset=utf-8"});
                 saveAs(blob, this.state.heirlooms.title + ".txt");
             }
@@ -165,7 +165,7 @@ class Show extends Component {
                         <a href={`/edit/${this.state.key}`} class =
                             "btn btn-outline-warning">Edit</a>
                         <div className="divider"></div>
-                        <button onClick={this.downloadTxtFile.bind(this, 
+                        <button onClick={this.downloadTxtFile.bind(this,
                             this.state.key)} class =
                             "btn btn-outline-warning">Download</button>
                         <div className="divider"></div>
@@ -185,19 +185,19 @@ class Show extends Component {
                         this.state.key)} class =
                         "btn btn-outline-warning">Download</button>
                     <div className="divider"></div>
-                    <button onClick = {this.inherit.bind(this, this.state.key)} 
+                    <button onClick = {this.inherit.bind(this, this.state.key)}
                         class = "btn btn-outline-warning">Inherit</button>
                     <div className="divider"></div>
-                    <button onClick={this.archive.bind(this, this.state.key)} 
+                    <button onClick={this.archive.bind(this, this.state.key)}
                         className="btn btn-outline-warning">
                         {this.state.archive_text}</button>
                 </div>
                 );
             }
         } else {
-            return( 
+            return(
                 <div  className='floating-button'>
-                <button onClick={this.archive.bind(this, this.state.key)} 
+                <button onClick={this.archive.bind(this, this.state.key)}
                 className="btn btn-outline-warning">{this.state.archive_text}
                 </button>
                 </div>);
@@ -221,8 +221,6 @@ class Show extends Component {
     render() {
         // Authentication process
         if(this.state.user == null && this.state.isAuth){
-            console.log(" not authenticated");
-            console.log(firebase.auth().currentUser);
             return <Redirect to= '/login'/>
         }
 
@@ -243,11 +241,11 @@ class Show extends Component {
             console.log(this.state.heirlooms.marker);
         }
         // Create map
-        if (this.state.heirlooms.marker !== undefined) {map = 
+        if (this.state.heirlooms.marker !== undefined) {map =
             <Map google={this.props.google}
                     style={style}
                     initialCenter={{
-                        lat: this.state.heirlooms.marker[0], 
+                        lat: this.state.heirlooms.marker[0],
                         lng: this.state.heirlooms.marker[1]
                     }}
                     zoom={4}
