@@ -3,12 +3,12 @@
  *
  * The purpose of this file is to implement the create page and functionality
  * for the app. This involves the handling of text fields to send to Firebase
- * realtime database, as well as img files to upload to Firebase Storage. 
+ * realtime database, as well as img files to upload to Firebase Storage.
  *
  * @summary Creates an heirloom
  * @author FamilyJewels
  *
- * Created at     : 2019-08-28 
+ * Created at     : 2019-08-28
  * Last modified  : 2019-10-15
  */
 
@@ -24,11 +24,11 @@ import MapContainer from './elements/MapContainer';
 const acceptedFileTypes =
     'image/x-png, image/png, image/jpg, image/jpegf, image/jpeg'
 // turns the string into an array
-const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => 
+const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) =>
     {return item.trim()})
 
-/** When called returns a uniquely generated string ID 
- *  retrieved from: 
+/** When called returns a uniquely generated string ID
+ *  retrieved from:
  *  https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
  */
 function uuidv4(){
@@ -40,10 +40,10 @@ function uuidv4(){
 
 class Create extends Component {
 
-    /** Construct the create component react state */ 
+    /** Construct the create component react state */
     constructor() {
         super();
-        
+
         // retrieve the firebase collection with our heirloom boards
         this.ref = firebase.firestore().collection('boards');
 
@@ -68,18 +68,18 @@ class Create extends Component {
         };
     }
 
-    /** Function that is called when the page is initially loaded, retrieves 
-     *  the heirlooms from the database, to check for conflicting titles 
+    /** Function that is called when the page is initially loaded, retrieves
+     *  the heirlooms from the database, to check for conflicting titles
      *  for heirlooms. The snapshot retrieves all documents
      */
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
-        
+
         // get each document from the collection snapshot
         querySnapshot.forEach((doc) => {
 
             // retrieve information and add to heirlooms list
-            const { title, date, description, guardian, nextguardian } 
+            const { title, date, description, guardian, nextguardian }
                 = doc.data();
 
             list.push({
@@ -103,7 +103,7 @@ class Create extends Component {
 
         // unsubscribe from the collection reference after used
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        
+
         // make sure the user is authenticated to use the page
         firebaseAuth.onAuthStateChanged(user => {
             this.setState({ user: firebase.auth().currentUser });
@@ -152,7 +152,7 @@ class Create extends Component {
         if (files && files.length > 0){
             const currentFile = files[0]
             const currentFileType = currentFile.type
-            
+
             // check file types
             if (!acceptedFileTypesArray.includes(currentFileType)){
                 alert("This file is not allowed. Only images are allowed.")
@@ -163,10 +163,10 @@ class Create extends Component {
     }
 
     /** Uploads a single image to Firebase storage, prgressing the progress
-     *  bar to visualise the update progress. As well as this waits until 
+     *  bar to visualise the update progress. As well as this waits until
      *  all the images have been uploaded then sends user to home page
      *  @param {File} file     : file data to be uploaded
-     *  @param {String} id     : generated ID to be used as the reference in  
+     *  @param {String} id     : generated ID to be used as the reference in
      *  the database
      *  @param {Int} currFile  : represents index of file being uploaded
      *  @param {Int} numImages : total number of files to be uploaded
@@ -181,7 +181,7 @@ class Create extends Component {
             // called when Firebase returns an update snapshot
             (snapshot) => {
                 // visualise progress
-                const progress = Math.round((snapshot.bytesTransferred / 
+                const progress = Math.round((snapshot.bytesTransferred /
                                              snapshot.totalBytes) * 100);
                 this.setState({progress});
             },
@@ -189,19 +189,19 @@ class Create extends Component {
             (error) => {
                 console.log(error);
             },
-            // called when the upload task is complete. 
+            // called when the upload task is complete.
             () => {
-                // reset progress, display success and load home page 
+                // reset progress, display success and load home page
                 const progress = 0;
                 console.log("success");
                 this.setState({progress});
                 this.props.history.push("/")
             });
-        } 
+        }
         // as above, with no homepage reset
         else { uploadTask.on('state_changed',
             (snapshot) => {
-                const progress = Math.round((snapshot.bytesTransferred / 
+                const progress = Math.round((snapshot.bytesTransferred /
                     snapshot.totalBytes) * 100);
                 this.setState({progress});
             },
@@ -212,11 +212,11 @@ class Create extends Component {
                 console.log("success - more to come");
             });
         }
-        
+
     }
 
     /** Called when the form is submitted. Requires a unique title, guardian
-     *  description and an image to be successful. Updates the state and 
+     *  description and an image to be successful. Updates the state and
      *  handles Firebase calls
      */
     onSubmit = (e) => {
@@ -235,20 +235,20 @@ class Create extends Component {
                 found = true;
             }
         }
-        
+
         // make sure correct length title
         if (this.state.title.length > 55) {
             window.alert("Title has a 55 character limit. You have " +
                             this.state.title.length.toString() + ".");
         } else if (!found) {
-            const { title, date, marker, description, guardian, nextguardian } 
+            const { title, date, marker, description, guardian, nextguardian }
                 = this.state;
 
             // make sure has all required fields, otherwise alert
-            if (title && description && guardian && this.state.previews.length 
+            if (title && description && guardian && this.state.previews.length
                 !== 0) {
-                
-                /* perform individual upload on each image, keeping track of 
+
+                /* perform individual upload on each image, keeping track of
                  all locations and ID's */
                 for (let i = 0; i < images.length; i++) {
                     let id = uuidv4()
@@ -280,7 +280,7 @@ class Create extends Component {
                     console.error("Error adding document: ", error);
                 });
             } else {
-                window.alert("An heirloom must have a title, description," + 
+                window.alert("An heirloom must have a title, description," +
                     "guardian, and at least one image.");
             }
         } else {
@@ -315,12 +315,12 @@ class Create extends Component {
     render() {
         document.title = "Add heirloom";
         const { title, date, description, guardian, nextguardian } = this.state;
-        /* takes the state previews which is a array of files and dynamically 
+        /* takes the state previews which is a array of files and dynamically
          generated display images and maps them to display within the dropzone
          also generates a remove button that calls remove preview*/
         const thumbs = this.state.previews.map((file,index) => (
             <div className="thumb" key={file.name}>
-                <button type="button" className="close" aria-label="Close" 
+                <button type="button" className="close" aria-label="Close"
                     onClick={() => this.removePreview(index)}>
                         <span aria-hidden="true">&times;</span>
                 </button>
@@ -355,37 +355,37 @@ class Create extends Component {
             <div className="panel-body">
                 <form onSubmit={this.onSubmit}>
                 <div className="form-group form-control-text">
-                    <input type="text" 
-                        className="form-control form-control-text-major" 
-                        name="title" value={title} onChange={this.onChange} 
+                    <input type="text"
+                        className="form-control form-control-text-major"
+                        name="title" value={title} onChange={this.onChange}
                         placeholder="Title*"/>
-                    <input type="text" 
-                        className="form-control form-control-text-minor" 
-                        name="date" value={date} onChange={this.onChange} 
+                    <input type="text"
+                        className="form-control form-control-text-minor"
+                        name="date" value={date} onChange={this.onChange}
                         placeholder="Origin year"/>
                 </div>
                 <div className="form-group">
-                    <textArea className="form-control" name="description" 
-                        onChange={this.onChange} placeholder="Description" 
-                        cols="80" rows="3">{description}</textArea>
+                    <textarea className="form-control" name="description"
+                        onChange={this.onChange} placeholder="Description*"
+                        cols="80" rows="3">{description}</textarea>
                 </div>
                 <div className="form-group">
-                    <input type="text" className="form-control" name="guardian" 
-                        value={guardian} onChange={this.onChange} 
+                    <input type="text" className="form-control" name="guardian"
+                        value={guardian} onChange={this.onChange}
                         placeholder="Guardian*" />
                 </div>
                 <div className="form-group">
-                    <input type="text" className="form-control" 
-                        name="nextguardian" value={nextguardian} 
+                    <input type="text" className="form-control"
+                        name="nextguardian" value={nextguardian}
                         onChange={this.onChange} placeholder="Next guardian" />
                 </div>
-                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop} 
+                <Dropzone name="imageDropzone" onDrop={this.handleOnDrop}
                     accept={acceptedFileTypes}>
                     {({getRootProps, getInputProps}) => (
                         <section className="dropzone">
                             <div {...getRootProps()}>
                                 <input {...getInputProps()} />
-                                <p>Drag and drop files here, or 
+                                <p>Drag and drop files here, or
                                     click HERE to select files*</p>
                             </div>
                             <aside className="thumbs-container">
@@ -396,17 +396,17 @@ class Create extends Component {
                 </Dropzone>
                 <div className="divider"/>
                 <div className="progress">
-                    <div className="progress-bar progress-bar-striped progress-bar-animated" 
+                    <div className="progress-bar progress-bar-striped progress-bar-animated"
                     style={{width: this.state.progress+'%'}}></div>
                 </div>
                 <div className="divider"/>
                 <div/>
-                <label for="submitButton"><i>* fields are mandatory</i></label>
+                <label htmlFor="submitButton"><i>* fields are mandatory</i></label>
                 <br></br>
                 <a>Click a location relevant to the item</a>
                 <br></br>
-                <a>{this.state.marker ? 'Currently selected: ' + 
-                    this.state.marker[0] + ', ' + this.state.marker[1] : 
+                <a>{this.state.marker ? 'Currently selected: ' +
+                    this.state.marker[0] + ', ' + this.state.marker[1] :
                     'Nothing selected'}</a>
                 <div/>
                 <div className="map-container">
@@ -419,9 +419,9 @@ class Create extends Component {
                     </MapContainer>}
                 </div>
                 <div className="floating-button">
-                    <div class ="floating-button-tile">
-                        <button name="submitButton" type="submit" 
-                        className="btn btn-outline-warning" 
+                    <div className ="floating-button-tile">
+                        <button name="submitButton" type="submit"
+                        className="btn btn-outline-warning"
                         disabled={!this.state.images.length}>Submit</button>
                     </div>
                 </div>
