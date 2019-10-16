@@ -162,11 +162,11 @@ class Show extends Component {
             if (this.state.nextguardian === ''){
                 return(
                     <div className='floating-button'>
-                        <a href={`/edit/${this.state.key}`} class =
+                        <a href={`/edit/${this.state.key}`} className =
                             "btn btn-outline-warning">Edit</a>
                         <div className="divider"></div>
                         <button onClick={this.downloadTxtFile.bind(this, 
-                            this.state.key)} class =
+                            this.state.key)} className =
                             "btn btn-outline-warning">Download</button>
                         <div className="divider"></div>
                         <button onClick={this.archive.bind(this,
@@ -178,15 +178,15 @@ class Show extends Component {
             else {
             return(
                 <div  className='floating-button'>
-                    <a href={`/edit/${this.state.key}`} class =
+                    <a href={`/edit/${this.state.key}`} className =
                         "btn btn-outline-warning">Edit</a>
                     <div className="divider"></div>
                     <button onClick={this.downloadTxtFile.bind(this,
-                        this.state.key)} class =
+                        this.state.key)} className =
                         "btn btn-outline-warning">Download</button>
                     <div className="divider"></div>
                     <button onClick = {this.inherit.bind(this, this.state.key)} 
-                        class = "btn btn-outline-warning">Inherit</button>
+                        className = "btn btn-outline-warning">Inherit</button>
                     <div className="divider"></div>
                     <button onClick={this.archive.bind(this, this.state.key)} 
                         className="btn btn-outline-warning">
