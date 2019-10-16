@@ -432,7 +432,7 @@ class Edit extends Component {
                         <div className="progress">
                             <div className="progress-bar progress-bar-striped progress-bar-animated" style={{width: this.state.progress+'%'}}></div>
                         </div>
-                        <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + ', ' + this.state.marker[1] : 'Nothing selected'}</a>
+                        <a>{this.state.marker ? 'Currently selected: ' + this.state.marker[0] + '°, ' + this.state.marker[1] + '°': 'Nothing selected'}</a>
                         <div className="map-container">
                             {<MapContainer
                                 saveMarker={(t, map, c) => {
