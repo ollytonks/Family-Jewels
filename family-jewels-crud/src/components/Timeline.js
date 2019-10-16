@@ -120,6 +120,11 @@ class Timeline extends Component {
     }
 
     render() {
+        /*prevent elements rendering until authentication variables have
+          finished initialising*/
+        if(this.state.isAuth === false){
+            return(<div></div>)
+        }
         //user is not logged in
         if(this.state.user === null && this.state.isAuth){
             console.log(" not authenticated");

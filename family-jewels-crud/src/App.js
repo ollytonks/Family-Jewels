@@ -39,7 +39,7 @@ class App extends Component {
     onCollectionUpdate = (querySnapshot) => {
         const list = [];
         querySnapshot.forEach((doc) => {
-            const { title, description, guardian, nextguardian, 
+            const { title, description, guardian, nextguardian,
                 imagesLocations, date} = doc.data();
             firebase.storage().ref('images').child(imagesLocations[0])
                 .getDownloadURL().then(url => {
@@ -135,6 +135,11 @@ class App extends Component {
          * changing filters (in which the Search filter is required) or
          * navigating to another page (in which the filters are irrelevant).
          */
+         /*prevent elements rendering until authentication variables have
+           finished initialising*/
+         if(this.state.isAuth === false){
+             return(<div></div>)
+         }
         document.title = "Home";
         let tempList = [];
         if (this.state.searchKey !== "") {
@@ -143,7 +148,7 @@ class App extends Component {
             // Use .filter() to determine which items should be displayed
             // based on the search terms
             tempList = currentList.filter(item => {
-                let lc = "" + item.title + ":" + item.description + ":" + 
+                let lc = "" + item.title + ":" + item.description + ":" +
                     item.guardian + ":" + item.nextguardian + ":" + item.date;
                 lc = lc.toLowerCase();
                 if (lc !== null) {

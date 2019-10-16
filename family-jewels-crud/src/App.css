@@ -228,6 +228,7 @@ h2.panel-title {
     text-decoration-color: initial;
 
 
+
 }
 
 .tiletitle {
@@ -251,8 +252,7 @@ h2.panel-title {
     text-decoration-line: none;
     text-decoration-style: initial;
     text-decoration-color: initial;
-    width: 200px;
-    height: 200px;
+    
 }
 
 .imgbox {

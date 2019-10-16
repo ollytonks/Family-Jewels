@@ -57,10 +57,8 @@ class Login extends Component {
         //check if user is still signed in
         if(this._isMounted) {
             firebaseAuth.onAuthStateChanged(user => {
-                console.log("Auth state changed")
                 this.setState({ user: firebase.auth().currentUser });
                 this.setState({ isAuth: true });
-                console.log(this.state.user)
             });
         }
     }
@@ -183,11 +181,9 @@ class Login extends Component {
         @return HTML to be rendered
     **/
     render() {
-        console.log(this.state.isAuth);
         /*prevent elements rendering until authentication variables have
           finished initialising*/
         if(this.state.isAuth === false){
-            console.log("not finished initialising");
             return(<div></div>)
         }
         //ensure user is signed in
