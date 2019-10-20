@@ -93,7 +93,7 @@ class App extends Component {
 
     componentDidUpdate() {
         this.state.heading = this.state.switch ? "ARCHIVE" : "HEIRLOOMS";
-        if (this.state.searching) {
+        if (this.state.searching && this.nameInput) {
             this.nameInput.focus();
         }
     }
