@@ -227,10 +227,10 @@ class Show extends Component {
         document.title = this.state.heirlooms.title;
 
         // Set up map and markers
-        let map;
+        let map = "No location given.";
         let markers = [];
         // Create markers
-        if(this.state.heirlooms.marker !== undefined) {
+        if(this.state.heirlooms.marker) {
             markers.push(
                 <Marker
                 key={0}
@@ -238,10 +238,9 @@ class Show extends Component {
                     lat: this.state.heirlooms.marker[0],
                     lng: this.state.heirlooms.marker[1]}}/>
             )
-            console.log(this.state.heirlooms.marker);
         }
         // Create map
-        if (this.state.heirlooms.marker !== undefined) {map =
+        if (this.state.heirlooms.marker) {map =
             <Map google={this.props.google}
                     style={style}
                     initialCenter={{
