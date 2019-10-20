@@ -345,7 +345,7 @@ class Edit extends Component {
                 console.error("Error adding document: ", error);
             });
         } else {
-            window.alert("An heirloom must have a title, description, guardian and at least one iamge.");
+            window.alert("An heirloom must have a title, description, guardian and at least one image.");
         }
     }
 
