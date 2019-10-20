@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
@@ -18,7 +20,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 ReactDOM.render(
     <Router>
-        <div>
+        <Switch>
             <Route exact path='/' component={App} />
             <Route path='/edit/:id' component={Edit} />
             <Route path='/create' component={Create} />
@@ -28,7 +30,8 @@ ReactDOM.render(
             <Route path='/createuser' component={CreateUser} />
             <Route path ='/map' component={FamilyMap} />
             <Route path ='/timeline' component={Timeline} />
-        </div>
+            <Route component={App} />
+        </Switch>
     </Router>,
     document.getElementById('root')
 );
