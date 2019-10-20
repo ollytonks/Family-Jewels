@@ -130,12 +130,9 @@ class Show extends Component {
         console.log("Future Guardian: " + futureguardian);
         const updateRef = firebase.firestore().collection('boards')
             .doc(this.state.key);
-        updateRef.set({
-            title:this.state.title,
-            description:this.state.description,
-            guardian:this.state.nextguardian,
-            nextguardian:futureguardian,
-            imagesLocations:this.state.imagesLocations
+        updateRef.update({
+            guardian:this.state.heirlooms.nextguardian,
+            nextguardian:futureguardian
         }).then((docRef) => {
             this.setState({
                 key: '',
@@ -159,7 +156,8 @@ class Show extends Component {
      */
     renderEditDelete() {
         if (this.state.target === 'boards') {
-            if (this.state.nextguardian === ''){
+            console.log(this.state.heirlooms.nextguardian);
+            if (this.state.heirlooms.nextguardian === ''){
                 return(
                     <div className='floating-button'>
                         <a href={`/edit/${this.state.key}`} className =
@@ -174,25 +172,24 @@ class Show extends Component {
                             {this.state.archive_text}</button>
                     </div>
                 );
-            }
-            else {
-            return(
-                <div  className='floating-button'>
-                    <a href={`/edit/${this.state.key}`} className =
-                        "btn btn-outline-warning">Edit</a>
-                    <div className="divider"></div>
-                    <button onClick={this.downloadTxtFile.bind(this,
-                        this.state.key)} className =
-                        "btn btn-outline-warning">Download</button>
-                    <div className="divider"></div>
-                    <button onClick = {this.inherit.bind(this, this.state.key)} 
-                        className = "btn btn-outline-warning">Inherit</button>
-                    <div className="divider"></div>
-                    <button onClick={this.archive.bind(this, this.state.key)}
-                        className="btn btn-outline-warning">
-                        {this.state.archive_text}</button>
-                </div>
-                );
+            } else {
+                return(
+                    <div  className='floating-button'>
+                        <a href={`/edit/${this.state.key}`} className =
+                            "btn btn-outline-warning">Edit</a>
+                        <div className="divider"></div>
+                        <button onClick={this.downloadTxtFile.bind(this,
+                            this.state.key)} className =
+                            "btn btn-outline-warning">Download</button>
+                        <div className="divider"></div>
+                        <button onClick = {this.inherit.bind(this, this.state.key)} 
+                            className = "btn btn-outline-warning">Inherit</button>
+                        <div className="divider"></div>
+                        <button onClick={this.archive.bind(this, this.state.key)}
+                            className="btn btn-outline-warning">
+                            {this.state.archive_text}</button>
+                    </div>
+                    );
             }
         } else {
             return(

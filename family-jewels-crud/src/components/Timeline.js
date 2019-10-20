@@ -86,7 +86,7 @@ class Timeline extends Component {
     componentDidMount() {
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
         var locstate = this.props.location.payload;
-        if (locstate !== undefined) {
+        if (typeof locstate !== 'undefined') {
             if (locstate.searching === true) {
                 this.setState({
                     searching: true
