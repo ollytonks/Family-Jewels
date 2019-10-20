@@ -259,7 +259,7 @@ class Show extends Component {
             <Navbar/>
             <div className="container show-container">
                 <h3 className="panel-title">
-                    {this.state.heirlooms.title} {this.state.heirlooms.date !== undefined ? ("- " + this.state.heirlooms.date) : ""}
+                    {this.state.heirlooms.title} {this.state.heirlooms.date ? ("- " + this.state.heirlooms.date) : ""}
                 </h3>
                 <div className="show-grid">
                     <div className="show-description">
@@ -293,7 +293,7 @@ class Show extends Component {
                     </Gallery></dd>
                     </div>
                     <div className="show-map">
-                            {this.state.heirlooms.marker !== undefined || this.state.heirlooms.marker !== "" ? map : "No location set"}
+                            {this.state.heirlooms.marker || this.state.heirlooms.marker !== "" ? map : "No location set"}
                     </div>
                 </div>
                 <div>{this.renderEditDelete()}</div>
