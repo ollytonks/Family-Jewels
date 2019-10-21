@@ -12,6 +12,7 @@
 import React, { Component } from 'react';
 import {firebase} from '../Firebase';
 import '../App.css';
+import loginLogo from './elements/loginlogo.svg'
 
 /* Create User component to handle user profile creation */
 class CreateUser extends Component {
@@ -64,13 +65,19 @@ class CreateUser extends Component {
         return (
             <div class="login-container">
                 <div class="panel-heading">
+                <div className="login-logo">
+                    <div className="col-md-12" align="center">
+                        <img width="200" height="200" src={loginLogo}/>
+                    </div>
+                </div>
                     <h2 class="panel-title">
                         Create Account
                     </h2>
                 </div>
                 <form onSubmit={this.createUser}>
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                    <div className="col-md-3 col-md-offset-3"></div>
+                    <div className="col-md-6 form-group">
                             <input type="email" class="form-control"
                             name="email" placeholder="Email"
                             value={this.state.email}
@@ -79,7 +86,8 @@ class CreateUser extends Component {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-12 form-group">
+                        <div className="col-md-3 col-md-offset-3"></div>
+                        <div className="col-md-6 form-group">
                             <input type="password" className="form-control"
                             name="password" placeholder="Password"
                             value={this.state.password}
@@ -88,11 +96,14 @@ class CreateUser extends Component {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                    <div className="col-md-5 col-md-offset-5"></div>
+                        <div class="col-md-2">
+                        <div className="profile-btn">
                          <button type="submit"
                          class="btn btn-outline-warning btn-block"
                          onClick={this.submit}>Create Account
                          </button>
+                        </div>
                         </div>
                     </div>
                 </form>

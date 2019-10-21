@@ -102,7 +102,7 @@ div.mainbodyArchive
 }
 
 .login-container{
-    width:40%;
+    width:60%;
     max-width:100%;
     margin:5% auto;
 }
@@ -112,8 +112,16 @@ div.mainbodyArchive
     color: #FEBD59;
 }
 
-.login-container .col-md-12{
-    padding: 2%;
+.login-container .col-md-12 .profile-btn{
+    padding: 1%;
+}
+
+.login-container .col-md-6{
+    padding: .5%;
+}
+.login-logo{
+    padding-top: 6%;
+    padding-bottom: 3%
 }
 
 .login-container .btn-link {
@@ -122,6 +130,12 @@ div.mainbodyArchive
 
 .login-container .btn-link:hover {
     color: #ffd38f;
+}
+
+input.form-control{
+    max-width: 80%;
+    text-align: center;
+    margin: auto;
 }
 
 .profile-container{
@@ -252,7 +266,7 @@ h2.panel-title {
     text-decoration-line: none;
     text-decoration-style: initial;
     text-decoration-color: initial;
-    
+
 }
 
 .imgbox {

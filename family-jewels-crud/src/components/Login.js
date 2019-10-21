@@ -223,14 +223,15 @@ class Login extends Component {
         //user not yet authenticated
         return (
             <div className="login-container">
-                <div className="row">
+                <div className="login-logo">
                     <div className="col-md-12" align="center">
                         <img width="200" height="200" src={loginLogo}/>
                     </div>
                 </div>
                 <form onSubmit={this.loginEmailPassword}>
                     <div className="row">
-                        <div className="col-md-12 form-group">
+                        <div className="col-md-3 col-md-offset-3"></div>
+                        <div className="col-md-6 form-group">
                             <input type="email" className="form-control"
                             name="username" placeholder="Username"
                                 value={this.state.email}
@@ -241,20 +242,25 @@ class Login extends Component {
                     {this.state.resetPassword
                         ? <div>
                             <div className="col-md-12" align="center">
+                                <div className="profile-btn">
                                 <button type="submit"
                                     className="btn btn-outline-warning"
                                     onClick={this.resetPassword}>
                                     Send password reset
                                 </button>
                             </div>
+                            </div>
                             <div className="col-md-12" align="center">
+                                <div className="profile-btn">
                                 <button type="button"
                                     className="btn btn-outline-warning"
                                     onClick={this.returnToLogin}>Return</button>
                             </div>
+                            </div>
                         </div>
                         : <div className="row">
-                            <div className="col-md-12 form-group">
+                            <div className="col-md-3 col-md-offset-3"></div>
+                            <div className="col-md-6 form-group">
                                 <input type="password" className="form-control"
                                 name="password" placeholder="Password"
                                 value={this.state.password}
@@ -264,42 +270,38 @@ class Login extends Component {
                         </div>
                     }
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-12" align="center">
                             {this.state.resetPassword
                                 ? <p></p>
-                                : <button type="submit"
-                                className="btn btn-outline-warning btn-block"
+                                : <div className="profile-btn">
+                                <button type="submit"
+                                className="btn btn-outline-warning"
                                 onClick={this.submit}>Sign in</button>
+                                </div>
                             }
                         </div>
                     </div>
                 </form>
                 <div className="row">
-                    <div className="col-md-12" align="center">
-                        {this.state.resetPassword
-                            ? <p></p>
-                            : <button className="btn btn-outline-warning btn-block"
-                            onClick={this.loginWithGoogle}>Sign in with Google
-                            </button>
-                        }
-                    </div>
-                </div>
-                <div className="row">
                 </div>
                     <div className="col-md-12" align="center">
                         { this.state.resetPassword
                             ? <p></p>
-                            : <div>
+                            : <div className="profile-btn">
                                 <div className="col-md-12" align="center">
                                     <button className="btn btn-warning btn-sm"
                                     type="button" onClick={this.createProfile}>
                                     Create account
                                     </button>
                                 </div>
+                                <div className="profile-btn">
+                                <div className="col-md-12" align="center">
                                 <button className="btn btn-link"
                                 onClick={() => {this.setState({resetPassword:
                                      true})}}>Forgot password
                                 </button>
+                            </div>
+                            </div>
                             </div>
                         }
                     </div>
