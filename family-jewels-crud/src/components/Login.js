@@ -283,6 +283,16 @@ class Login extends Component {
                     </div>
                 </form>
                 <div className="row">
+                <div className="col-md-12" align="center">
+                    {this.state.resetPassword
+                        ? <p></p>
+                        : <div className="profile-btn">
+                        <button type="button"
+                        className="btn btn-outline-warning"
+                        onClick={this.loginWithGoogle}>Sign in with Google</button>
+                        </div>
+                    }
+                </div>
                 </div>
                     <div className="col-md-12" align="center">
                         { this.state.resetPassword
