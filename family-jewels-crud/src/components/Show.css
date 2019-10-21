@@ -111,3 +111,8 @@
     max-height: 100%;
     position: relative !important;
 }
+
+#root > div > div:nth-child(1) > div.container.show-container > div.show-grid > div.show-map > div {
+    max-height: 100%;
+    position: relative !important;
+}
