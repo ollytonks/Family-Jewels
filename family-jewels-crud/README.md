@@ -1,53 +1,108 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Go to home to reach log in page
-Click into create account
-Type in already created username and password to log in
+# Family Jewels
 
-User is first presented with a login screen
-Cannot access app without an account
-Privacy was a concern for our clients 
-Clients able to create their own accounts 
-As one of our clients expressed difficulty remembering passwords, it was crucial to have a reset password option
+This is a web application to track a single family's most important heirlooms, so they can find them, pass them on, and engage with their family's history. They do this by adding heirlooms with relevant information.
 
-View
-Once logged in, the user is presented with a view of all the family heirlooms
-Click on an heirloom
-Clicking in to an heirloom allows the user to see the story and images associated with it
+## Getting Started
 
-Add
-User is able to easily create an heirloom
-Can’t create without unique title, >0 images, and guardian
+## Available Scripts
 
-Search
-Search for newly created item
-If the user wants to update the information on an item they can do so easily by searching with keywords associated with the item, selecting the item and then clicking edit
+In the project directory, you can run:
 
-Edit
-Click on newly created item
-Click edit
-Add new piece of information
-Submit
+### `npm start`
 
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-Archive
-Archive the newly created heirloom
-As our clients wanted to preserve the history of all family heirlooms, having a delete function was not appropriate
-Instead, our clients have the ability to archive an item to move it away from the main collection
-Use the switch to view archived heirloom from homepage
-These archived heirlooms can be viewed with a flick of the switch
+### `npm test`
 
-Engage
-Navigate to our history
-Timeline feature allows users to find out more about their family history
-Set the user on a path of discovery
-(pick an item of interest)
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-Navigate to our map
-Use the search bar to search for item of interest discovered in our historyd
-Allows the user to dig deeper into the history of an heirloom
-Perhaps they are wanting to find out more about the origin of heirloom they viewed in the timeline feature
-All they have to do is search for a keyword belonging to that item and it appears
+### `npm run build`
 
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Prerequisites
+
+You will need node-package-manager and a text-editing software such as Visual Studio Code to develop this application. A standard web browser (i.e. not Internet Explorer) is recommended for the best experience.
+
+## Built With
+
+* [ReactJS](https://reactjs.org/) - Web framework
+* [Firebase](https://firebase.google.com/) - Database
+* [Bootstrap](https://getbootstrap.com/) - CSS framework
+
+## Contributing
+
+This is a private project and contributions are not allowed.
+
+## Versioning
+
+1.0
+
+## Authors
+
+* **Hugh Rayner**
+* **Oliver Tonks**
+* **Genevieve Fryer**
+* **Nicholas Gurban**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Thanks to Cassie Li for her assistance and guidance
+* Thanks to Leon Sterling for initiating the project
