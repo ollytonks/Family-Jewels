@@ -2,7 +2,7 @@ import * as firebase from 'firebase';
 import "firebase/auth";
 
 const config = {
-    apiKey: "AIzaSyCBvZdocIgvv1jBTUHi1XuDK86ZL2yvxzk",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "family-jewels-8b7ef.firebaseapp.com",
     databaseURL: "https://family-jewels-8b7ef.firebaseio.com",
     projectId: "family-jewels-8b7ef",
