@@ -1,68 +1,113 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
+App view
+Actions
+Talking points
+Login
 
-### `npm start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Try to enter url  http://localhost:3000/ to access app without authentication 
+Click into create account
+Return
+Click into forgot password
+Return
+Type in already created username and password to log in
 
-### `npm run build`
+User is first presented with a login screen
+Cannot access app without an account
+Privacy was a concern for our clients 
+Clients able to create their own accounts 
+As one of our clients expressed difficulty remembering passwords, it was crucial to have a reset password option
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+View
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Once logged in, the user is presented with a view of all the family heirlooms
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Click on an heirloom
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Clicking in to an heirloom allows the user to see the story and images associated with it
 
-### Code Splitting
+Add
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+User is able to easily create an heirloom
+Can’t create without unique title, >0 images, and guardian
 
-### Deployment
+Search
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `npm run build` fails to minify
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+Search for newly created item
+
+If the user wants to update the information on an item they can do so easily by searching with keywords associated with the item, selecting the item and then clicking edit
+
+Edit
+
+
+
+
+
+Click on newly created item
+Click edit
+Add new piece of information
+Submit
+
+
+
+Archive
+
+
+
+
+
+Archive the newly created heirloom
+
+As our clients wanted to preserve the history of all family heirlooms, having a delete function was not appropriate
+Instead, our clients have the ability to archive an item to move it away from the main collection
+
+
+Use the switch to view archived heirloom
+
+These archived heirlooms can be viewed with a flick of the switch
+
+Engage
+
+
+
+
+
+Navigate to our history
+
+
+Timeline feature allows users to find out more about their family history
+Set the user on a path of discovery
+(pick an item of interest)
+
+
+Navigate to our map
+Use the search bar to search for item of interest discovered in our history
+
+
+Allows the user to dig deeper into the history of an heirloom
+Perhaps they are wanting to find out more about the origin of heirloom they viewed in the timeline feature
+All they have to do is search for a keyword belonging to that item and it appears
+
+
